@@ -52,10 +52,11 @@ const contractApi = {
 }
 
 // 获取支付管理合同列表
-export function getPaymentApplyList () {
+export function getPaymentApplyList (params) {
     return request({
         url: contractApi.list,
         method: 'get',
+        params
     })
 }
 
@@ -79,18 +80,20 @@ export function getPaymentScene () {
 
 
 // 获取所属合同名称
-export function getContractName () {
+export function getContractName (params) {
   return request({
       url: contractApi.contractName,
       method: 'get',
+      params
   })
 }
 
 // 获取付款相关所属合同名称
-export function getPaymentContractName () {
+export function getPaymentContractName (params) {
   return request({
       url: contractApi.payContractName,
       method: 'get',
+      params
   })
 }
 
@@ -223,10 +226,11 @@ export function getProject () {
 }
 
 // 获取总包合同下拉列表
-export function getTotalContract () {
+export function getTotalContract (params) {
   return request({
       url: contractApi.totalContract,
       method: 'get',
+      params
   })
 }
 
@@ -465,20 +469,20 @@ export function getMonthDetail (data) {
 }
 
 // 付款获取乙方公司合同
-export function getCompContractList (name) {
+export function getCompContractList (data) {
   return request({
-      url: contractApi.getCompContract + name,
+      url: contractApi.getCompContract,
       method: 'post',
-      data: {name}
+      data
   })
 }
 
 
 // 工资付款获取乙方公司合同
-export function getComp1ContractList (name) {
+export function getComp1ContractList (data) {
   return request({
-      url: contractApi.getComp1Contract + name,
+      url: contractApi.getComp1Contract,
       method: 'post',
-      data: {name}
+      data
   })
 }

@@ -102,10 +102,10 @@
                         <span>合同背景信息</span>
                     </div>
                     <a-row :gutter="24" class="model-col">
-                        <a-col :span="12">
+                        <!-- <a-col :span="12">
                             <span>归属总包合同名称：</span>
                             <span>{{ contractObj.belongContractName }}</span>
-                        </a-col>
+                        </a-col> -->
                         <a-col :span="12">
                             <span>归属三级项目信息：</span>
                             <span>{{ contractObj.belongProjectName }}</span>
@@ -167,10 +167,10 @@
                         </a-col>
                     </a-row> -->
                     <a-row :gutter="24" class="model-col">
-                        <a-col :span="12">
+                        <!-- <a-col :span="12">
                             <span>合同已结算金额（元）：</span>
                             <span>{{ contractObj.settledAmount }}</span>
-                        </a-col>
+                        </a-col> -->
                         <a-col :span="12">
                             <span>合同已支付金额（元）：</span>
                             <span>{{ contractObj.paidAmount }}</span>
@@ -455,10 +455,10 @@
                             </a-col>
                         </a-row>
                         <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
+                            <!-- <a-col :span="12">
                                 <span>本次结算金额（元）：</span>
                                 <span>{{ paymentObj.currentSettlementAmount }}</span>
-                            </a-col>
+                            </a-col> -->
                             <a-col :span="12">
                                 <span>交易附言：</span>
                                 <span>{{ paymentObj.transactionRemark }}</span>
@@ -585,10 +585,10 @@
                             </a-col>
                         </a-row>
                         <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
+                            <!-- <a-col :span="12">
                                 <span>本次结算金额（元）：</span>
                                 <span>{{ paymentObj.currentSettlementAmount }}</span>
-                            </a-col>
+                            </a-col> -->
                             <a-col :span="12">
                                 <span>交易附言：</span>
                                 <span>{{ paymentObj.transactionRemark }}</span>
@@ -670,10 +670,10 @@
                             </a-col>
                         </a-row>
                         <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
+                            <!-- <a-col :span="12">
                                 <span>本次结算金额（元）：</span>
                                 <span>{{ paymentObj.currentSettlementAmount }}</span>
-                            </a-col>
+                            </a-col> -->
                             <a-col :span="12">
                                 <span>交易附言：</span>
                                 <span>{{ paymentObj.transactionRemark }}</span>
@@ -782,10 +782,10 @@
                                 <span>申请金额（元）：</span>
                                 <span>{{ paymentObj.paymentAmount }}</span>
                             </a-col>
-                            <a-col :span="12">
+                            <!-- <a-col :span="12">
                                 <span>本次结算金额（元）：</span>
                                 <span>{{ paymentObj.currentSettlementAmount }}</span>
-                            </a-col>
+                            </a-col> -->
                             
                         </a-row>
                         <a-row :gutter="24" class="model-col">
@@ -1045,10 +1045,10 @@
                 <span>交易信息</span>
             </div>
             <a-row :gutter="24" class="model-col">
-                <a-col :span="12">
+                <!-- <a-col :span="12">
                     <span>已结算金额（元）：</span>
                     <span>{{ collectionObj.contractSettlAmount }}</span>
-                </a-col>
+                </a-col> -->
                 <a-col :span="12">
                     <span>已支付金额（元）:</span>
                     <span>{{ collectionObj.contractPaidAmount }}</span>
@@ -1059,10 +1059,10 @@
                     <span>本次支付金额（元）：</span>
                     <span>{{ collectionObj.transactionAmount }}</span>
                 </a-col>
-                <a-col :span="12">
+                <!-- <a-col :span="12">
                     <span>本次结算金额（元）:</span>
                     <span>{{ collectionObj.currentSettlementAmount }}</span>
-                </a-col>
+                </a-col> -->
             </a-row>
             <a-row :gutter="24" class="model-col">
                 <a-col :span="12">
@@ -1074,12 +1074,12 @@
                     <span>{{ collectionObj.payDate }}</span>
                 </a-col>
             </a-row>
-            <a-row :gutter="24" class="model-col">
+            <!-- <a-row :gutter="24" class="model-col">
                 <a-col :span="12">
                     <span>所属结算批次：</span>
                     <span>{{ collectionObj.settlementBatchName }}</span>
                 </a-col>
-            </a-row>
+            </a-row> -->
             <!-- <div>
                 <div class="model-row">
                     <span>审批流程</span>
@@ -1553,7 +1553,8 @@ export default {
         getContractFinishInfo () {
             let reqObj = {
                 pageNum: this.pagination.current,
-                pageSize: this.pagination.pageSize
+                pageSize: this.pagination.pageSize,
+                projectIDLv3: localStorage.getItem('projectIDLv3')
             }
             getContractFinishList(reqObj).then(res => {
                 const data = res.data
@@ -1565,7 +1566,8 @@ export default {
         getPaymentFinishInfo() {
             let reqObj = {
                 pageNum: this.pagination.current,
-                pageSize: this.pagination.pageSize
+                pageSize: this.pagination.pageSize,
+                projectIDLv3: localStorage.getItem('projectIDLv3')
             }
             getPaymentFinishList(reqObj).then(res => {
                 if(res.status == 1 && res.data) {
@@ -1584,7 +1586,8 @@ export default {
         getPayCollectionList() {
             let reqObj = {
                 pageNum: this.payCollectionPagination.current,
-                pageSize: this.payCollectionPagination.pageSize
+                pageSize: this.payCollectionPagination.pageSize,
+                projectIDLv3: localStorage.getItem('projectIDLv3')
             }
             getPayCollectionFinishList(reqObj).then(res => {
                 const data = res.data

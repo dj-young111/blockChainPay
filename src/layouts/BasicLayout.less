@@ -34,3 +34,50 @@
   }
 }
 
+.ant-pro-sider-menu-sider.light {
+  background-image: url('../assets/sider.png');
+  background-size: cover;
+}
+.ant-pro-sider-menu-sider.light .ant-pro-sider-menu-logo {
+  background: none !important;
+  display: flex;
+  justify-content: center;
+  // align-items: center;
+  padding-left: 0px;
+}
+.ant-pro-sider-menu-logo {
+  // position: relative;
+  height: 164px;
+  padding-left: 24px;
+  overflow: hidden;
+  transition: all 0.3s;
+  line-height: 64px;
+  // background: #001529;
+  // background-image: url('../assets/sider.png');
+  // background-size: cover;
+  .router-link-active {
+    background: none;
+    background-image: url('../assets/aside-top.png');
+    background-size: cover;
+    width: 98px;
+    height: 98px;
+  }
+}
+.ant-menu {
+  background: none;
+}
+.ant-menu-submenu > .ant-menu {
+  background: none;
+}
+.ant-pro-sider-menu-logo a span h1 {
+  display: block;
+  line-height: 1.2;
+  position: absolute;
+  font-family: MiSans;
+  font-weight: 600;
+  color: #194D84 !important;
+  text-align: center;
+  top: 100px;
+  right: 40px;
+  width: 170px;
+}

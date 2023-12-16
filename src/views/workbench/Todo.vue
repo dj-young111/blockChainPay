@@ -101,10 +101,10 @@
                         <span>合同背景信息</span>
                     </div>
                     <a-row :gutter="24" class="model-col">
-                        <a-col :span="12">
+                        <!-- <a-col :span="12">
                             <span>归属总包合同名称：</span>
                             <span>{{ contractObj.belongContractName }}</span>
-                        </a-col>
+                        </a-col> -->
                         <a-col :span="12">
                             <span>归属三级项目信息：</span>
                             <span>{{ contractObj.belongProjectName }}</span>
@@ -166,10 +166,10 @@
                         </a-col>
                     </a-row> -->
                     <a-row :gutter="24" class="model-col">
-                        <a-col :span="12">
+                        <!-- <a-col :span="12">
                             <span>合同已结算金额（元）：</span>
                             <span>{{ contractObj.settledAmount }}</span>
-                        </a-col>
+                        </a-col> -->
                         <a-col :span="12">
                             <span>合同已支付金额（元）：</span>
                             <span>{{ contractObj.paidAmount }}</span>
@@ -516,10 +516,10 @@
                                 <span>已支付金额（元）：</span>
                                 <span>{{ paymentObj.contractPaidAmount }}</span>
                             </a-col>
-                            <a-col :span="12">
+                            <!-- <a-col :span="12">
                                 <span>已结算金额（元）：</span>
                                 <span>{{ paymentObj.contractSettlAmount }}</span>
-                            </a-col>
+                            </a-col> -->
                         </a-row>
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
@@ -532,10 +532,10 @@
                             </a-col>
                         </a-row>
                         <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
+                            <!-- <a-col :span="12">
                                 <span>本次结算金额（元）：</span>
                                 <span>{{ paymentObj.currentSettlementAmount }}</span>
-                            </a-col>
+                            </a-col> -->
                             <a-col :span="12">
                                 <span>交易附言：</span>
                                 <span>{{ paymentObj.transactionRemark }}</span>
@@ -547,14 +547,13 @@
                                 <span>{{ paymentObj.month }}</span>
                             </a-col>
                         </a-row>
-                        <a-row :gutter="24" class="model-col">
+                        <!-- <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
                                 <span>所属结算批次：</span>
-                                <!-- <span>{{ paymentObj.settlementBatchName }}</span> -->
                                 <span v-if="paymentObj.settlementBatchName">{{ paymentObj.settlementBatchName }}</span>
                                 <a-button type="link" @click="handleSettleClick">选择</a-button>
                             </a-col>
-                        </a-row>
+                        </a-row> -->
                     </div>
                     <div>
                         <div class="model-row">
@@ -664,10 +663,10 @@
                                 <span>已支付金额（元）：</span>
                                 <span>{{ paymentObj.contractPaidAmount }}</span>
                             </a-col>
-                            <a-col :span="12">
+                            <!-- <a-col :span="12">
                                 <span>已结算金额（元）：</span>
                                 <span>{{ paymentObj.contractSettlAmount }}</span>
-                            </a-col>
+                            </a-col> -->
                         </a-row>
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
@@ -680,10 +679,10 @@
                             </a-col>
                         </a-row>
                         <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
+                            <!-- <a-col :span="12">
                                 <span>本次结算金额（元）：</span>
                                 <span>{{ paymentObj.currentSettlementAmount }}</span>
-                            </a-col>
+                            </a-col> -->
                             <a-col :span="12">
                                 <span>交易附言：</span>
                                 <span>{{ paymentObj.transactionRemark }}</span>
@@ -695,13 +694,13 @@
                                 <span>{{ paymentObj.month }}</span>
                             </a-col>
                         </a-row>
-                        <a-row :gutter="24" class="model-col">
+                        <!-- <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
                                 <span>所属结算批次：</span>
                                 <span v-if="paymentObj.settlementBatchName">{{ paymentObj.settlementBatchName }}</span>
                                 <a-button type="link" @click="handleSettleClick">选择</a-button>
                             </a-col>
-                        </a-row>
+                        </a-row> -->
                     </div>
                     <div>
                         <div class="model-row">
@@ -766,10 +765,10 @@
                                 <span>已支付金额（元）：</span>
                                 <span>{{ paymentObj.contractPaidAmount }}</span>
                             </a-col>
-                            <a-col :span="12">
+                            <!-- <a-col :span="12">
                                 <span>已结算金额（元）：</span>
                                 <span>{{ paymentObj.contractSettlAmount }}</span>
-                            </a-col>
+                            </a-col> -->
                         </a-row>
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
@@ -782,22 +781,22 @@
                             </a-col>
                         </a-row>
                         <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
+                            <!-- <a-col :span="12">
                                 <span>本次结算金额（元）：</span>
                                 <span>{{ paymentObj.currentSettlementAmount }}</span>
-                            </a-col>
+                            </a-col> -->
                             <a-col :span="12">
                                 <span>交易附言：</span>
                                 <span>{{ paymentObj.transactionRemark }}</span>
                             </a-col>
                         </a-row>
-                        <a-row :gutter="24" class="model-col">
+                        <!-- <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
                                 <span>所属结算批次：</span>
                                 <span v-if="paymentObj.settlementBatchName">{{ paymentObj.settlementBatchName }}</span>
                                 <a-button type="link" @click="handleSettleClick">选择</a-button>
                             </a-col>
-                        </a-row>
+                        </a-row> -->
                     </div>
                     <div>
                         <div class="model-row">
@@ -916,20 +915,20 @@
                                 <span>已支付金额（元）：</span>
                                 <span>{{ paymentObj.contractPaidAmount }}</span>
                             </a-col>
-                            <a-col :span="12">
+                            <!-- <a-col :span="12">
                                 <span>已结算金额（元）：</span>
                                 <span>{{ paymentObj.contractSettlAmount }}</span>
-                            </a-col>
+                            </a-col> -->
                         </a-row>
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
                                 <span>申请金额（元）：</span>
                                 <span>{{ paymentObj.paymentAmount }}</span>
                             </a-col>
-                            <a-col :span="12">
+                            <!-- <a-col :span="12">
                                 <span>本次结算金额（元）：</span>
                                 <span>{{ paymentObj.currentSettlementAmount }}</span>
-                            </a-col>
+                            </a-col> -->
                         </a-row>
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
@@ -937,13 +936,13 @@
                                 <span>{{ paymentObj.transactionRemark }}</span>
                             </a-col>
                         </a-row>
-                        <a-row :gutter="24" class="model-col">
+                        <!-- <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
                                 <span>所属结算批次：</span>
                                 <span v-if="paymentObj.settlementBatchName">{{ paymentObj.settlementBatchName }}</span>
                                 <a-button type="link" @click="handleSettleClick">选择</a-button>
                             </a-col>
-                        </a-row>
+                        </a-row> -->
                     </div>
                     <div>
                         <!-- <div class="model-row">
@@ -1278,7 +1277,7 @@
                         </a-col>
                     </a-row> -->
                     <a-row :gutter="24">
-                        <a-col :span="12">
+                        <!-- <a-col :span="12">
                             <a-form-model-item label="合同已结算金额（元）" prop="settledAmount">
                                 <a-input 
                                     type="number" 
@@ -1286,7 +1285,7 @@
                                     placeholder="请输入合同已结算金额"
                                 />
                             </a-form-model-item>
-                        </a-col>
+                        </a-col> -->
                         <a-col :span="12">
                             <a-form-model-item label="合同已支付金额（元）" prop="paidAmount">
                                 <a-input 
@@ -1782,10 +1781,10 @@
                         <span>交易信息</span>
                     </div>
                     <a-row :gutter="24" class="model-col">
-                        <a-col :span="12">
+                        <!-- <a-col :span="12">
                             <span>已结算金额（元）：</span>
                             <span>{{ collectionObj.contractSettlAmount }}</span>
-                        </a-col>
+                        </a-col> -->
                         <a-col :span="12">
                             <span>已支付金额（元）：</span>
                             <span>{{ collectionObj.contractPaidAmount }}</span>
@@ -1796,10 +1795,10 @@
                         <span>本次支付金额（元）：</span>
                         <span>{{ collectionObj.transactionAmount }}</span>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <span>本次结算金额（元）:</span>
                         <span>{{ collectionObj.currentSettlementAmount }}</span>
-                    </a-col>
+                    </a-col> -->
                     </a-row>
                     <a-row :gutter="24" class="model-col">
                         <a-col :span="12">
@@ -1811,14 +1810,13 @@
                             <span>{{ collectionObj.payDate }}</span>
                         </a-col>
                     </a-row>
-                    <a-row :gutter="24" class="model-col">
+                    <!-- <a-row :gutter="24" class="model-col">
                         <a-col :span="12">
                             <span>所属结算批次：</span>
-                            <!-- <span>{{ collectionObj.settlementBatchName }}</span> -->
                             <span v-if="collectionObj.settlementBatchName">{{ collectionObj.settlementBatchName }}</span>
                             <a-button type="link" @click="handleSettleClick">选择</a-button>
                         </a-col>
-                    </a-row>
+                    </a-row> -->
                 </div>
                 <!-- <div>
                     <div class="model-row">
@@ -2135,7 +2133,7 @@
                     <span>交易信息</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                             <a-input 
                                 type="number"  
@@ -2143,7 +2141,7 @@
                                 disabled
                                 />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item label="已支付金额（元）">
                             <a-input 
@@ -2163,14 +2161,14 @@
                         />
                     </a-form-model-item>
                 </a-col>
-                <a-col :span="12">
+                <!-- <a-col :span="12">
                     <a-form-model-item label="本次结算金额（元）">
                     <a-input 
                         type="text"  
                         v-model="editCollectionForm.currentSettlementAmount"
                         />
                     </a-form-model-item>
-                </a-col>
+                </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -2194,14 +2192,14 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
-                <a-row :gutter="24">
+                <!-- <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="所属结算批次">
                             <span>{{selectionRows.length > 0 ? selectionRows[0].batchName + '(' + selectionRows[0].companyName + ')' : ''}} </span>
                             <a-button type="link" @click="handleSettleClick">选择</a-button>
                         </a-form-model-item>
                     </a-col>
-                </a-row>
+                </a-row> -->
                 <div class="model-row">
                     <span>支付要件及付款成功凭证</span>
                 </div>
@@ -2755,7 +2753,7 @@ export default {
                 companyOperator: [{ required: true, message: '请选择甲方企业经办人', trigger: 'change' }],
                 companyContractPrimaryReviewer: [{ required: true, message: '请选择合同一级复核人', trigger: 'change' }],
                 companyContractDetailOperator: [{ required: true, message: '请选择合同经办人', trigger: 'change' }],
-                settledAmount: [{ required: true, message: '请输入合同已结算金额', trigger: 'change' }],
+                // settledAmount: [{ required: true, message: '请输入合同已结算金额', trigger: 'change' }],
                 paidAmount: [{ required: true, message: '请输入合同已支付金额', trigger: 'change' }],
             },
             imgKey: '',
@@ -2969,7 +2967,7 @@ export default {
         this.getPayCollectionList()
         this.getPaymentSceneList()
         this.getContractNameList()
-        this.getSettleInfo()
+        // this.getSettleInfo()
 
         // getPaymentProcessInfo(186).then(res => {
         //     let url = res.data.url
@@ -3010,7 +3008,8 @@ export default {
         getContractTodoInfo () {
             let reqObj = {
                 pageNum: this.pagination.current,
-                pageSize: this.pagination.pageSize
+                pageSize: this.pagination.pageSize,
+                projectIDLv3: localStorage.getItem('projectIDLv3')
             }
             getContractTodoList(reqObj).then(res => {
                 const data = res.data
@@ -3023,7 +3022,8 @@ export default {
         getPaymentTodoInfo() {
             let reqObj = {
                 pageNum: this.paymentPagination.current,
-                pageSize: this.paymentPagination.pageSize
+                pageSize: this.paymentPagination.pageSize,
+                projectIDLv3: localStorage.getItem('projectIDLv3')
             }
             getPaymentTodoList(reqObj).then(res => {
                 if(res.status == 1 && res.data) {
@@ -3046,7 +3046,10 @@ export default {
             })
         },
         getGeneralContractList() {
-            getGeneralContract().then(res => {
+            let parmas = {
+                projectIDLv3: localStorage.getItem('projectIDLv3') || ''
+            }
+            getGeneralContract(parmas).then(res => {
                 if(res && res.length > 0) {
                 this.belongGeneralType = res
                 } 
@@ -3055,7 +3058,8 @@ export default {
         getPayCollectionList() {
             let reqObj = {
                 pageNum: this.payCollectionPagination.current,
-                pageSize: this.payCollectionPagination.pageSize
+                pageSize: this.payCollectionPagination.pageSize,
+                projectIDLv3: localStorage.getItem('projectIDLv3')
             }
             getPayCollection(reqObj).then(res => {
                 
@@ -4685,7 +4689,10 @@ export default {
             })
         },
         getContractNameList() {
-            getContractName().then(res => {
+             let params = {
+                projectIDLv3: localStorage.getItem('projectIDLv3')
+            }
+            getContractName(params).then(res => {
                 this.contractNameSelect = res
             })
         },

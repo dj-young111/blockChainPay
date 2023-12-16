@@ -109,7 +109,7 @@ const vueConfig = {
     //   }
     // }
   },
-
+  runtimeCompiler: true,
   // disable source map in production
   productionSourceMap: false,
   lintOnSave: false,

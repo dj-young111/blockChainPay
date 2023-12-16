@@ -42,7 +42,7 @@
                 :wrapper-col="{ span: 12 }"
             >
                 <div class="modal-title">
-                    <span>基本信息</span>
+                    <span>基本信息1</span>
                 </div>
                 <a-row :gutter="24">
                 <a-col :span="12">
@@ -127,6 +127,7 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
+            <div v-if="type != 14">     
                 <div class="modal-title">
                     <span>收款方信息</span>
                 </div>
@@ -170,6 +171,64 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
+            </div>    
+            <div v-if="type == 14">   
+                <div class="modal-title">
+                    <span>收款方信息</span>
+                </div>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方名称">
+                            <a-input 
+                                type="text" 
+                                v-model="requestObj.peasantWorkerPayeeName"
+                                disabled
+                            />
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="收款银行账号户名">
+                            <a-input 
+                                type="text" 
+                                v-model="requestObj.peasantWorkerPayeeName"
+                                disabled
+                            />
+                            </a-form-model-item>
+                        </a-col>
+                </a-row>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方银行账号">
+                            <a-input 
+                                type="text" 
+                                v-model="requestObj.peasantWorkerPayeeAcc"
+                                disabled
+                            />
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方联行行号">
+                        <a-input 
+                            type="text" 
+                            v-model="requestObj.peasantWorkerPayeeOpenBankNo"
+                            disabled
+                        />
+                        </a-form-model-item>
+                    </a-col>
+                    
+                </a-row>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方开户行">
+                        <a-input 
+                            type="text" 
+                            v-model="requestObj.peasantWorkerPayeeOpenBank"
+                            disabled
+                        />
+                        </a-form-model-item>
+                    </a-col>
+                </a-row>
+            </div>  
                 <div class="modal-title">
                     <span>支付申请信息</span>
                 </div>
@@ -183,7 +242,7 @@
                             />
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                         <a-input 
                             type="number"  
@@ -191,7 +250,7 @@
                             disabled
                             />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -203,7 +262,7 @@
                             />
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="本次结算金额（元）">
                         <a-input 
                             type="number"  
@@ -211,7 +270,7 @@
                             placeholder="请输入"
                             />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -221,18 +280,95 @@
                     </a-col>
                 </a-row>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="所属结算批次">
                             <span v-if="isSettleSelect">{{ cacheSettle }}</span>
                             <a-button type="link" @click="handleSettleClick">选择</a-button>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
+                </a-row>
+                <div class="modal-title">
+                    <span>发票文件</span>
+                </div>
+                <a-row :gutter="24">
+                    <div>
+                        <a-button class="editable-add-btn" @click="handleAdd" style="margin: 20px 0">
+                        新增
+                        </a-button>
+                        <a-table bordered :data-source="dataSource" :columns="billColumns" :pagination="false" style="margin-bottom: 40px">
+                        <template slot="invoiceBatchNo" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceBatchNo', $event)" />
+                        </template>
+                        <template slot="invoiceCode" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceCode', $event)" />
+                        </template>
+                        <template slot="invoiceNo" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceNo', $event)" />
+                        </template>
+                        <template slot="invoiceAmount" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceAmount', $event)" />
+                        </template>
+                        <template slot="isLocalTax" slot-scope="text, record">
+                            <!-- <editable-cell :text="text" @change="onCellChange(record.key, 'isLocalTax', $event)" /> -->
+                            <a-select v-model="isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
+                                <a-select-option :value="1">
+                                    是
+                                </a-select-option>
+                                <a-select-option :value="2">
+                                    否
+                                </a-select-option>
+                            </a-select>
+                        </template>
+                        <template slot="invoiceFile" slot-scope="text, record, index">
+                            <!-- <a-upload
+                                :action="`${$fileUrl}/files`"
+                                @change="(e) => handlePayChangeFile(e, index)"
+                                :before-upload="beforePayImgUpload"
+                                :default-file-list="payDetailForm.fileUrlList"
+                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                            >
+                                <a-button type="primary"> <a-icon type="upload" /> 上传发票附件 </a-button>
+                            </a-upload> -->
+                            <a-upload
+                                :action="`${$fileUrl}/files`"
+                                @change="(e) => handleReqChangeFile(e, index)"
+                                :before-upload="beforeReqImgUpload"
+                                :default-file-list="reqDetailForm.fileUrlList"
+                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                            >
+                                <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
+                            </a-upload>
+                        </template>
+                        <template slot="operation" slot-scope="text, record">
+                            <a-popconfirm
+                            v-if="dataSource.length"
+                            title="确定删除?"
+                            @confirm="() => onDelete(record.key)"
+                            >
+                            <a href="javascript:;">删除</a>
+                            </a-popconfirm>
+                        </template>
+                        </a-table>
+                    </div>
+                    <!-- <a-col :span="12">
+                        <a-form-model-item class="upload-wrapper" label="上传发票附件">
+                        <a-upload
+                            :action="`${$fileUrl}/files`"
+                            @change="handlePayChangeFile"
+                            :before-upload="beforePayImgUpload"
+                            :default-file-list="payDetailForm.fileUrlList"
+                            accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                        >
+                            <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
+                        </a-upload>
+                        </a-form-model-item>
+                    </a-col> -->
                 </a-row>
                 <div class="modal-title">
                     <span>支付要件</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传发票附件">
                             <a-upload
                                 :action="`${$fileUrl}/files`"
@@ -244,7 +380,7 @@
                                 <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
                             </a-upload>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                         <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传审批文件">
                             <a-upload
@@ -290,7 +426,7 @@
                 :wrapper-col="{ span: 12 }"
             >
                 <div class="modal-title">
-                    <span>基本信息</span>
+                    <span>基本信息2</span>
                 </div>
                 <a-row :gutter="24">
                 <a-col :span="12">
@@ -437,7 +573,7 @@
                             />
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                         <a-input 
                             type="number"  
@@ -446,7 +582,7 @@
                             disabled
                             />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -458,7 +594,7 @@
                             />
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="本次结算金额（元）">
                         <a-input 
                             type="number"  
@@ -466,7 +602,7 @@
                             placeholder="请输入"
                             />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -476,12 +612,12 @@
                     </a-col>
                 </a-row>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="所属结算批次">
                             <span v-if="isSettleSelect">{{ cacheSettle }}</span>
                             <a-button type="link" @click="handleSettleClick">选择</a-button>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <div class="modal-title">
                     <span>支付要件</span>
@@ -610,6 +746,7 @@
 
                     </a-col>
                 </a-row>
+            <div v-if="type != 12">   
                 <div class="modal-title">
                     <span>收款方信息</span>
                 </div>
@@ -665,6 +802,64 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
+            </div>   
+            <div v-if="type == 12">   
+                <div class="modal-title">
+                    <span>收款方信息</span>
+                </div>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方名称">
+                            <a-input 
+                                type="text" 
+                                v-model="paymentObj.peasantWorkerPayeeName"
+                                disabled
+                            />
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="收款银行账号户名">
+                            <a-input 
+                                type="text" 
+                                v-model="paymentObj.peasantWorkerPayeeName"
+                                disabled
+                            />
+                            </a-form-model-item>
+                        </a-col>
+                </a-row>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方银行账号">
+                            <a-input 
+                                type="text" 
+                                v-model="paymentObj.peasantWorkerPayeeAcc"
+                                disabled
+                            />
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方联行行号">
+                        <a-input 
+                            type="text" 
+                            v-model="paymentObj.peasantWorkerPayeeOpenBankNo"
+                            disabled
+                        />
+                        </a-form-model-item>
+                    </a-col>
+                    
+                </a-row>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方开户行">
+                        <a-input 
+                            type="text" 
+                            v-model="paymentObj.peasantWorkerPayeeOpenBank"
+                            disabled
+                        />
+                        </a-form-model-item>
+                    </a-col>
+                </a-row>
+            </div>  
                 <div class="modal-title">
                     <span>支付申请信息</span>
                 </div>
@@ -678,7 +873,7 @@
                             />
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                         <a-input 
                             type="number"  
@@ -686,7 +881,7 @@
                             disabled
                             />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -698,7 +893,7 @@
                             />
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="本次结算金额（元）">
                         <a-input 
                             type="number"  
@@ -706,7 +901,7 @@
                             placeholder="请输入"
                             />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -716,18 +911,72 @@
                     </a-col>
                 </a-row>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="所属结算批次">
                             <span v-if="isSettleSelect">{{ cacheSettle }}</span>
                             <a-button type="link" @click="handleSettleClick">选择</a-button>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
+                </a-row>
+                <div class="modal-title">
+                    <span>发票文件</span>
+                </div>
+                <a-row :gutter="24">
+                    <div>
+                        <a-button class="editable-add-btn" @click="handleAdd" style="margin: 20px 0">
+                        新增
+                        </a-button>
+                        <a-table bordered :data-source="dataSource" :columns="billColumns" :pagination="false" style="margin-bottom: 40px">
+                        <template slot="invoiceBatchNo" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceBatchNo', $event)" />
+                        </template>
+                        <template slot="invoiceCode" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceCode', $event)" />
+                        </template>
+                        <template slot="invoiceNo" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceNo', $event)" />
+                        </template>
+                        <template slot="invoiceAmount" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceAmount', $event)" />
+                        </template>
+                        <template slot="isLocalTax" slot-scope="text, record">
+                            <a-select v-model="isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
+                                <a-select-option :value="1">
+                                    是
+                                </a-select-option>
+                                <a-select-option :value="2">
+                                    否
+                                </a-select-option>
+                            </a-select>
+                        </template>
+                        <template slot="invoiceFile" slot-scope="text, record, index">
+                            <a-upload
+                                :action="`${$fileUrl}/files`"
+                                @change="(e) => handlePayChangeFile(e, index)"
+                                :before-upload="beforePayImgUpload"
+                                :default-file-list="payDetailForm.fileUrlList"
+                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                            >
+                                <a-button type="primary"> <a-icon type="upload" /> 上传发票附件 </a-button>
+                            </a-upload>
+                        </template>
+                        <template slot="operation" slot-scope="text, record">
+                            <a-popconfirm
+                            v-if="dataSource.length"
+                            title="确定删除?"
+                            @confirm="() => onDelete(record.key)"
+                            >
+                            <a href="javascript:;">删除</a>
+                            </a-popconfirm>
+                        </template>
+                        </a-table>
+                    </div>
                 </a-row>
                 <div class="modal-title">
                     <span>支付要件</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传发票附件">
                         <a-upload
                             :action="`${$fileUrl}/files`"
@@ -739,7 +988,7 @@
                             <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
                         </a-upload>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传审批文件">
                         <a-upload
@@ -785,7 +1034,7 @@
                 :wrapper-col="{ span: 12 }"
             >
                 <div class="modal-title">
-                    <span>基本信息</span>
+                    <span>基本信息2s</span>
                 </div>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -807,17 +1056,6 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
-                <a-row :gutter="24">
-                    <a-col :span="12">
-                        <a-form-model-item label="所属合同名称" prop="belongContractCode">
-                            <a-select v-model="payDetailOtherForm.belongContractCode" placeholder="请选择" @change="handleProjectContractCodeChange">
-                                <a-select-option v-for="item of payContractNameSelect" :key="item.value" :value="item.value">
-                                {{ item.name }}
-                                </a-select-option>
-                            </a-select>
-                        </a-form-model-item>
-                    </a-col>
-                </a-row>
                 <div class="modal-title">
                     <span>付款方信息</span>
                 </div>
@@ -832,32 +1070,71 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
+            <div v-if="type == 13">
                 <div class="modal-title">
-                    <span>支付申请信息</span>
+                    <span>收款方信息</span>
                 </div>
                 <a-row :gutter="24">
                     <a-col :span="12">
-                        <a-form-model-item label="已支付金额（元）">
+                        <a-form-model-item label="收款银行账号户名" prop='payeeName'>
                             <a-input 
-                                type="number"  
-                                v-model="contractPaidAmount"
-                                placeholder="请输入"
-                                disabled
-                                />
-                        </a-form-model-item>
-                    </a-col>
-                    <a-col :span="12">
-                        <a-form-model-item label="已结算金额（元）">
+                                type="text" 
+                                v-model="payDetailOtherForm.payeeName"
+                            />
+                            </a-form-model-item>
+                        </a-col>
+                        <a-col :span="12">
+                        <a-form-model-item label="收款方银行账号" prop='payeeAcc'>
                             <a-input 
-                                type="number"  
-                                v-model="contractSettlAmount"
-                                placeholder="请输入"
-                                disabled
-                                />
+                                type="text" 
+                                v-model="payDetailOtherForm.payeeAcc"
+                            />
                         </a-form-model-item>
                     </a-col>
                 </a-row>
                 <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方联行行号" prop='payeeOpenBankNo'>
+                        <a-input 
+                            type="text" 
+                            v-model="payDetailOtherForm.payeeOpenBankNo"
+                        />
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方开户行" prop='payeeOpenBank'>
+                        <a-input 
+                            type="text" 
+                            v-model="payDetailOtherForm.payeeOpenBank"
+                        />
+                        </a-form-model-item>
+                    </a-col>
+                </a-row>
+            </div>    
+                <div class="modal-title">
+                    <span>支付申请信息</span>
+                </div>
+                <a-row :gutter="24" v-if="type == 18">
+                    <a-col :span="12">
+                        <a-form-model-item label="总金额（元）" prop="totalSalary">
+                        <a-input 
+                            type="text" 
+                            v-model="payDetailOtherForm.totalSalary"
+                            
+                        />
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="笔数" prop="totalNum">
+                        <a-input 
+                            type="text" 
+                            v-model="payDetailOtherForm.totalNum"
+                            
+                        />
+                        </a-form-model-item>
+                    </a-col>
+                </a-row>
+                <a-row :gutter="24" v-if="type == 13">
                     <a-col :span="12">
                         <a-form-model-item label="付款总金额（元）" prop="paymentAmount">
                         <a-input 
@@ -868,53 +1145,110 @@
                         </a-form-model-item>
                     </a-col>
                     <a-col :span="12">
-                        <a-form-model-item label="付款总笔数" prop="paymentNum">
-                            <a-input 
-                                type="number" 
-                                v-model="payDetailOtherForm.paymentNum" 
-                                placeholder="请输入"/>
-                        </a-form-model-item>
-                    </a-col>
-                </a-row>
-                <a-row :gutter="24">
-                    <a-col :span="12">
-                        <a-form-model-item label="本次结算金额（元）">
-                        <a-input 
-                            type="number"  
-                            v-model="payDetailOtherForm.currentSettlementAmount"
-                            placeholder="请输入"
-                            />
-                        </a-form-model-item>
-                    </a-col>
-                    <a-col :span="12">
                         <a-form-model-item label="交易附言">
                             <a-input v-model="payDetailOtherForm.transactionRemark" placeholder="请输入"/>
                         </a-form-model-item>
                     </a-col>
                 </a-row>
+            <div class="process">
+                <div class="model-row">
+                    <span>审批流程</span><strong>* 请在此部分设定与本合同审批及本合同支付审批相关的流程</strong>
+                </div>
+                <div>
+                <div >
                 <a-row :gutter="24">
-                    <a-form-model-item label="所属结算批次">
-                        <span v-if="isSettleSelect">{{ cacheSettle }}</span>
-                        <a-button type="link" @click="handleSettleClick">选择</a-button>
-                    </a-form-model-item>
+                    <a-col :span="12">
+                        <a-form-model-item label="经办人" prop="companyOperator">
+                            <a-select v-model="payDetailOtherForm.companyOperator" placeholder="请选择经办人" @focus="handleCompanyContractOperatorFocus">
+                              <a-select-option v-for="item of agentSelectB" :key="item.value" :value="item.value">
+                                {{ item.name }}
+                              </a-select-option>
+                            </a-select>
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="一级复核人" prop="companyContractPrimaryReviewer" >
+                            <a-select v-model="payDetailOtherForm.companyContractPrimaryReviewer" placeholder="请选择一级复核人" @focus="handleCompanyContractPrimaryFocus">
+                            <a-select-option v-for="item of reviewSelect3" :key="item.value" :value="item.value">
+                              {{ item.name }}
+                            </a-select-option>
+                          </a-select>
+                        </a-form-model-item>
+                    </a-col>
+                </a-row>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="二级复核人（如有）">
+                            <a-select v-model="payDetailOtherForm.companyContractSecondaryReviewer" placeholder="请选择二级复核人" @focus="handleCompanyContractSecondFocus">
+                              <a-select-option v-for="item of reviewSelect2" :key="item.value" :value="item.value">
+                                {{ item.name }}
+                              </a-select-option>
+                            </a-select>
+                        </a-form-model-item>
+                    </a-col>
+                </a-row>
+            </div>
+                </div>
+            </div>
+                <div class="modal-title">
+                    <span>发票文件</span>
+                </div>
+                <a-row :gutter="24">
+                    <div>
+                        <a-button class="editable-add-btn" @click="handleAdd" style="margin: 20px 0">
+                        新增
+                        </a-button>
+                        <a-table bordered :data-source="dataSource" :columns="billColumns" :pagination="false" style="margin-bottom: 40px">
+                        <template slot="invoiceBatchNo" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceBatchNo', $event)" />
+                        </template>
+                        <template slot="invoiceCode" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceCode', $event)" />
+                        </template>
+                        <template slot="invoiceNo" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceNo', $event)" />
+                        </template>
+                        <template slot="invoiceAmount" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceAmount', $event)" />
+                        </template>
+                        <template slot="isLocalTax" slot-scope="text, record">
+                            <!-- <editable-cell :text="text" @change="onCellChange(record.key, 'isLocalTax', $event)" /> -->
+                            <a-select v-model="isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
+                                <a-select-option :value="1">
+                                    是
+                                </a-select-option>
+                                <a-select-option :value="2">
+                                    否
+                                </a-select-option>
+                            </a-select>
+                        </template>
+                        <template slot="invoiceFile" slot-scope="text, record, index">
+                            <a-upload
+                                :action="`${$fileUrl}/files`"
+                                @change="(e) => handleOtherPayChangeFile(e, index)"
+                                :before-upload="beforeOtherPayImgUpload"
+                                :default-file-list="payDetailOtherForm.fileUrlList"
+                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                            >
+                                <a-button type="primary"> <a-icon type="upload" /> 上传发票附件 </a-button>
+                            </a-upload>
+                        </template>
+                        <template slot="operation" slot-scope="text, record">
+                            <a-popconfirm
+                            v-if="dataSource.length"
+                            title="确定删除?"
+                            @confirm="() => onDelete(record.key)"
+                            >
+                            <a href="javascript:;">删除</a>
+                            </a-popconfirm>
+                        </template>
+                        </a-table>
+                    </div>
                 </a-row>
                 <div class="modal-title">
                     <span>支付要件</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
-                        <a-form-model-item class="upload-wrapper" label="上传发票附件">
-                        <a-upload
-                            :action="`${$fileUrl}/files`"
-                            @change="handleOtherPayChangeFile"
-                            :before-upload="beforeOtherPayImgUpload"
-                            :default-file-list="payDetailOtherForm.fileUrlList"
-                            accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
-                        >
-                            <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
-                        </a-upload>
-                        </a-form-model-item>
-                    </a-col>
                     <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传审批文件">
                         <a-upload
@@ -926,6 +1260,20 @@
                         >
                             <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
                         </a-upload>
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :span="12" class="upload" v-if="type == 18">
+                        <a-form-model-item label="请上传工资单" prop="fileDetails">
+                            <a-upload
+                                :action="`${$fileUrl}/salaryFiles`"
+                                @change="handleChangeFile"
+                                :before-upload="beforeImgUpload"
+                                :default-file-list="salaryDetailForm.fileDetails"
+                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                            >
+                                <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
+                            </a-upload>
+                            <a class="download-wrapper" @click="$newExportsExcel(`${$fileUrl}/model/downloadModel/1`, '批量代付明细账单模板', false)">批量代付明细账单模板下载</a>
                         </a-form-model-item>
                     </a-col>
                 </a-row>
@@ -944,14 +1292,14 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row> -->
-                <a-row :gutter="24">
+                <!-- <a-row :gutter="24">
                     <a-col :span="12" class="upload">
                         <a-form-model-item class="upload-wrapper" label="选择合同相关联工资单">
                             <span v-if="isSalarySelect">{{ cacheSalary }}</span>
                             <a-button type="link" @click="handleSalarySelectClick">选择</a-button>
                         </a-form-model-item>
                     </a-col>
-                </a-row>
+                </a-row> -->
                 <div class="modal-title">
                     <span>其他附件</span>
                 </div>
@@ -983,7 +1331,7 @@
                 :wrapper-col="{ span: 12 }"
             >
                 <div class="modal-title">
-                    <span>基本信息</span>
+                    <span>基本信息222</span>
                 </div>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -1089,6 +1437,7 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
+            <div v-if="type != 19">
                 <div class="modal-title">
                     <span>分包商信息</span>
                 </div>
@@ -1143,11 +1492,12 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
+            </div>      
                 <div class="modal-title">
                     <span>支付申请信息</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已支付金额（元）">
                         <a-input 
                             type="text" 
@@ -1155,8 +1505,8 @@
                             disabled
                         />
                         </a-form-model-item>
-                    </a-col>
-                    <a-col :span="12">
+                    </a-col> -->
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                         <a-input 
                             type="text" 
@@ -1164,7 +1514,7 @@
                             disabled
                         />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -1187,7 +1537,7 @@
                     </a-col>
                 </a-row>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="本次结算金额（元）">
                         <a-input 
                             type="number"  
@@ -1195,7 +1545,7 @@
                             placeholder="请输入"
                             />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item label="交易附言">
                         <a-input 
@@ -1213,17 +1563,72 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
-                <a-row :gutter="24">
+                <!-- <a-row :gutter="24">
                     <a-form-model-item label="所属结算批次">
                         <span v-if="isSettleSelect">{{ cacheSettle }}</span>
                         <a-button type="link" @click="handleSettleClick">选择</a-button>
                     </a-form-model-item>
+                </a-row> -->
+                <div class="modal-title">
+                    <span>发票文件</span>
+                </div>
+                <a-row :gutter="24">
+                    <div>
+                        <a-button class="editable-add-btn" @click="handleAdd" style="margin: 20px 0">
+                        新增
+                        </a-button>
+                        <a-table bordered :data-source="dataSource" :columns="billColumns" :pagination="false" style="margin-bottom: 40px">
+                        <template slot="invoiceBatchNo" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceBatchNo', $event)" />
+                        </template>
+                        <template slot="invoiceCode" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceCode', $event)" />
+                        </template>
+                        <template slot="invoiceNo" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceNo', $event)" />
+                        </template>
+                        <template slot="invoiceAmount" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceAmount', $event)" />
+                        </template>
+                        <template slot="isLocalTax" slot-scope="text, record">
+                            <!-- <editable-cell :text="text" @change="onCellChange(record.key, 'isLocalTax', $event)" /> -->
+                            <a-select v-model="isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
+                                <a-select-option :value="1">
+                                    是
+                                </a-select-option>
+                                <a-select-option :value="2">
+                                    否
+                                </a-select-option>
+                            </a-select>
+                        </template>
+                        <template slot="invoiceFile" slot-scope="text, record, index">
+                            <a-upload
+                                :action="`${$fileUrl}/files`"
+                                @change="(e) => handleSalaryChangeFile(e, index)"
+                                :before-upload="beforeSalaryImgUpload"
+                                :default-file-list="payDetailForm.fileUrlList"
+                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                            >
+                                <a-button type="primary"> <a-icon type="upload" /> 上传发票附件 </a-button>
+                            </a-upload>
+                        </template>
+                        <template slot="operation" slot-scope="text, record">
+                            <a-popconfirm
+                            v-if="dataSource.length"
+                            title="确定删除?"
+                            @confirm="() => onDelete(record.key)"
+                            >
+                            <a href="javascript:;">删除</a>
+                            </a-popconfirm>
+                        </template>
+                        </a-table>
+                    </div>
                 </a-row>
                 <div class="modal-title">
                     <span>支付要件</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传发票附件">
                             <a-upload
                                 :action="`${$fileUrl}/files`"
@@ -1235,7 +1640,21 @@
                                 <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
                             </a-upload>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
+                    <!-- <a-col :span="24" class="upload-wrapper">
+                        <a-form-model-item label="请上传工资单" prop="fileDetails">
+                            <a-upload
+                                :action="`${$fileUrl}/salaryFiles`"
+                                @change="handleChangeFile"
+                                :before-upload="beforeImgUpload"
+                                :default-file-list="salaryDetailForm.fileDetails"
+                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                            >
+                                <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
+                            </a-upload>
+                            <a class="download-wrapper" @click="$newExportsExcel(`${$fileUrl}/model/downloadModel/1`, '批量代付明细账单模板', false)">批量代付明细账单模板下载</a>
+                        </a-form-model-item>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传审批文件">
                             <a-upload
@@ -1249,11 +1668,25 @@
                             </a-upload>
                         </a-form-model-item>
                     </a-col>
+                    <a-col :span="12" class="upload">
+                        <a-form-model-item label="请上传工资单" prop="fileDetails">
+                            <a-upload
+                                :action="`${$fileUrl}/salaryFiles`"
+                                @change="handleChangeFile"
+                                :before-upload="beforeImgUpload"
+                                :default-file-list="salaryDetailForm.fileDetails"
+                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                            >
+                                <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
+                            </a-upload>
+                            <a class="download-wrapper" @click="$newExportsExcel(`${$fileUrl}/model/downloadModel/1`, '批量代付明细账单模板', false)">批量代付明细账单模板下载</a>
+                        </a-form-model-item>
+                    </a-col>
                 </a-row>
                 <a-row :gutter="24">
-                    <a-col :span="12" class="upload">
+                    <!-- <a-col :span="12" class="upload">
                         <a-form-model-item class="upload-wrapper" label="选择合同相关联工资单">
-                            <!-- <a-upload
+                            <a-upload
                                 :action="`${$fileUrl}/files`"
                                 @change="handleSalaryDetailChangeFile"
                                 :before-upload="beforeSalaryDetailImgUpload"
@@ -1261,11 +1694,25 @@
                             >
                                 <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
                             </a-upload>
-                            <a class="download-wrapper" :href="`${$fileUrl}/model/downloadModel/1`">批量代付明细账单模板下载</a> -->
+                            <a class="download-wrapper" :href="`${$fileUrl}/model/downloadModel/1`">批量代付明细账单模板下载</a>
                             <span v-if="isSalarySelect">{{ cacheSalary }}</span>
                             <a-button type="link" @click="handleSalarySelectClick">选择</a-button>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
+                    <!-- <a-col :span="12" class="upload">
+                        <a-form-model-item label="请上传工资单" prop="fileDetails">
+                            <a-upload
+                                :action="`${$fileUrl}/salaryFiles`"
+                                @change="handleChangeFile"
+                                :before-upload="beforeImgUpload"
+                                :default-file-list="salaryDetailForm.fileDetails"
+                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                            >
+                                <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
+                            </a-upload>
+                            <a class="download-wrapper" @click="$newExportsExcel(`${$fileUrl}/model/downloadModel/1`, '批量代付明细账单模板', false)">批量代付明细账单模板下载</a>
+                        </a-form-model-item>
+                    </a-col> -->
                 </a-row>
                 <div class="modal-title">
                     <span>其他附件</span>
@@ -1298,7 +1745,7 @@
                 :wrapper-col="{ span: 12 }"
             >
                 <div class="modal-title">
-                    <span>基本信息</span>
+                    <span>基本信息222111</span>
                 </div>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -1396,7 +1843,7 @@
                     <span>支付申请信息</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已支付金额（元）">
                         <a-input 
                             type="number"  
@@ -1404,8 +1851,8 @@
                             placeholder="请输入"
                             />
                         </a-form-model-item>
-                    </a-col>
-                    <a-col :span="12">
+                    </a-col> -->
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                         <a-input 
                             type="number"  
@@ -1413,7 +1860,7 @@
                             placeholder="请输入"
                             />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -1436,7 +1883,7 @@
                     </a-col>
                 </a-row>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="本次结算金额（元）">
                         <a-input 
                             type="number"  
@@ -1444,7 +1891,7 @@
                             placeholder="请输入"
                             />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item label="交易附言">
                         <a-input 
@@ -1462,17 +1909,72 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
-                <a-row :gutter="24">
+                <!-- <a-row :gutter="24">
                     <a-form-model-item label="所属结算批次">
                         <span v-if="isSettleSelect">{{ cacheSettle }}</span>
                         <a-button type="link" @click="handleSettleClick">选择</a-button>
                     </a-form-model-item>
+                </a-row> -->
+                <div class="modal-title">
+                    <span>发票文件</span>
+                </div>
+                <a-row :gutter="24">
+                    <div>
+                        <a-button class="editable-add-btn" @click="handleAdd" style="margin: 20px 0">
+                        新增
+                        </a-button>
+                        <a-table bordered :data-source="dataSource" :columns="billColumns" :pagination="false" style="margin-bottom: 40px">
+                        <template slot="invoiceBatchNo" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceBatchNo', $event)" />
+                        </template>
+                        <template slot="invoiceCode" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceCode', $event)" />
+                        </template>
+                        <template slot="invoiceNo" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceNo', $event)" />
+                        </template>
+                        <template slot="invoiceAmount" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceAmount', $event)" />
+                        </template>
+                        <template slot="isLocalTax" slot-scope="text, record">
+                            <!-- <editable-cell :text="text" @change="onCellChange(record.key, 'isLocalTax', $event)" /> -->
+                            <a-select v-model="isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
+                                <a-select-option :value="1">
+                                    是
+                                </a-select-option>
+                                <a-select-option :value="2">
+                                    否
+                                </a-select-option>
+                            </a-select>
+                        </template>
+                        <template slot="invoiceFile" slot-scope="text, record, index">
+                            <a-upload
+                                :action="`${$fileUrl}/files`"
+                                @change="(e) => handleSubContractSalaryChangeFile(e, index)"
+                                :before-upload="beforeSubContractSalaryImgUpload"
+                                :default-file-list="subContractSalaryDetailForm.fileUrlList"
+                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                            >
+                                <a-button type="primary"> <a-icon type="upload" /> 上传发票附件 </a-button>
+                            </a-upload>
+                        </template>
+                        <template slot="operation" slot-scope="text, record">
+                            <a-popconfirm
+                            v-if="dataSource.length"
+                            title="确定删除?"
+                            @confirm="() => onDelete(record.key)"
+                            >
+                            <a href="javascript:;">删除</a>
+                            </a-popconfirm>
+                        </template>
+                        </a-table>
+                    </div>
                 </a-row>
                 <div class="modal-title">
                     <span>支付要件</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传发票附件">
                             <a-upload
                                 :action="`${$fileUrl}/files`"
@@ -1484,7 +1986,7 @@
                                 <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
                             </a-upload>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传审批文件">
                             <a-upload
@@ -1498,11 +2000,25 @@
                             </a-upload>
                         </a-form-model-item>
                     </a-col>
+                    <a-col :span="12" class="upload">
+                        <a-form-model-item label="请上传工资单" prop="fileDetails">
+                            <a-upload
+                                :action="`${$fileUrl}/salaryFiles`"
+                                @change="handleChangeFile"
+                                :before-upload="beforeImgUpload"
+                                :default-file-list="subContractSalaryDetailForm.fileDetails"
+                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                            >
+                                <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
+                            </a-upload>
+                            <a class="download-wrapper" @click="$newExportsExcel(`${$fileUrl}/model/downloadModel/1`, '批量代付明细账单模板', false)">批量代付明细账单模板下载</a>
+                        </a-form-model-item>
+                    </a-col>
                 </a-row>
-                <a-row :gutter="24">
+                <!-- <a-row :gutter="24">
                     <a-col :span="12" class="upload">
                         <a-form-model-item class="upload-wrapper" label="选择合同相关联工资单">
-                            <!-- <a-upload
+                            <a-upload
                                 :action="`${$fileUrl}/files`"
                                 @change="handleSubContractSalaryDetailChangeFile"
                                 :before-upload="beforeSubContractSalaryDetailImgUpload"
@@ -1510,12 +2026,12 @@
                             >
                                 <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
                             </a-upload>
-                            <a class="download-wrapper" :href="`${$fileUrl}/model/downloadModel/1`">批量代付明细账单模板下载</a> -->
+                            <a class="download-wrapper" :href="`${$fileUrl}/model/downloadModel/1`">批量代付明细账单模板下载</a>
                             <span v-if="isSalarySelect">{{ cacheSalary }}</span>
                             <a-button type="link" @click="handleSalarySelectClick">选择</a-button>
                         </a-form-model-item>
                     </a-col>
-                </a-row>
+                </a-row> -->
                 <div class="modal-title">
                     <span>其他附件</span>
                 </div>
@@ -1803,7 +2319,7 @@
                 :wrapper-col="{ span: 12 }"
             >
                 <div class="modal-title">
-                    <span>基本信息</span>
+                    <span>基本信息de</span>
                 </div>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -1993,7 +2509,7 @@
                             />
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                         <a-input 
                             type="text"  
@@ -2001,7 +2517,7 @@
                             disabled
                             />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -2022,7 +2538,7 @@
                     </a-col>
                 </a-row>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="本次结算金额（元）">
                         <a-input 
                             type="number"  
@@ -2030,7 +2546,7 @@
                             placeholder="请输入"
                             />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item label="交易附言">
                             <a-input v-model="reqAndPayDetailForm.transactionRemark" placeholder="请输入"/>
@@ -2044,17 +2560,72 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
-                <a-row :gutter="24">
+                <!-- <a-row :gutter="24">
                     <a-form-model-item label="所属结算批次">
                         <span v-if="isSettleSelect">{{ cacheSettle }}</span>
                         <a-button type="link" @click="handleSettleClick">选择</a-button>
                     </a-form-model-item>
+                </a-row> -->
+                 <div class="modal-title">
+                    <span>发票文件</span>
+                </div>
+                <a-row :gutter="24">
+                    <div>
+                        <a-button class="editable-add-btn" @click="handleAdd" style="margin: 20px 0">
+                        新增
+                        </a-button>
+                        <a-table bordered :data-source="dataSource" :columns="billColumns" :pagination="false" style="margin-bottom: 40px">
+                        <template slot="invoiceBatchNo" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceBatchNo', $event)" />
+                        </template>
+                        <template slot="invoiceCode" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceCode', $event)" />
+                        </template>
+                        <template slot="invoiceNo" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceNo', $event)" />
+                        </template>
+                        <template slot="invoiceAmount" slot-scope="text, record">
+                            <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceAmount', $event)" />
+                        </template>
+                        <template slot="isLocalTax" slot-scope="text, record">
+                            <!-- <editable-cell :text="text" @change="onCellChange(record.key, 'isLocalTax', $event)" /> -->
+                            <a-select v-model="isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
+                                <a-select-option :value="1">
+                                    是
+                                </a-select-option>
+                                <a-select-option :value="2">
+                                    否
+                                </a-select-option>
+                            </a-select>
+                        </template>
+                        <template slot="invoiceFile" slot-scope="text, record, index">
+                            <a-upload
+                                :action="`${$fileUrl}/files`"
+                                @change="(e) => handleReqAndPayChangeFile(e, index)"
+                                :before-upload="beforeReqAndPayImgUpload"
+                                :default-file-list="payDetailOtherForm.fileUrlList"
+                                accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
+                            >
+                                <a-button type="primary"> <a-icon type="upload" /> 上传发票附件 </a-button>
+                            </a-upload>
+                        </template>
+                        <template slot="operation" slot-scope="text, record">
+                            <a-popconfirm
+                            v-if="dataSource.length"
+                            title="确定删除?"
+                            @confirm="() => onDelete(record.key)"
+                            >
+                            <a href="javascript:;">删除</a>
+                            </a-popconfirm>
+                        </template>
+                        </a-table>
+                    </div>
                 </a-row>
                 <div class="modal-title">
                     <span>支付要件</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传发票附件">
                         <a-upload
                             :action="`${$fileUrl}/files`"
@@ -2066,7 +2637,7 @@
                             <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
                         </a-upload>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传审批文件">
                         <a-upload
@@ -2094,10 +2665,10 @@
                         </a-upload>
                             <a class="download-wrapper" :href="`${$fileUrl}/model/downloadModel/1`">批量代付明细账单模板下载</a>
                         </a-form-model-item> -->
-                        <a-form-model-item class="upload-wrapper" label="选择合同相关联工资单">
+                        <!-- <a-form-model-item class="upload-wrapper" label="选择合同相关联工资单">
                             <span v-if="isSalarySelect">{{ cacheSalary }}</span>
                             <a-button type="link" @click="handleSalarySelectClick">选择</a-button>
-                        </a-form-model-item>
+                        </a-form-model-item> -->
                     </a-col>
                 </a-row>
                 <div class="modal-title">
@@ -2263,11 +2834,11 @@
                             <span>{{ reqDetailView.contractPaidAmount }}</span>
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                             <span>{{ reqDetailView.contractSettlAmount }}</span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -2275,11 +2846,11 @@
                             <span>{{ reqDetailView.applicationAmount }}</span>
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="本次结算金额（元）">
                             <span>{{ reqDetailView.currentSettlementAmount }}</span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -2288,22 +2859,30 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
-                <a-row :gutter="24">
+                <!-- <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="所属结算批次">
                             <span>{{ reqDetailView.settlementBatchName }}</span>
                         </a-form-model-item>
                     </a-col>
-                </a-row>
+                </a-row> -->
+                <div class="modal-title">
+                    <span>发票文件</span>
+                </div>
+                <a-table bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
+                    <template slot="invoiceFile" slot-scope="text, record, index">
+                        <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${text}&flag=true`)">下载</a>
+                    </template>
+                </a-table>
                 <div class="modal-title">
                     <span>支付要件</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传发票附件">
                             <span v-for="(item, index) of reqDetailView.invoiceFile" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a><br/></span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传审批文件">
                             <span v-for="(item, index) of reqDetailView.approveFile" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a><br/></span>
@@ -2428,11 +3007,11 @@
                             <span>{{ progressReqDetailView.contractPaidAmount }}</span>
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                             <span>{{ progressReqDetailView.contractSettlAmount }}</span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -2440,11 +3019,11 @@
                             <span>{{ progressReqDetailView.applicationAmount }}</span>
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="本次结算金额（元）">
                             <span>{{ progressReqDetailView.currentSettlementAmount }}</span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -2453,13 +3032,13 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
-                <a-row :gutter="24">
+                <!-- <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="所属结算批次">
                             <span>{{ progressReqDetailView.settlementBatchName }}</span>
                         </a-form-model-item>
                     </a-col>
-                </a-row>
+                </a-row> -->
                 <div class="modal-title">
                     <span>支付要件</span>
                 </div>
@@ -2576,11 +3155,11 @@
                             <span>{{ payDetailView.contractPaidAmount }}</span>
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                             <span>{{ payDetailView.contractSettlAmount }}</span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -2588,11 +3167,11 @@
                             <span>{{ payDetailView.paymentAmount }}</span>
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="本次结算金额（元）">
                             <span>{{ payDetailView.currentSettlementAmount }}</span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -2601,22 +3180,30 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
-                <a-row :gutter="24">
+                <!-- <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="所属结算批次">
                             <span>{{ payDetailView.settlementBatchName }}</span>
                         </a-form-model-item>
                     </a-col>
-                </a-row>
+                </a-row> -->
+                <div class="modal-title">
+                    <span>发票文件</span>
+                </div>
+                <a-table bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
+                    <template slot="invoiceFile" slot-scope="text, record, index">
+                        <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${text}&flag=true`)">下载</a>
+                    </template>
+                </a-table>
                 <div class="modal-title">
                     <span>支付要件</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传发票附件">
                             <span v-for="(item, index) of payDetailView.invoiceFile" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a><br/></span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传审批文件">
                             <span v-for="(item, index) of payDetailView.approveFile" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a><br/></span>
@@ -2660,38 +3247,49 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
-                <a-row :gutter="24">
-                    <a-col :span="12">
-                        <a-form-model-item label="所属合同名称" prop="belongContractCode">
-                            <span>{{ payDetailOtherView.belongContractCode }}</span>
-                        </a-form-model-item>
-                    </a-col>
-                </a-row>
                 <div class="modal-title">
                     <span>付款方信息</span>
                 </div>
                 <a-row :gutter="24">
                     <a-col :span="12">
-                        <a-form-model-item label="付款方银行账号" prop="payerAcc">
-                            <span>{{ payDetailOtherView.payerAcc }}</span>
+                        <a-form-model-item label="付款方银行账号" prop="paymentBankNum">
+                            <span>{{ payDetailOtherView.paymentBankNum }}</span>
                         </a-form-model-item>
                     </a-col>
                 </a-row>
+            <div v-if="type == 13">
+                <div class="modal-title">
+                    <span>收款方信息</span>
+                </div>
+                 <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="收款银行账号户名" prop="payeeName">
+                            <span>{{ payDetailOtherView.payeeName }}</span>
+                        </a-form-model-item>
+                    </a-col>
+                        <a-col :span="12">
+                            <a-form-model-item label="收款方银行账号" prop="payeeAcc">
+                            <span>{{ payDetailOtherView.payeeAcc }}</span>
+                        </a-form-model-item>
+                    </a-col>
+                </a-row>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方联行行号" prop="payeeOpenBankNo">
+                            <span>{{ payDetailOtherView.payeeOpenBankNo }}</span>
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方开户行" prop="payeeOpenBank">
+                            <span>{{ payDetailOtherView.payeeOpenBank }}</span>
+                        </a-form-model-item>
+                    </a-col>
+                </a-row>
+            </div>
+            <div v-if="type == 13">
                 <div class="modal-title">
                     <span>支付申请信息</span>
                 </div>
-                <a-row :gutter="24">
-                    <a-col :span="12">
-                        <a-form-model-item label="已支付金额（元）">
-                            <span>{{ payDetailOtherView.contractPaidAmount }}</span>
-                        </a-form-model-item>
-                    </a-col>
-                    <a-col :span="12">
-                        <a-form-model-item label="已结算金额（元）">
-                            <span>{{ payDetailOtherView.contractSettlAmount }}</span>
-                        </a-form-model-item>
-                    </a-col>
-                </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="付款总金额（元）" prop="paymentAmount">
@@ -2699,42 +3297,94 @@
                         </a-form-model-item>
                     </a-col>
                     <a-col :span="12">
+                        <a-form-model-item label="交易附言">
+                            <span>{{ payDetailOtherView.transactionRemark }}</span>
+                        </a-form-model-item>
+                    </a-col>
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="付款总笔数" prop="paymentNum">
                             <span>{{ payDetailOtherView.paymentNum }}</span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
+            </div>    
+            <div v-if="type == 18">
+                <div class="modal-title">
+                    <span>支付申请信息</span>
+                </div>
                 <a-row :gutter="24">
                     <a-col :span="12">
-                        <a-form-model-item label="本次结算金额（元）">
-                            <span>{{ payDetailOtherView.currentSettlementAmount }}</span>
+                        <a-form-model-item label="总金额（元）" >
+                            <span>{{ payDetailOtherView.totalSalary }}</span>
                         </a-form-model-item>
                     </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="总笔数">
+                            <span>{{ payDetailOtherView.totalNum }}</span>
+                        </a-form-model-item>
+                    </a-col>
+                    <!-- <a-col :span="12">
+                        <a-form-model-item label="付款总笔数" prop="paymentNum">
+                            <span>{{ payDetailOtherView.paymentNum }}</span>
+                        </a-form-model-item>
+                    </a-col> -->
+                </a-row>
+            </div>    
+            
+                <!-- <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="交易附言">
                             <span>{{ payDetailOtherView.transactionRemark }}</span>
                         </a-form-model-item>
                     </a-col>
+                </a-row> -->
+                <div class="modal-title">
+                    <span>审批流程信息</span>
+                </div>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="经办人" prop="companyOperatorName">
+                            <span>{{ payDetailOtherView.companyOperatorName }}</span>
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="一级复核人" prop="companyContractPrimaryReviewerName">
+                            <span>{{ payDetailOtherView.companyContractPrimaryReviewerName }}</span>
+                        </a-form-model-item>
+                    </a-col>
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
-                        <a-form-model-item label="所属结算批次">
-                            <span>{{ payDetailOtherView.settlementBatchName }}</span>
+                        <a-form-model-item label="二级复核人（如有）" prop="companyContractSecondaryReviewerName">
+                            <span>{{ payDetailOtherView.companyContractSecondaryReviewerName }}</span>
                         </a-form-model-item>
                     </a-col>
                 </a-row>
                 <div class="modal-title">
+                    <span>发票文件</span>
+                </div>
+                <a-table bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
+                    <template slot="invoiceFile" slot-scope="text, record, index">
+                        <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${text}&flag=true`)">下载</a>
+                    </template>
+                </a-table>
+                <div class="modal-title">
                     <span>支付要件</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传发票附件">
                             <span v-for="(item, index) of payDetailOtherView.invoiceFile" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a><br/></span>
                         </a-form-model-item>
+                    </a-col> -->
+                    <a-col :span="12">
+                        <a-form-model-item class="upload-wrapper" label="审批文件">
+                            <span v-for="(item, index) of payDetailOtherView.approveFile" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a><br/></span>
+                        </a-form-model-item>
                     </a-col>
                     <a-col :span="12">
-                        <a-form-model-item class="upload-wrapper" label="上传审批文件">
-                            <span v-for="(item, index) of payDetailOtherView.approveFile" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a><br/></span>
+                        <a-form-model-item class="upload-wrapper" label="工资单文件">
+                            <span v-for="(item, index) of payDetailOtherView.salaryDetails" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a><br/></span>
                         </a-form-model-item>
                     </a-col>
                 </a-row>
@@ -2780,7 +3430,7 @@
                     </a-col>
                     <a-col :span="12">
                         <a-form-model-item label="所属劳务分包合同名称" prop="belongSubContractCode">
-                            <span>{{ salaryDetailView.belongSubContractCode }}</span>
+                            <span>{{ salaryDetailView.contractName }}</span>
                         </a-form-model-item>
                     </a-col>
                 </a-row>
@@ -2818,6 +3468,7 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
+            <div v-if="type != 19">    
                 <div class="modal-title">
                     <span>分包商信息</span>
                 </div>
@@ -2852,6 +3503,7 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
+            </div>    
                 <div class="modal-title">
                     <span>支付申请信息</span>
                 </div>
@@ -2861,11 +3513,11 @@
                             <span>{{ salaryDetailView.contractPaidAmount }}</span>
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                             <span>{{ salaryDetailView.contractSettlAmount }}</span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -2880,11 +3532,11 @@
                     </a-col>
                 </a-row>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                             <a-form-model-item label="本次结算金额（元）">
                                 <span>{{ salaryDetailView.currentSettlementAmount }}</span>
                             </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item label="交易附言">
                             <span>{{ salaryDetailView.transactionRemark }}</span>
@@ -2898,22 +3550,30 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
-                <a-row :gutter="24">
+                <!-- <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="所属结算批次">
                             <span>{{ salaryDetailView.settlementBatchName }}</span>
                         </a-form-model-item>
                     </a-col>
-                </a-row>
+                </a-row> -->
+                <div class="modal-title">
+                    <span>发票文件</span>
+                </div>
+                <a-table bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
+                    <template slot="invoiceFile" slot-scope="text, record, index">
+                        <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${text}&flag=true`)">下载</a>
+                    </template>
+                </a-table>
                 <div class="modal-title">
                     <span>支付要件</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传发票附件">
                             <span v-for="(item, index) of salaryDetailView.invoiceFile" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a><br/></span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传审批文件">
                             <span v-for="(item, index) of salaryDetailView.approveFile" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a><br/></span>
@@ -2962,7 +3622,7 @@
                     </a-col>
                     <a-col :span="12">
                         <a-form-model-item label="所属劳务分包合同名称" prop="belongSubContractCode">
-                            <span>{{ salaryDetailView.belongSubContractCode }}</span>
+                            <span>{{ salaryDetailView.contractName }}</span>
                         </a-form-model-item>
                     </a-col>
                 </a-row>
@@ -3014,16 +3674,16 @@
                     <span>支付申请信息</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已支付金额（元）">
                             <span>{{ salaryDetailView.contractPaidAmount }}</span>
                         </a-form-model-item>
-                    </a-col>
-                    <a-col :span="12">
+                    </a-col> -->
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                             <span>{{ salaryDetailView.contractSettlAmount }}</span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -3038,11 +3698,11 @@
                 </a-col>
                 </a-row>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="本次结算金额（元）">
                             <span>{{ salaryDetailView.currentSettlementAmount }}</span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item label="交易附言">
                             <span>{{ salaryDetailView.transactionRemark }}</span>
@@ -3056,22 +3716,23 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
-                <a-row :gutter="24">
-                    <a-col :span="12">
-                        <a-form-model-item label="所属结算批次">
-                            <span>{{ salaryDetailView.settlementBatchName }}</span>
-                        </a-form-model-item>
-                    </a-col>
-                </a-row>
+                <div class="modal-title">
+                    <span>发票文件</span>
+                </div>
+                <a-table bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
+                    <template slot="invoiceFile" slot-scope="text, record, index">
+                        <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${text}&flag=true`)">下载</a>
+                    </template>
+                </a-table>
                 <div class="modal-title">
                     <span>支付要件</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传发票附件">
                             <span v-for="(item, index) of salaryDetailView.invoiceFile" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a><br/></span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item class="upload-wrapper" label="上传审批文件">
                             <span v-for="(item, index) of salaryDetailView.approveFile" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a><br/></span>
@@ -3390,11 +4051,11 @@
                             <span>{{ reqAndPayDetailView.contractPaidAmount }}</span>
                         </a-form-model-item>
                     </a-col>
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                             <span>{{ reqAndPayDetailView.contractSettlAmount }}</span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
@@ -3409,11 +4070,11 @@
                     </a-col>
                 </a-row>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="本次结算金额（元）">
                             <span>{{ reqAndPayDetailView.currentSettlementAmount }}</span>
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12">
                         <a-form-model-item label="交易附言">
                             <span>{{ reqAndPayDetailView.transactionRemark }}</span>
@@ -3427,13 +4088,13 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
-                <a-row :gutter="24">
+                <!-- <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="所属结算批次">
                             <span>{{ reqAndPayDetailView.settlementBatchName }}</span>
                         </a-form-model-item>
                     </a-col>
-                </a-row>
+                </a-row> -->
                 <div class="modal-title">
                     <span>支付要件</span>
                 </div>
@@ -3612,7 +4273,7 @@ import {
     getCompContractList,
     getComp1ContractList
 } from '@/api/payment'
-import { getUserRole } from '@/api/contract'
+import { getUserRole, getUserRolePay } from '@/api/contract'
 import { getSelectAccount } from '@/api/workbench'
 import { getContractSalaryList } from '@/api/worker'
 
@@ -3731,14 +4392,100 @@ const salaryManageColumns = [
         fixed: 'right'
     },
 ]
-
+const EditableCell = {
+  template: `
+      <div class="editable-cell">
+        <div v-if="editable" class="editable-cell-input-wrapper">
+          <a-input :value="value" @change="handleChange" @pressEnter="check" /><a-icon
+            type="check"
+            class="editable-cell-icon-check"
+            @click="check"
+          />
+        </div>
+        <div v-else class="editable-cell-text-wrapper">
+          {{ value || ' ' }}
+          <a-icon type="edit" class="editable-cell-icon" @click="edit" />
+        </div>
+      </div>
+    `,
+  props: {
+    text: String,
+  },
+  data() {
+    return {
+      value: this.text,
+      editable: false,
+    };
+  },
+  methods: {
+    handleChange(e) {
+      const value = e.target.value;
+      this.value = value;
+    },
+    check() {
+      this.editable = false;
+      this.$emit('change', this.value);
+    },
+    edit() {
+      this.editable = true;
+    },
+  },
+};
 export default {
-  components: { ArticleListContent },
+  components: { ArticleListContent, EditableCell },
     data () {
         this.columns = columns
         this.settleColumns = settleColumns
         this.salaryManageColumns = salaryManageColumns
         return {
+            dataSource: [
+                {
+                    key: '0',
+                    isLocalTax: 1
+                }
+            ],
+            count: 1,
+            billColumns: [
+                {
+                title: '发票批次号',
+                dataIndex: 'invoiceBatchNo',
+                width: '16%',
+                scopedSlots: { customRender: 'invoiceBatchNo' },
+                },
+                {
+                title: '发票代码',
+                dataIndex: 'invoiceCode',
+                width: '16%',
+                scopedSlots: { customRender: 'invoiceCode' },
+                },
+                {
+                title: '发票号码',
+                dataIndex: 'invoiceNo',
+                width: '16%',
+                scopedSlots: { customRender: 'invoiceNo' },
+                },
+                {
+                title: '票⾯价税合计⾦额 （元）',
+                dataIndex: 'invoiceAmount',
+                scopedSlots: { customRender: 'invoiceAmount' },
+                },
+                {
+                title: '是否本地纳税',
+                dataIndex: 'isLocalTax',
+                scopedSlots: { customRender: 'isLocalTax' },
+                },
+                {
+                title: '发票扫描件',
+                dataIndex: 'invoiceFile',
+                scopedSlots: { customRender: 'invoiceFile' },
+                },
+                {
+                title: '操作',
+                dataIndex: 'operation',
+                scopedSlots: { customRender: 'operation' },
+                },
+            ],
+            dataSource1: [],
             companyBNameList: [],
             companyBNameList1: [],
             companyContractList: [],
@@ -3814,10 +4561,17 @@ export default {
                 paymentNum: '',
                 currentSettlementAmount: '',
                 transactionRemark: '',
+                payeeName: '',
+                payeeAcc: '',
+                payeeOpenBankNo: '',
+                payeeOpenBank: '',
                 fileUrlList: [],
                 fileDetails: [],
                 fileUrlApproveList: [],
-                fileUrlOtherList: []
+                fileUrlOtherList: [],
+                companyOperator: '',
+                companyContractPrimaryReviewer: '',
+                companyContractSecondaryReviewer: ''
             },
             salaryDetailForm: {
                 taskName: '',
@@ -3885,7 +4639,7 @@ export default {
                 belongContractCode: [{ required: true, message: '请选择所属合同名称', trigger: 'change' }], 
                 paymentBankNum: [{ required: true, message: '请选择付款银行账号', trigger: 'change' }], 
                 paymentAmount: [{ required: true, message: '请输入付款总金额', trigger: 'change' }], 
-                fileUrlList: [{ required: true, message: '请上传发票附件', trigger: 'change' }],
+                // fileUrlList: [{ required: true, message: '请上传发票附件', trigger: 'change' }],
                 fileUrlApproveList: [{ required: true, message: '请上传审批文件', trigger: 'change' }],
                 fileUrlOtherList: [{ required: true, message: '请上传材料', trigger: 'change' }]
             },
@@ -3895,11 +4649,19 @@ export default {
                 belongContractCode: [{ required: true, message: '请选择所属合同名称', trigger: 'change' }], 
                 payerAcc: [{ required: true, message: '请选择付款方银行账号', trigger: 'change' }],
                 paymentAmount: [{ required: true, message: '请输入付款总金额', trigger: 'change' }], 
+                payeeName: [{ required: true, message: '请输入收款银行账号户名', trigger: 'change' }], 
+                payeeAcc: [{ required: true, message: '请输入收款方银行账号', trigger: 'change' }], 
+                payeeOpenBankNo: [{ required: true, message: '请输入收款方联行行号', trigger: 'change' }], 
+                payeeOpenBank: [{ required: true, message: '请输入收款方开户行', trigger: 'change' }], 
+                totalSalary: [{ required: true, message: '请输入总金额', trigger: 'change' }], 
+                totalNum: [{ required: true, message: '请输入笔数', trigger: 'change' }], 
                 paymentNum: [{ required: true, message: '请输入付款笔数', trigger: 'change' }],
                 fileUrlList: [{ required: true, message: '请上传发票附件', trigger: 'change' }],
                 fileDetails: [{ required: true, message: '请上传付款明细', trigger: 'change' }],
                 fileUrlApproveList: [{ required: true, message: '请上传审批文件', trigger: 'change' }],
                 fileUrlOtherList: [{ required: true, message: '请上传材料', trigger: 'change' }],
+                companyOperator: [{ required: true, message: '请选择经办人', trigger: 'change' }],
+                companyContractPrimaryReviewer: [{ required: true, message: '请选择一级复核人', trigger: 'change' }],
             },
             salaryDetailRules: {
                 taskName: [{ required: true, message: '请输入任务名称', trigger: 'change' }], 
@@ -3908,7 +4670,7 @@ export default {
                 totalSalary: [{ required: true, message: '请输入工资总金额', trigger: 'change' }], 
                 totalNum: [{ required: true, message: '请输入工资总笔数', trigger: 'change' }], 
                 fileUrlList: [{ required: true, message: '请上传发票附件', trigger: 'change' }],
-                fileDetails: [{ required: true, message: '请上工资明细', trigger: 'change' }],
+                fileDetails: [{ required: true, message: '请上传工资明细', trigger: 'change' }],
                 payerName: [{ required: true, message: '请选择中标主体工资专户名称', trigger: 'change' }],
                 fileUrlApproveList: [{ required: true, message: '请上传审批文件', trigger: 'change' }],
                 fileUrlOtherList: [{ required: true, message: '请上传材料', trigger: 'change' }],
@@ -3931,7 +4693,7 @@ export default {
                 belongSubContractCode: [{ required: true, message: '请选择所属劳务分包合同名称', trigger: 'change' }], 
                 totalSalary: [{ required: true, message: '请输入工资总金额', trigger: 'change' }], 
                 totalNum: [{ required: true, message: '请输入工资总笔数', trigger: 'change' }], 
-                fileUrlList: [{ required: true, message: '请上传发票附件', trigger: 'change' }],
+                // fileUrlList: [{ required: true, message: '请上传发票附件', trigger: 'change' }],
                 fileDetails: [{ required: true, message: '请上传工资明细', trigger: 'change' }], 
                 fileUrlApproveList: [{ required: true, message: '请上传审批文件', trigger: 'change' }],
                 fileUrlOtherList: [{ required: true, message: '请上传材料', trigger: 'change' }],
@@ -3965,6 +4727,9 @@ export default {
             agentSelect: [],
             reviewSelect1: [],
             reviewSelect2: [],
+            agentSelectB: [],
+            reviewSelect3: [],
+            reviewSelect4: [],
             contractRoleCode: '',
             paymentProcessId: '',
             isPayDetailViewVisible: false,
@@ -3992,7 +4757,7 @@ export default {
             payAccountInfo: {},
             payAccountInfoSelect: [],
             isSubContractSalaryDetailViewVisible: false,
-            prjNameValue: '',
+            prjNameValue: localStorage.getItem('projectName'),
             isShowVerification: false,
             verificationForm: {
                 code: ''
@@ -4060,7 +4825,8 @@ export default {
             selectedSalaryRowKeys: [],
             selectionSalaryRows: [],
             isSalarySelect: false,
-            cacheSalary: ''
+            cacheSalary: '',
+            isLocalTax: 1
         }
     },
     mounted() {
@@ -4074,10 +4840,10 @@ export default {
         this.getPayAccountSelect()
         this.getSettleInfo()
         this.getSalaryManageInfo()
-        getCompContractList(' ').then(res => {
+        getCompContractList({name: ' ', projectIDLv3: localStorage.getItem('projectIDLv3')}).then(res => {
             this.companyBNameList = res
         })
-        getComp1ContractList(' ').then(res => {
+        getComp1ContractList({name: ' ', projectIDLv3: localStorage.getItem('projectIDLv3')}).then(res => {
             this.companyBNameList1 = res
         })
     },
@@ -4092,6 +4858,79 @@ export default {
         // }
     },
     methods: {
+        handleCompanyContractOperatorFocus() {
+            getUserRolePay(1).then(res => {
+                let result = []
+                if(res && Array.isArray(res.data)) {
+                res.data.map(v => {
+                    let obj = {
+                    name: v.userName,
+                    value: String(v.id)
+                    }
+                    result.push(obj)
+                })
+                this.agentSelectB = result
+                }
+            })
+        },
+        handleCompanyContractPrimaryFocus() {
+            getUserRolePay(2).then(res => {
+                let result = []
+                if(res && Array.isArray(res.data)) {
+                res.data.map(v => {
+                    let obj = {
+                    name: v.userName,
+                    value: String(v.id)
+                    }
+                    result.push(obj)
+                })
+                this.reviewSelect3 = result
+                }
+            })
+        },
+        handleCompanyContractSecondFocus() {
+            getUserRolePay(3).then(res => {
+                let result = []
+                if(res && Array.isArray(res.data)) {
+                    res.data.map(v => {
+                        let obj = {
+                        name: v.userName,
+                        value: String(v.id)
+                        }
+                        result.push(obj)
+                    })
+                    this.reviewSelect4 = result
+                } else {
+                    this.reviewSelect4 = []
+                }
+            })
+        },
+        onCellChange(key, dataIndex, value) {
+            const dataSource = [...this.dataSource];
+            const target = dataSource.find(item => item.key === key);
+            if (target) {
+                target[dataIndex] = value;
+                this.dataSource = dataSource;
+            }
+        },
+        onDelete(key) {
+            const dataSource = [...this.dataSource];
+            this.dataSource = dataSource.filter(item => item.key !== key);
+        },
+        handleAdd() {
+            const { count, dataSource } = this;
+            const newData = {
+                key: count,
+            };
+            this.payDetailForm.fileUrlList = []
+            this.dataSource = [...dataSource, newData];
+            this.count = count + 1;
+        },
+        handleInvoiceChange(val, record) {
+            console.log(val)
+            record.isLocalTax = val
+            console.log(record)
+        },
         filterOption(input, option) {
             return (
                 option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -4103,7 +4942,7 @@ export default {
                 pageSize: this.pagination.pageSize,
                 taskName: this.taskName,
                 paymentScene: this.type,
-
+                projectIDLv3: localStorage.getItem('projectIDLv3')
             }
             getApplyList(reqObj).then(res => {
                 if(res.status == 1 && res.data) {
@@ -4129,23 +4968,23 @@ export default {
             })
         },
         getSalaryManageInfo() {
-            let reqObj = {
-                contractName: this.salaryParam.contractName,
-                salaryName: this.salaryParam.salaryName,
-                pageNum: this.salaryManagePagination.current,
-                pageSize: this.salaryManagePagination.pageSize
-            }
-            getContractSalaryList(reqObj).then(res => {
-                if(res.status == 1 && res.data) {
-                    const data = res.data
-                    this.salaryManageData = data.pageList
-                }
-            })
+            // let reqObj = {
+            //     contractName: this.salaryParam.contractName,
+            //     salaryName: this.salaryParam.salaryName,
+            //     pageNum: this.salaryManagePagination.current,
+            //     pageSize: this.salaryManagePagination.pageSize
+            // }
+            // getContractSalaryList(reqObj).then(res => {
+            //     if(res.status == 1 && res.data) {
+            //         const data = res.data
+            //         this.salaryManageData = data.pageList
+            //     }
+            // })
         },
         handleAddClick() {
             let self = this
             this.applicationType = self.type
-            if(this.type == 1) {
+            if(this.type == 1 || this.type == 2 || this.type == 14) {
                 // 请款
                 this.isReqDetailVisible = true
                 this.isPayDetailVisible = false
@@ -4162,18 +5001,20 @@ export default {
                     }
                     
                 })
-            } else if(this.type == 2) {
-                // 工程进度请款
-                this.isProgressReqDetailVisible = true
-                this.isReqDetailVisible = false
-                this.isPayDetailVisible = false
-                this.isSalaryDetailVisible = false
-                this.isOtherDetailVisible = false
-                this.isSubContractSalaryDetailVisible = false
-                getReqTaskName(this.type).then(res => {
-                    self.progressReqDetailForm.taskName = res.data
-                })
-            } else if(this.type >= 3 && this.type <= 6 ) {
+            } 
+            // else if(this.type == 2) {
+            //     // 工程进度请款
+            //     this.isProgressReqDetailVisible = true
+            //     this.isReqDetailVisible = false
+            //     this.isPayDetailVisible = false
+            //     this.isSalaryDetailVisible = false
+            //     this.isOtherDetailVisible = false
+            //     this.isSubContractSalaryDetailVisible = false
+            //     getReqTaskName(this.type).then(res => {
+            //         self.progressReqDetailForm.taskName = res.data
+            //     })
+            // } 
+            else if(this.type >= 3 && this.type <= 6 ) {
                 this.isReqDetailVisible = true
                 this.isPayDetailVisible = false
                 this.isSalaryDetailVisible = false
@@ -4184,7 +5025,7 @@ export default {
                 getReqTaskName(this.type).then(res => {
                     self.reqDetailForm.taskName = res.data
                 })
-            } else if(this.type >= 7 && this.type < 13) {
+            } else if(this.type >= 7 && this.type < 13 || this.type == 17 ) {
                 // 付款
                 this.isPayDetailVisible = true
                 this.isReqDetailVisible = false
@@ -4202,25 +5043,27 @@ export default {
                 this.isOtherDetailVisible = true
                 this.isProgressReqDetailVisible = false
                 this.isSubContractSalaryDetailVisible = false
-                this.prjNameValue = ''
+                this.prjNameValue = localStorage.getItem('projectName')
                 this.contractPaidAmount = ''
                 this.contractSettlAmount = ''
                 getPayTaskName(this.type).then(res => {
                     self.payDetailOtherForm.taskName = res.data
                 })
-            } else if(this.type == 14) {
-                // 请款+代发
-                this.isReqAndPayDetailVisible = true
-                this.isSalaryDetailVisible = false
-                this.isReqDetailVisible = false
-                this.isPayDetailVisible = false
-                this.isOtherDetailVisible = false
-                this.isProgressReqDetailVisible = false
-                this.isSubContractSalaryDetailVisible = false
-                getSalaryTaskName(this.type).then(res => {
-                    self.reqAndPayDetailForm.taskName = res.data
-                })
-            } else if(this.type > 14) {
+            }
+            //  else if(this.type == 14) {
+            //     // 请款+代发
+            //     this.isReqAndPayDetailVisible = true
+            //     this.isSalaryDetailVisible = false
+            //     this.isReqDetailVisible = false
+            //     this.isPayDetailVisible = false
+            //     this.isOtherDetailVisible = false
+            //     this.isProgressReqDetailVisible = false
+            //     this.isSubContractSalaryDetailVisible = false
+            //     getSalaryTaskName(this.type).then(res => {
+            //         self.reqAndPayDetailForm.taskName = res.data
+            //     })
+            // }
+             else if(this.type == 15 || this.type == 19 || this.type == 20) {
                 // 工资
                 if(this.scene == 3 || this.scene == 6) {
                     this.isSubContractSalaryDetailVisible = true
@@ -4229,6 +5072,7 @@ export default {
                     this.isSalaryDetailVisible = true
                     this.isSubContractSalaryDetailVisible = false
                 }
+                
                 this.isReqDetailVisible = false
                 this.isPayDetailVisible = false
                 this.isOtherDetailVisible = false
@@ -4237,15 +5081,34 @@ export default {
                     self.salaryDetailForm.taskName = res.data
                     self.subContractSalaryDetailForm.taskName = res.data
                 })
+            } else if(this.type == 18) {
+                this.isSalaryDetailVisible = false
+                this.isReqDetailVisible = false
+                this.isPayDetailVisible = false
+                this.isOtherDetailVisible = true
+                this.isProgressReqDetailVisible = false
+                this.isSubContractSalaryDetailVisible = false
+                this.prjNameValue = localStorage.getItem('projectName')
+                this.contractPaidAmount = ''
+                this.contractSettlAmount = ''
+                getPayTaskName(this.type).then(res => {
+                    self.payDetailOtherForm.taskName = res.data
+                })
             }
         },
         getPaymentApplyInfo() {
-            getPaymentApplyList().then(res => {
+            let params = {
+                projectIDLv3: localStorage.getItem('projectIDLv3')
+            }
+            getPaymentApplyList(params).then(res => {
                 this.applyList = res
             })
         },
         getContractNameList() {
-            getContractName().then(res => {
+            let params = {
+                projectIDLv3: localStorage.getItem('projectIDLv3')
+            }
+            getContractName(params).then(res => {
                 this.contractNameSelect = res
             })
         },
@@ -4255,7 +5118,10 @@ export default {
             })
         },
         getTotalContractList() {
-            getTotalContract().then(res => {
+            let params = {
+                projectIDLv3: localStorage.getItem('projectIDLv3')
+            }
+            getTotalContract(params).then(res => {
                 this.totalContractSelect = res
             })
         },
@@ -4266,7 +5132,10 @@ export default {
             })
         },
         getPaymentContractNameList () {
-            getPaymentContractName().then(res => {
+            let params = {
+                projectIDLv3: localStorage.getItem('projectIDLv3')
+            }
+            getPaymentContractName(params).then(res => {
                 this.payContractNameSelect = res
             })
         },
@@ -4361,7 +5230,7 @@ export default {
         },
         handleReqContractCodeChange(value) {
             let reqObj = {
-                contractCode: value
+                contractCode: value,
             }
             getReqReceive(reqObj).then(res => {
                 if(res.status == 1) {
@@ -4378,11 +5247,18 @@ export default {
                     reqObj.applicationAmount = Number(reqObj.applicationAmount)
                     reqObj.currentSettlementAmount = Number(reqObj.currentSettlementAmount)
                     reqObj.applicationType = this.applicationType
-                    let resultFile = ''
-                    reqObj.fileUrlList && reqObj.fileUrlList.map(v => {
-                            resultFile += v.name + '#' + v.response.data + ','
+                    // let resultFile = ''
+                    // reqObj.fileUrlList && reqObj.fileUrlList.map(v => {
+                    //         resultFile += v.name + '#' + v.response.data + ','
+                    //     })
+                    // reqObj.invoiceFile = resultFile
+                    if (this.dataSource[0].file) {
+                        this.dataSource.map(v => {
+                            v.invoiceFile = v.file.name + '#' + v.file.response.data 
                         })
-                    reqObj.invoiceFile = resultFile
+                        // this.dataSource.invoiceFile = resultFile
+                        reqObj.invoiceList = this.dataSource
+                    }
                     let approveFile = ''
                     reqObj.fileApproveUrlList && reqObj.fileApproveUrlList.map(v => {
                             approveFile += v.name + '#' + v.response.data + ','
@@ -4397,6 +5273,7 @@ export default {
                     delete reqObj.fileUrlList
                     delete reqObj.fileApproveUrlList
                     delete reqObj.fileUrlOtherList
+                    reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
                     addReqFund(reqObj).then(res => {
                         if(res.status == 1) {
                             this.isReqDetailVisible = false
@@ -4449,6 +5326,7 @@ export default {
                     delete reqObj.fileUrlList
                     delete reqObj.fileUrlApproveList
                     delete reqObj.fileUrlOtherList
+                    reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
                     addReqFund(reqObj).then(res => {
                         if(res.status == 1) {
                             this.isProgressReqDetailVisible = false
@@ -4610,20 +5488,27 @@ export default {
             this.isReqDetailVisible = false
             this.$refs.reqDetailForm.resetFields()
             this.requestObj = {}
+            this.dataSource = []
         },
         handlePayDetailSubmitClick(e) {
             e.preventDefault()
             this.$refs.rulePaymentForm.validate(valid => {
+                console.log(valid)
                 if(valid) {
                     let reqObj = Object.assign({}, this.payDetailForm)
                     reqObj.paymentAmount = Number(reqObj.paymentAmount)
                     reqObj.currentSettlementAmount = Number(reqObj.currentSettlementAmount)
                     reqObj.paymentType = Number(this.applicationType)
-                    let resultFile = ''
-                    reqObj.fileUrlList && reqObj.fileUrlList.map(v => {
-                            resultFile += v.name + '#' + v.response.data + ','
+                    
+                    if (this.dataSource[0].file) {
+                        this.dataSource.map(v => {
+                            v.invoiceFile = v.file.name + '#' + v.file.response.data 
                         })
-                    reqObj.invoiceFile = resultFile
+                        reqObj.invoiceList = this.dataSource
+                        console.log(reqObj)
+                    }
+                    
+                    // fileKey
 
                     let approveFile = ''
                     reqObj.fileUrlApproveList && reqObj.fileUrlApproveList.map(v => {
@@ -4652,12 +5537,16 @@ export default {
                     // this.cacheDataObj = {}
                     // this.cacheDataObj = reqObj
                     // return
+                    reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
+                    console.log(reqObj)
                     addPayFund(reqObj).then(res => {
                         if(res.status == 1) {
                             this.isPayDetailVisible = false
                             this.$message.success('添加成功!')
                             this.getApplyInfo()
                             this.$refs.rulePaymentForm.resetFields()
+                        } else {
+                            this.$message.error(res.message)
                         }
                     })
                 }
@@ -4667,33 +5556,47 @@ export default {
             this.isPayDetailVisible = false
             this.$refs.rulePaymentForm.resetFields()
             this.paymentObj = {}
+            this.dataSource = [{
+                    key: '0',
+                    isLocalTax: 1
+                }]
         },
         // 其他付款提交
         handlePayDetailOtherSubmitClick(e) {
             e.preventDefault()
             this.$refs.ruleOtherForm.validate(valid => {
                 if(valid) {
-                    if(!this.selectionSalaryRows || this.selectionSalaryRows.length == 0) {
-                        this.$message.warning('请选择合同关联工资单')
-                        return
-                    }
+                    
                     let reqObj = Object.assign({}, this.payDetailOtherForm)
                     reqObj.paymentType = Number(this.applicationType)
+                    reqObj.salaryType = Number(this.applicationType)
                     reqObj.belongPrjCode = this.prjNameValue
-                    reqObj.paymentBankNum = Number(reqObj.payerAcc)
+                    reqObj.paymentBankNum = String(reqObj.payerAcc)
                     reqObj.paymentAmount = Number(reqObj.paymentAmount)
                     reqObj.paymentNum = Number(reqObj.paymentNum)
                     reqObj.currentSettlementAmount = Number(reqObj.currentSettlementAmount)
-                    let resultFile = ''
-                    reqObj.fileUrlList && reqObj.fileUrlList.map(v => {
-                            resultFile += v.name + '#' + v.response.data + ','
+                    reqObj.companyContractPrimaryReviewer = Number(reqObj.companyContractPrimaryReviewer)
+                    reqObj.companyContractSecondaryReviewer = Number(reqObj.companyContractSecondaryReviewer)
+                    reqObj.companyOperator = Number(reqObj.companyOperator)
+
+                    // let resultFile = ''
+                    // reqObj.fileUrlList && reqObj.fileUrlList.map(v => {
+                    //         resultFile += v.name + '#' + v.response.data + ','
+                    //     })
+                    // reqObj.invoiceFile = resultFile
+                    if (this.dataSource[0].file) {
+                        this.dataSource.map(v => {
+                            v.invoiceFile = v.file.name + '#' + v.file.response.data 
                         })
-                    reqObj.invoiceFile = resultFile
-                    let detailFile = ''
-                    reqObj.fileDetails && reqObj.fileDetails.map(v => {
-                            detailFile += v.name + '#' + v.response.data + ','
-                        })
-                    reqObj.paymentDetails = detailFile
+                        // this.dataSource.invoiceFile = resultFile
+                        reqObj.invoiceList = this.dataSource
+                    }
+
+                    // let detailFile = ''
+                    // reqObj.fileDetails && reqObj.fileDetails.map(v => {
+                    //         detailFile += v.name + '#' + v.response.data + ','
+                    //     })
+                    // reqObj.paymentDetails = detailFile
 
                     let approveFile = ''
                     reqObj.fileUrlApproveList && reqObj.fileUrlApproveList.map(v => {
@@ -4706,29 +5609,58 @@ export default {
                             otherFile += v.name + '#' + v.response.data + ','
                         })
                     reqObj.otherFile = otherFile
+
+                    let detailFile = ''
+                    reqObj.fileDetails && reqObj.fileDetails.map(v => {
+                            detailFile += v.name + '#' + v.response.data + ','
+                        })
+                    reqObj.salaryDetails = detailFile
+
                     reqObj.workerSalaryList = this.workerSalaryList
-                    reqObj.settlementBatchId = this.selectionRows.length > 0 ? this.selectionRows[0].id : ''
-                    reqObj.salaryManageId = this.selectionSalaryRows.length > 0 ? this.selectionSalaryRows[0].id : ''
+                    // reqObj.settlementBatchId = this.selectionRows.length > 0 ? this.selectionRows[0].id : ''
+                    // reqObj.salaryManageId = this.selectionSalaryRows.length > 0 ? this.selectionSalaryRows[0].id : ''
                     delete reqObj.payerAcc
                     delete reqObj.prjName
                     delete reqObj.fileUrlList
                     delete reqObj.fileDetails
                     delete reqObj.fileUrlApproveList
                     delete reqObj.fileUrlOtherList
-                    addPayFund(reqObj).then(res => {
-                        if(res.status == 1) {
-                            this.isOtherDetailVisible = false
-                            this.$message.success(res.data)
-                            this.getApplyInfo()
-                        } else {
-                            if(res.data) {
-                                this.$message.error(res.data)
+                    reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
+                    if (this.type == 13) {
+                        addPayFund(reqObj).then(res => {
+                            if(res.status == 1) {
+                                this.isOtherDetailVisible = false
+                                this.$message.success(res.data)
+                                this.getApplyInfo()
                             } else {
-                                this.$message.error(res.message)
+                                if(res.data) {
+                                    this.$message.error(res.data)
+                                } else {
+                                    this.$message.error(res.message)
+                                }
+                                
                             }
-                            
-                        }
-                    })
+                        })
+                    }
+                    if (this.type == 18) {
+                        reqObj.totalSalary = Number(reqObj.totalSalary)
+                        reqObj.totalNum = Number(reqObj.totalNum)
+                        addSalaryFund(reqObj).then(res => {
+                             if(res.status == 1) {
+                                this.isOtherDetailVisible = false
+                                this.$message.success(res.data)
+                                this.getApplyInfo()
+                            } else {
+                                if(res.data) {
+                                    this.$message.error(res.data)
+                                } else {
+                                    this.$message.error(res.message)
+                                }
+                                
+                            }
+                        })
+                    }
+                    
                 }
             })
         },
@@ -4740,20 +5672,26 @@ export default {
             e.preventDefault()
             this.$refs.ruleSalaryDetailForm.validate(valid => {
                 if(valid) {
-                    if(!this.selectionSalaryRows || this.selectionSalaryRows.length == 0) {
-                        this.$message.warning('请选择合同关联工资单')
-                        return
-                    }
+                    // if(!this.selectionSalaryRows || this.selectionSalaryRows.length == 0) {
+                    //     this.$message.warning('请选择合同关联工资单')
+                    //     return
+                    // }
                     let reqObj = Object.assign({}, this.salaryDetailForm)
                     reqObj.totalSalary = Number(reqObj.totalSalary)
                     reqObj.totalNum = Number(reqObj.totalNum)
                     reqObj.currentSettlementAmount = Number(reqObj.currentSettlementAmount)
                     reqObj.salaryType = this.applicationType
-                    let resultFile = ''
-                    reqObj.fileUrlList && reqObj.fileUrlList.map(v => {
-                            resultFile += v.name + '#' + v.response.data + ','
+                    // let resultFile = ''
+                    // reqObj.fileUrlList && reqObj.fileUrlList.map(v => {
+                    //         resultFile += v.name + '#' + v.response.data + ','
+                    //     })
+                    // reqObj.invoiceFile = resultFile
+                    if (this.dataSource[0].file) {
+                        this.dataSource.map(v => {
+                            v.invoiceFile = v.file.name + '#' + v.file.response.data 
                         })
-                    reqObj.invoiceFile = resultFile
+                        reqObj.invoiceList = this.dataSource
+                    }
                     let detailFile = ''
                     reqObj.fileDetails && reqObj.fileDetails.map(v => {
                             detailFile += v.name + '#' + v.response.data + ','
@@ -4773,12 +5711,13 @@ export default {
                         })
                     reqObj.otherFile = otherFile
                     reqObj.workerSalaryList = this.workerSalaryList
-                    reqObj.settlementBatchId = this.selectionRows.length > 0 ? this.selectionRows[0].id : ''
-                    reqObj.salaryManageId = this.selectionSalaryRows.length > 0 ? this.selectionSalaryRows[0].id : ''
+                    // reqObj.settlementBatchId = this.selectionRows.length > 0 ? this.selectionRows[0].id : ''
+                    // reqObj.salaryManageId = this.selectionSalaryRows.length > 0 ? this.selectionSalaryRows[0].id : ''
                     delete reqObj.fileUrlList
                     delete reqObj.fileDetails
                     delete reqObj.fileUrlApproveList
                     delete reqObj.fileUrlOtherList
+                    reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
                     addSalaryFund(reqObj).then(res => {
                         this.isSalaryDetailVisible = false
                         this.$message.success('添加成功！')
@@ -4791,25 +5730,33 @@ export default {
             this.isSalaryDetailVisible = false
             this.$refs.ruleSalaryDetailForm.resetFields()
             this.salaryObj = {}
+            this.dataSource = [{
+                    key: '0',
+                    isLocalTax: 1
+                }]
         },
         handleSubContractSalaryDetailSubmitClick(e) {
             e.preventDefault()
             this.$refs.ruleSubContractSalaryDetailForm.validate(valid => {
                 if(valid) {
-                    if(!this.selectionSalaryRows || this.selectionSalaryRows.length == 0) {
-                        this.$message.warning('请选择合同关联工资单')
-                        return
-                    }
                     let reqObj = Object.assign({}, this.subContractSalaryDetailForm)
                     reqObj.totalSalary = Number(reqObj.totalSalary)
                     reqObj.totalNum = Number(reqObj.totalNum)
                     reqObj.currentSettlementAmount = Number(reqObj.currentSettlementAmount)
                     reqObj.salaryType = this.applicationType
-                    let resultFile = ''
-                    reqObj.fileUrlList && reqObj.fileUrlList.map(v => {
-                            resultFile += v.name + '#' + v.response.data + ','
+                    reqObj.belongContractCode = reqObj.belongSubContractCode
+                    // let resultFile = ''
+                    // reqObj.fileUrlList && reqObj.fileUrlList.map(v => {
+                    //         resultFile += v.name + '#' + v.response.data + ','
+                    //     })
+                    // reqObj.invoiceFile = resultFile
+                    if (this.dataSource[0].file) {
+                        this.dataSource.map(v => {
+                            v.invoiceFile = v.file.name + '#' + v.file.response.data 
                         })
-                    reqObj.invoiceFile = resultFile
+                        reqObj.invoiceList = this.dataSource
+                    }
+
                     let detailFile = ''
                     reqObj.fileDetails && reqObj.fileDetails.map(v => {
                             detailFile += v.name + '#' + v.response.data + ','
@@ -4829,18 +5776,19 @@ export default {
                         })
                     reqObj.otherFile = otherFile
                     reqObj.workerSalaryList = this.workerSalaryList
-                    reqObj.settlementBatchId = this.selectionRows.length > 0 ? this.selectionRows[0].id : ''
-                    reqObj.salaryManageId = this.selectionSalaryRows.length > 0 ? this.selectionSalaryRows[0].id : ''
+                    // reqObj.settlementBatchId = this.selectionRows.length > 0 ? this.selectionRows[0].id : ''
+                    // reqObj.salaryManageId = this.selectionSalaryRows.length > 0 ? this.selectionSalaryRows[0].id : ''
                     delete reqObj.fileUrlList
                     delete reqObj.fileDetails
                     delete reqObj.fileUrlApproveList
                     delete reqObj.fileUrlOtherList
                     console.log(this.scene)
-                    if(this.scene == 3 || this.scene == 6) {
+                    // if(this.scene == 3 || this.scene == 6) {
 
-                    } else {
-                        reqObj.payerAcc = ''
-                    }
+                    // } else {
+                    //     reqObj.payerAcc = ''
+                    // }
+                    reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
                     addSalaryFund(reqObj).then(res => {
                         this.isSubContractSalaryDetailVisible = false
                         this.$message.success('添加成功！')
@@ -4859,20 +5807,23 @@ export default {
             e.preventDefault()
             this.$refs.ruleReqAndPayForm.validate(valid => {
                 if(valid) {
-                    if(!this.selectionSalaryRows || this.selectionSalaryRows.length == 0) {
-                        this.$message.warning('请选择合同关联工资单')
-                        return
-                    }
+                    // if(!this.selectionSalaryRows || this.selectionSalaryRows.length == 0) {
+                    //     this.$message.warning('请选择合同关联工资单')
+                    //     return
+                    // }
                     let reqObj = Object.assign({}, this.reqAndPayDetailForm)
                     reqObj.totalSalary = Number(reqObj.totalSalary)
                     reqObj.totalNum = Number(reqObj.totalNum)
                     reqObj.currentSettlementAmount = Number(reqObj.currentSettlementAmount)
                     reqObj.salaryType = this.applicationType
-                    let resultFile = ''
-                    reqObj.fileUrlList && reqObj.fileUrlList.map(v => {
-                            resultFile += v.name + '#' + v.response.data + ','
+                    
+                    if (this.dataSource[0].file) {
+                        this.dataSource.map(v => {
+                            v.invoiceFile = v.file.name + '#' + v.file.response.data 
                         })
-                    reqObj.invoiceFile = resultFile
+                        reqObj.invoiceList = this.dataSource
+                    }
+
                     let detailFile = ''
                     reqObj.fileDetails && reqObj.fileDetails.map(v => {
                             detailFile += v.name + '#' + v.response.data + ','
@@ -4898,6 +5849,7 @@ export default {
                     delete reqObj.fileDetails
                     delete reqObj.fileUrlApproveList
                     delete reqObj.fileUrlOtherList
+                    reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
                     addSalaryFund(reqObj).then(res => {
                         if(res.status == 1) {
                             this.isReqAndPayDetailVisible = false
@@ -4994,22 +5946,37 @@ export default {
             this.isReqDetailVisible = false
             this.isContractRoleVisible = false
         },
-        handlePayChangeFile(info) {
+        handlePayChangeFile(info, key) {
             const status = info.file.status;
-            if (status !== "uploading") {
-                if (status == "removed") {
-                    const index = this.payDetailForm.fileUrlList.indexOf(info.file)  
-                    const newFileList = this.payDetailForm.fileUrlList.slice()  
-                    newFileList.splice(index, 1)  
-                    this.payDetailForm.fileUrlList = newFileList
-                } else {
-                    this.payDetailForm.fileUrlList = info.fileList
+            console.log(info, key)
+            let fileList = [...info.fileList];
+            fileList = fileList.slice(0);
+            this.dataSource.fileKey = key
+            fileList = fileList.map(file => {
+                if (file.response) {
+                // Component will show file.url as link
+                file.url = file.response.url;
                 }
-            } else {
-                this.payDetailForm.fileUrlList = info.fileList
+                return file;
+            });
+            this.payDetailForm.fileUrlList = fileList;
+            if (status === 'done') {
+                this.dataSource[key].file = fileList[0]
             }
+            // if (status !== "uploading") {
+            //     if (status == "removed") {
+            //         const index = this.payDetailForm.fileUrlList.indexOf(info.file)  
+            //         const newFileList = this.payDetailForm.fileUrlList.slice()  
+            //         newFileList.splice(index, 1)  
+            //         this.payDetailForm.fileUrlList = newFileList
+            //     } else {
+            //         this.payDetailForm.fileUrlList = info.fileList
+            //     }
+            // } else {
+            //     this.payDetailForm.fileUrlList = info.fileList
+            // }
         },
-        beforePayImgUpload(file) {
+        beforePayImgUpload(file, fileList) {
             const isLt400M = file.size / 1024 / 1024 <= 400
             if (!isLt400M) {
                 this.$message.error('上传文件大小不能超过 400MB!')
@@ -5060,20 +6027,36 @@ export default {
                 return false
             }
         },
-        handleOtherPayChangeFile(info) {
+        handleOtherPayChangeFile(info, key) {
             const status = info.file.status;
-            if (status !== "uploading") {
-                if (status == "removed") {
-                    const index = this.payDetailOtherForm.fileUrlList.indexOf(info.file)  
-                    const newFileList = this.payDetailOtherForm.fileUrlList.slice()  
-                    newFileList.splice(index, 1)  
-                    this.payDetailOtherForm.fileUrlList = newFileList
-                } else {
-                    this.payDetailOtherForm.fileUrlList = info.fileList
+            console.log(info, key)
+            let fileList = [...info.fileList];
+            fileList = fileList.slice(0);
+            this.dataSource.fileKey = key
+            fileList = fileList.map(file => {
+                if (file.response) {
+                // Component will show file.url as link
+                file.url = file.response.url;
                 }
-            } else {
-                this.payDetailOtherForm.fileUrlList = info.fileList
+                return file;
+            });
+            this.payDetailForm.fileUrlList = fileList;
+            if (status === 'done') {
+                this.dataSource[key].file = fileList[0]
             }
+            // const status = info.file.status;
+            // if (status !== "uploading") {
+            //     if (status == "removed") {
+            //         const index = this.payDetailOtherForm.fileUrlList.indexOf(info.file)  
+            //         const newFileList = this.payDetailOtherForm.fileUrlList.slice()  
+            //         newFileList.splice(index, 1)  
+            //         this.payDetailOtherForm.fileUrlList = newFileList
+            //     } else {
+            //         this.payDetailOtherForm.fileUrlList = info.fileList
+            //     }
+            // } else {
+            //     this.payDetailOtherForm.fileUrlList = info.fileList
+            // }
         },
         beforeOtherPayImgUpload(file) {
             const isLt400M = file.size / 1024 / 1024 <= 400
@@ -5164,20 +6147,38 @@ export default {
                 reader.readAsBinaryString(file)
             })
         },
-        handleReqChangeFile(info) {
+        handleReqChangeFile(info, key) {
+
             const status = info.file.status;
-            if (status !== "uploading") {
-                if (status == "removed") {
-                    const index = this.reqDetailForm.fileUrlList.indexOf(info.file)  
-                    const newFileList = this.reqDetailForm.fileUrlList.slice()  
-                    newFileList.splice(index, 1)  
-                    this.reqDetailForm.fileUrlList = newFileList
-                } else {
-                    this.reqDetailForm.fileUrlList = info.fileList
+            console.log(info, key)
+            let fileList = [...info.fileList];
+            fileList = fileList.slice(0);
+            this.dataSource.fileKey = key
+            fileList = fileList.map(file => {
+                if (file.response) {
+                // Component will show file.url as link
+                file.url = file.response.url;
                 }
-            } else {
-                this.reqDetailForm.fileUrlList = info.fileList
+                return file;
+            });
+            this.reqDetailForm.fileUrlList = fileList;
+            if (status === 'done') {
+                this.dataSource[key].file = fileList[0]
             }
+
+            // const status = info.file.status;
+            // if (status !== "uploading") {
+            //     if (status == "removed") {
+            //         const index = this.reqDetailForm.fileUrlList.indexOf(info.file)  
+            //         const newFileList = this.reqDetailForm.fileUrlList.slice()  
+            //         newFileList.splice(index, 1)  
+            //         this.reqDetailForm.fileUrlList = newFileList
+            //     } else {
+            //         this.reqDetailForm.fileUrlList = info.fileList
+            //     }
+            // } else {
+            //     this.reqDetailForm.fileUrlList = info.fileList
+            // }
         },
         beforeReqImgUpload(file) {
             const isLt400M = file.size / 1024 / 1024 <= 400
@@ -5296,20 +6297,36 @@ export default {
                 return false
             }
         },
-        handleSalaryChangeFile(info) {
+        handleSalaryChangeFile(info, key) {
             const status = info.file.status;
-            if (status !== "uploading") {
-                if (status == "removed") {
-                    const index = this.salaryDetailForm.fileUrlList.indexOf(info.file)  
-                    const newFileList = this.salaryDetailForm.fileUrlList.slice()  
-                    newFileList.splice(index, 1)  
-                    this.salaryDetailForm.fileUrlList = newFileList
-                } else {
-                    this.salaryDetailForm.fileUrlList = info.fileList
+            console.log(info, key)
+            let fileList = [...info.fileList];
+            fileList = fileList.slice(0);
+            this.dataSource.fileKey = key
+            fileList = fileList.map(file => {
+                if (file.response) {
+                // Component will show file.url as link
+                file.url = file.response.url;
                 }
-            } else {
-                this.salaryDetailForm.fileUrlList = info.fileList
+                return file;
+            });
+            // this.salaryDetailForm.fileUrlList = fileList;
+            if (status === 'done') {
+                this.dataSource[key].file = fileList[0]
             }
+            // const status = info.file.status;
+            // if (status !== "uploading") {
+            //     if (status == "removed") {
+            //         const index = this.salaryDetailForm.fileUrlList.indexOf(info.file)  
+            //         const newFileList = this.salaryDetailForm.fileUrlList.slice()  
+            //         newFileList.splice(index, 1)  
+            //         this.salaryDetailForm.fileUrlList = newFileList
+            //     } else {
+            //         this.salaryDetailForm.fileUrlList = info.fileList
+            //     }
+            // } else {
+            //     this.salaryDetailForm.fileUrlList = info.fileList
+            // }
         },
         beforeSalaryImgUpload(file) {
             const isLt400M = file.size / 1024 / 1024 <= 400
@@ -5431,20 +6448,36 @@ export default {
     //   }
     //   reader.readAsBinaryString(file);
         },
-        handleSubContractSalaryChangeFile(info) {
+        handleSubContractSalaryChangeFile(info, key) {
             const status = info.file.status;
-            if (status !== "uploading") {
-                if (status == "removed") {
-                    const index = this.subContractSalaryDetailForm.fileUrlList.indexOf(info.file)  
-                    const newFileList = this.subContractSalaryDetailForm.fileUrlList.slice()  
-                    newFileList.splice(index, 1)  
-                    this.subContractSalaryDetailForm.fileUrlList = newFileList
-                } else {
-                    this.subContractSalaryDetailForm.fileUrlList = info.fileList
+            console.log(info, key)
+            let fileList = [...info.fileList];
+            fileList = fileList.slice(0);
+            this.dataSource.fileKey = key
+            fileList = fileList.map(file => {
+                if (file.response) {
+                // Component will show file.url as link
+                file.url = file.response.url;
                 }
-            } else {
-                this.subContractSalaryDetailForm.fileUrlList = info.fileList
+                return file;
+            });
+            // this.salaryDetailForm.fileUrlList = fileList;
+            if (status === 'done') {
+                this.dataSource[key].file = fileList[0]
             }
+            // const status = info.file.status;
+            // if (status !== "uploading") {
+            //     if (status == "removed") {
+            //         const index = this.subContractSalaryDetailForm.fileUrlList.indexOf(info.file)  
+            //         const newFileList = this.subContractSalaryDetailForm.fileUrlList.slice()  
+            //         newFileList.splice(index, 1)  
+            //         this.subContractSalaryDetailForm.fileUrlList = newFileList
+            //     } else {
+            //         this.subContractSalaryDetailForm.fileUrlList = info.fileList
+            //     }
+            // } else {
+            //     this.subContractSalaryDetailForm.fileUrlList = info.fileList
+            // }
         },
         beforeSubContractSalaryImgUpload(file) {
             const isLt400M = file.size / 1024 / 1024 <= 400
@@ -5540,20 +6573,36 @@ export default {
 
 
 
-        handleReqAndPayChangeFile(info) {
+        handleReqAndPayChangeFile(info, key) {
             const status = info.file.status;
-            if (status !== "uploading") {
-                if (status == "removed") {
-                    const index = this.reqAndPayDetailForm.fileUrlList.indexOf(info.file)  
-                    const newFileList = this.reqAndPayDetailForm.fileUrlList.slice()  
-                    newFileList.splice(index, 1)  
-                    this.reqAndPayDetailForm.fileUrlList = newFileList
-                } else {
-                    this.reqAndPayDetailForm.fileUrlList = info.fileList
+            console.log(info, key)
+            let fileList = [...info.fileList];
+            fileList = fileList.slice(0);
+            this.dataSource.fileKey = key
+            fileList = fileList.map(file => {
+                if (file.response) {
+                // Component will show file.url as link
+                file.url = file.response.url;
                 }
-            } else {
-                this.reqAndPayDetailForm.fileUrlList = info.fileList
+                return file;
+            });
+            this.reqAndPayDetailForm.fileUrlList = fileList;
+            if (status === 'done') {
+                this.dataSource[key].file = fileList[0]
             }
+            // const status = info.file.status;
+            // if (status !== "uploading") {
+            //     if (status == "removed") {
+            //         const index = this.reqAndPayDetailForm.fileUrlList.indexOf(info.file)  
+            //         const newFileList = this.reqAndPayDetailForm.fileUrlList.slice()  
+            //         newFileList.splice(index, 1)  
+            //         this.reqAndPayDetailForm.fileUrlList = newFileList
+            //     } else {
+            //         this.reqAndPayDetailForm.fileUrlList = info.fileList
+            //     }
+            // } else {
+            //     this.reqAndPayDetailForm.fileUrlList = info.fileList
+            // }
         },
         beforeReqAndPayImgUpload(file) {
             const isLt400M = file.size / 1024 / 1024 <= 400
@@ -5693,7 +6742,7 @@ export default {
         },
         // 查看详情
         handleReviewClick(row) {
-            if(this.type == 1) {
+            if(this.type == 1 || this.type == 2 || this.type == 14) {
                 // 请款
                 this.isReqDetailViewVisible = true
                 this.isPayDetailViewVisible = false
@@ -5702,18 +6751,19 @@ export default {
                 this.isProgressReqDetailViewVisible = false
                 getReqDetail(row.id).then(res => {
                     this.reqDetailView = res.data
-                    let newStr = this.reqDetailView.invoiceFile.substring(0, this.reqDetailView.invoiceFile.length - 1).split(',')
-                        let uploadArr = []
-                        newStr && newStr.map(res => {
-                            // res = res.split('#')[0]
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            uploadArr.push(resObj)
-                        })
-                        this.reqDetailView.invoiceFile = uploadArr
+                    this.dataSource1 = res.data.invoiceList
+                    // let newStr = this.reqDetailView.invoiceFile.substring(0, this.reqDetailView.invoiceFile.length - 1).split(',')
+                    //     let uploadArr = []
+                    //     newStr && newStr.map(res => {
+                    //         // res = res.split('#')[0]
+                    //         let num = res.lastIndexOf('\#')
+                    //         let resObj = {
+                    //             name: res.substring(0, num),
+                    //             url: res.substring(num + 1, res.length)
+                    //         }
+                    //         uploadArr.push(resObj)
+                    //     })
+                    //     this.reqDetailView.invoiceFile = uploadArr
                     
                     let approveStr = this.reqDetailView.approveFile.substring(0, this.reqDetailView.approveFile.length - 1).split(',')
                         let approveArr = []
@@ -5749,68 +6799,70 @@ export default {
                         })
                         this.reqDetailView.otherFile = otherArr
                 })
-            } else if(this.type == 2) {
-                // 工程进度请款
-                this.isProgressReqDetailViewVisible = true
-                this.isReqDetailViewVisible = false
-                this.isPayDetailViewVisible = false
-                this.isSalaryDetailViewVisible = false
-                this.isOtherDetailViewVisible = false
-                getReqDetail(row.id).then(res => {
-                    this.progressReqDetailView = res.data
-                    let newStr = this.progressReqDetailView.invoiceFile.substring(0, this.progressReqDetailView.invoiceFile.length - 1).split(',')
-                        let uploadArr = []
-                        newStr && newStr.map(res => {
-                            // res = res.split('#')[0]
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            uploadArr.push(resObj)
-                        })
-                        this.progressReqDetailView.invoiceFile = uploadArr
+            } 
+            // else if(this.type == 2) {
+            //     // 工程进度请款
+            //     this.isProgressReqDetailViewVisible = true
+            //     this.isReqDetailViewVisible = false
+            //     this.isPayDetailViewVisible = false
+            //     this.isSalaryDetailViewVisible = false
+            //     this.isOtherDetailViewVisible = false
+            //     getReqDetail(row.id).then(res => {
+            //         this.progressReqDetailView = res.data
+            //         let newStr = this.progressReqDetailView.invoiceFile.substring(0, this.progressReqDetailView.invoiceFile.length - 1).split(',')
+            //             let uploadArr = []
+            //             newStr && newStr.map(res => {
+            //                 // res = res.split('#')[0]
+            //                 // let resObj = {
+            //                 //     name: res.split('#')[0],
+            //                 //     url: res.split('#')[1]
+            //                 // }
+            //                 let num = res.lastIndexOf('\#')
+            //                 let resObj = {
+            //                     name: res.substring(0, num),
+            //                     url: res.substring(num + 1, res.length)
+            //                 }
+            //                 uploadArr.push(resObj)
+            //             })
+            //             this.progressReqDetailView.invoiceFile = uploadArr
 
-                    let approveStr = this.progressReqDetailView.approveFile.substring(0, this.progressReqDetailView.approveFile.length - 1).split(',')
-                        let approveArr = []
-                        approveStr && approveStr.map(res => {
-                            // res = res.split('#')[0]
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            approveArr.push(resObj)
-                        })
-                        this.progressReqDetailView.approveFile = approveArr
+            //         let approveStr = this.progressReqDetailView.approveFile.substring(0, this.progressReqDetailView.approveFile.length - 1).split(',')
+            //             let approveArr = []
+            //             approveStr && approveStr.map(res => {
+            //                 // res = res.split('#')[0]
+            //                 // let resObj = {
+            //                 //     name: res.split('#')[0],
+            //                 //     url: res.split('#')[1]
+            //                 // }
+            //                 let num = res.lastIndexOf('\#')
+            //                 let resObj = {
+            //                     name: res.substring(0, num),
+            //                     url: res.substring(num + 1, res.length)
+            //                 }
+            //                 approveArr.push(resObj)
+            //             })
+            //             this.progressReqDetailView.approveFile = approveArr
 
 
-                    let otherStr = this.progressReqDetailView.otherFile.substring(0, this.progressReqDetailView.otherFile.length - 1).split(',')
-                        let otherArr = []
-                        otherStr && otherStr.map(res => {
-                            // res = res.split('#')[0]
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            otherArr.push(resObj)
-                        })
-                        this.progressReqDetailView.otherFile = otherArr
-                })
-            } else if(this.type >= 3 && this.type <= 6 ) {
+            //         let otherStr = this.progressReqDetailView.otherFile.substring(0, this.progressReqDetailView.otherFile.length - 1).split(',')
+            //             let otherArr = []
+            //             otherStr && otherStr.map(res => {
+            //                 // res = res.split('#')[0]
+            //                 // let resObj = {
+            //                 //     name: res.split('#')[0],
+            //                 //     url: res.split('#')[1]
+            //                 // }
+            //                 let num = res.lastIndexOf('\#')
+            //                 let resObj = {
+            //                     name: res.substring(0, num),
+            //                     url: res.substring(num + 1, res.length)
+            //                 }
+            //                 otherArr.push(resObj)
+            //             })
+            //             this.progressReqDetailView.otherFile = otherArr
+            //     })
+            // } 
+            else if(this.type >= 3 && this.type <= 6 ) {
                 this.isReqDetailViewVisible = true
                 this.isPayDetailViewVisible = false
                 this.isSalaryDetailViewVisible = false
@@ -5822,23 +6874,23 @@ export default {
                 getReqDetail(row.id).then(res => {
                     console.log(res.data)
                     this.reqDetailView = res.data
-
-                    let newStr = this.reqDetailView.invoiceFile.substring(0, this.reqDetailView.invoiceFile.length - 1).split(',')
-                        let uploadArr = []
-                        newStr && newStr.map(res => {
-                            // res = res.split('#')[0]
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            uploadArr.push(resObj)
-                        })
-                        this.reqDetailView.invoiceFile = uploadArr
+                    this.dataSource1 = res.data.invoiceList
+                    // let newStr = this.reqDetailView.invoiceFile.substring(0, this.reqDetailView.invoiceFile.length - 1).split(',')
+                    //     let uploadArr = []
+                    //     newStr && newStr.map(res => {
+                    //         // res = res.split('#')[0]
+                    //         // let resObj = {
+                    //         //     name: res.split('#')[0],
+                    //         //     url: res.split('#')[1]
+                    //         // }
+                    //         let num = res.lastIndexOf('\#')
+                    //         let resObj = {
+                    //             name: res.substring(0, num),
+                    //             url: res.substring(num + 1, res.length)
+                    //         }
+                    //         uploadArr.push(resObj)
+                    //     })
+                    //     this.reqDetailView.invoiceFile = uploadArr
 
                     let approveStr = this.reqDetailView.approveFile.substring(0, this.reqDetailView.approveFile.length - 1).split(',')
                         let approveArr = []
@@ -5875,29 +6927,30 @@ export default {
                         })
                         this.reqDetailView.otherFile = otherArr                    
                 })
-            } else if(this.type >= 7 && this.type < 13) {
+            } else if(this.type >= 7 && this.type < 13 || this.type == 17) {
                 // 付款
                 this.isPayDetailViewVisible = true
                 getApplyDetail(row.id).then(res => {
                     if(res.status == 1) {
                         console.log(res.data)
+                        this.dataSource1 = res.data.invoiceList
                         this.payDetailView = res.data
-                        let newStr = this.payDetailView.invoiceFile.substring(0, this.payDetailView.invoiceFile.length - 1).split(',')
-                        let uploadArr = []
-                        newStr && newStr.map(res => {
-                            // res = res.split('#')[0]
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            uploadArr.push(resObj)
-                        })
-                        this.payDetailView.invoiceFile = uploadArr
+                        // let newStr = this.payDetailView.invoiceFile.substring(0, this.payDetailView.invoiceFile.length - 1).split(',')
+                        // let uploadArr = []
+                        // newStr && newStr.map(res => {
+                        //     // res = res.split('#')[0]
+                        //     // let resObj = {
+                        //     //     name: res.split('#')[0],
+                        //     //     url: res.split('#')[1]
+                        //     // }
+                        //     let num = res.lastIndexOf('\#')
+                        //     let resObj = {
+                        //         name: res.substring(0, num),
+                        //         url: res.substring(num + 1, res.length)
+                        //     }
+                        //     uploadArr.push(resObj)
+                        // })
+                        // this.payDetailView.invoiceFile = uploadArr
                         
                         let approveStr = this.payDetailView.approveFile.substring(0, this.payDetailView.approveFile.length - 1).split(',')
                         let approveArr = []
@@ -5934,26 +6987,28 @@ export default {
                         this.payDetailView.otherFile = otherArr
                     }
                 })
-            } else if(this.type == 13) {
+            } 
+            else if(this.type == 13) {
                 this.isOtherDetailViewVisible = true
                 getApplyDetail(row.id).then(res => {
                     this.payDetailOtherView = res.data
-                    let newStr = this.payDetailOtherView.invoiceFile && this.payDetailOtherView.invoiceFile.substring(0, this.payDetailOtherView.invoiceFile.length - 1).split(',')
-                        let uploadArr = []
-                        newStr && newStr.map(res => {
-                            // res = res.split('#')[0]
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            uploadArr.push(resObj)
-                        })
-                        this.payDetailOtherView.invoiceFile = uploadArr
+                    this.dataSource1 = res.data.invoiceList
+                    // let newStr = this.payDetailOtherView.invoiceFile && this.payDetailOtherView.invoiceFile.substring(0, this.payDetailOtherView.invoiceFile.length - 1).split(',')
+                    //     let uploadArr = []
+                    //     newStr && newStr.map(res => {
+                    //         // res = res.split('#')[0]
+                    //         // let resObj = {
+                    //         //     name: res.split('#')[0],
+                    //         //     url: res.split('#')[1]
+                    //         // }
+                    //         let num = res.lastIndexOf('\#')
+                    //         let resObj = {
+                    //             name: res.substring(0, num),
+                    //             url: res.substring(num + 1, res.length)
+                    //         }
+                    //         uploadArr.push(resObj)
+                    //     })
+                    //     this.payDetailOtherView.invoiceFile = uploadArr
                     let newFile = this.payDetailOtherView.paymentDetails && this.payDetailOtherView.paymentDetails.substring(0, this.payDetailOtherView.paymentDetails.length - 1).split(',')
                         let uploadFile = []
                         newFile && newFile.map(res => {
@@ -6007,24 +7062,17 @@ export default {
                         })
                         this.payDetailOtherView.otherFile = otherArr
                 })
-            } else if(this.type == 14) {
-                // 请款+代发
-                this.isReqAndPayDetailViewVisible = true
-                this.isSalaryDetailViewVisible = false
-                this.isReqDetailViewVisible = false
-                this.isPayDetailViewVisible = false
-                this.isOtherDetailViewVisible = false
-                this.isProgressReqDetailViewVisible = false
+            }
+            else if(this.type == 18) {
+                this.isOtherDetailViewVisible = true
                 getSalaryDetail(row.id).then(res => {
-                    this.reqAndPayDetailView = res.data
-                    let newFile = this.reqAndPayDetailView.invoiceFile && this.reqAndPayDetailView.invoiceFile.substring(0, this.reqAndPayDetailView.invoiceFile.length - 1).split(',')
+                    this.payDetailOtherView = res.data
+                    this.payDetailOtherView.prjName = localStorage.getItem('projectName')
+                    this.dataSource1 = res.data.invoiceList
+                    console.log(this.payDetailOtherView.salaryDetails)
+                    let newFile = this.payDetailOtherView.salaryDetails && this.payDetailOtherView.salaryDetails.substring(0, this.payDetailOtherView.salaryDetails.length - 1).split(',')
                         let uploadFile = []
                         newFile && newFile.map(res => {
-                            // res = res.split('#')[0]
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
                             let num = res.lastIndexOf('\#')
                             let resObj = {
                                 name: res.substring(0, num),
@@ -6032,27 +7080,13 @@ export default {
                             }
                             uploadFile.push(resObj)
                         })
-                    this.reqAndPayDetailView.invoiceFile = uploadFile
-                    let file = this.reqAndPayDetailView.salaryDetails && this.reqAndPayDetailView.salaryDetails.substring(0, this.reqAndPayDetailView.salaryDetails.length - 1).split(',')
-                        let fileUrl = []
-                        file && file.map(res => {
-                            // res = res.split('#')[0]
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            fileUrl.push(resObj)
-                        })
-                    this.reqAndPayDetailView.salaryDetails = fileUrl
+                        this.payDetailOtherView.salaryDetails = uploadFile
+                        console.log(this.payDetailOtherView.salaryDetails)
 
 
-                    let approveStr = this.reqAndPayDetailView.approveFile && this.reqAndPayDetailView.approveFile.substring(0, this.reqAndPayDetailView.approveFile.length - 1).split(',')
-                        let approveFile = []
+                    let approveStr = this.payDetailOtherView.approveFile && this.payDetailOtherView.approveFile.substring(0, this.payDetailOtherView.approveFile.length - 1).split(',')
+                        console.log(approveStr)
+                        let approveArr = []
                         approveStr && approveStr.map(res => {
                             // res = res.split('#')[0]
                             // let resObj = {
@@ -6064,12 +7098,13 @@ export default {
                                 name: res.substring(0, num),
                                 url: res.substring(num + 1, res.length)
                             }
-                            approveFile.push(resObj)
+                            approveArr.push(resObj)
                         })
-                    this.reqAndPayDetailView.approveFile = approveFile
+                        this.payDetailOtherView.approveFile = approveArr
 
-                    let otherStr = this.reqAndPayDetailView.otherFile && this.reqAndPayDetailView.otherFile.substring(0, this.reqAndPayDetailView.otherFile.length - 1).split(',')
-                        let otherFile = []
+
+                    let otherStr = this.payDetailOtherView.otherFile && this.payDetailOtherView.otherFile.substring(0, this.payDetailOtherView.otherFile.length - 1).split(',')
+                        let otherArr = []
                         otherStr && otherStr.map(res => {
                             // res = res.split('#')[0]
                             // let resObj = {
@@ -6081,11 +7116,91 @@ export default {
                                 name: res.substring(0, num),
                                 url: res.substring(num + 1, res.length)
                             }
-                            otherFile.push(resObj)
+                            otherArr.push(resObj)
                         })
-                    this.reqAndPayDetailView.otherFile = otherFile
+                        this.payDetailOtherView.otherFile = otherArr
                 })
-            } else if(this.type > 14) {
+            }
+            //  else if(this.type == 14) {
+            //     // 请款+代发
+            //     this.isReqAndPayDetailViewVisible = true
+            //     this.isSalaryDetailViewVisible = false
+            //     this.isReqDetailViewVisible = false
+            //     this.isPayDetailViewVisible = false
+            //     this.isOtherDetailViewVisible = false
+            //     this.isProgressReqDetailViewVisible = false
+            //     getSalaryDetail(row.id).then(res => {
+            //         this.reqAndPayDetailView = res.data
+            //         // let newFile = this.reqAndPayDetailView.invoiceFile && this.reqAndPayDetailView.invoiceFile.substring(0, this.reqAndPayDetailView.invoiceFile.length - 1).split(',')
+            //         //     let uploadFile = []
+            //         //     newFile && newFile.map(res => {
+            //         //         // res = res.split('#')[0]
+            //         //         // let resObj = {
+            //         //         //     name: res.split('#')[0],
+            //         //         //     url: res.split('#')[1]
+            //         //         // }
+            //         //         let num = res.lastIndexOf('\#')
+            //         //         let resObj = {
+            //         //             name: res.substring(0, num),
+            //         //             url: res.substring(num + 1, res.length)
+            //         //         }
+            //         //         uploadFile.push(resObj)
+            //         //     })
+            //         // this.reqAndPayDetailView.invoiceFile = uploadFile
+            //         let file = this.reqAndPayDetailView.salaryDetails && this.reqAndPayDetailView.salaryDetails.substring(0, this.reqAndPayDetailView.salaryDetails.length - 1).split(',')
+            //             let fileUrl = []
+            //             file && file.map(res => {
+            //                 // res = res.split('#')[0]
+            //                 // let resObj = {
+            //                 //     name: res.split('#')[0],
+            //                 //     url: res.split('#')[1]
+            //                 // }
+            //                 let num = res.lastIndexOf('\#')
+            //                 let resObj = {
+            //                     name: res.substring(0, num),
+            //                     url: res.substring(num + 1, res.length)
+            //                 }
+            //                 fileUrl.push(resObj)
+            //             })
+            //         this.reqAndPayDetailView.salaryDetails = fileUrl
+
+
+            //         let approveStr = this.reqAndPayDetailView.approveFile && this.reqAndPayDetailView.approveFile.substring(0, this.reqAndPayDetailView.approveFile.length - 1).split(',')
+            //             let approveFile = []
+            //             approveStr && approveStr.map(res => {
+            //                 // res = res.split('#')[0]
+            //                 // let resObj = {
+            //                 //     name: res.split('#')[0],
+            //                 //     url: res.split('#')[1]
+            //                 // }
+            //                 let num = res.lastIndexOf('\#')
+            //                 let resObj = {
+            //                     name: res.substring(0, num),
+            //                     url: res.substring(num + 1, res.length)
+            //                 }
+            //                 approveFile.push(resObj)
+            //             })
+            //         this.reqAndPayDetailView.approveFile = approveFile
+
+            //         let otherStr = this.reqAndPayDetailView.otherFile && this.reqAndPayDetailView.otherFile.substring(0, this.reqAndPayDetailView.otherFile.length - 1).split(',')
+            //             let otherFile = []
+            //             otherStr && otherStr.map(res => {
+            //                 // res = res.split('#')[0]
+            //                 // let resObj = {
+            //                 //     name: res.split('#')[0],
+            //                 //     url: res.split('#')[1]
+            //                 // }
+            //                 let num = res.lastIndexOf('\#')
+            //                 let resObj = {
+            //                     name: res.substring(0, num),
+            //                     url: res.substring(num + 1, res.length)
+            //                 }
+            //                 otherFile.push(resObj)
+            //             })
+            //         this.reqAndPayDetailView.otherFile = otherFile
+            //     })
+            // } 
+            else if(this.type == 15 || this.type == 19 || this.type == 20) {
                 // 工资
                 if(this.scene == 3 || this.scene == 6) {
                     this.isSubContractSalaryDetailViewVisible = true
@@ -6101,22 +7216,23 @@ export default {
                 this.isProgressReqDetailViewVisible = false
                 getSalaryDetail(row.id).then(res => {
                     this.salaryDetailView = res.data
-                    let newFile = this.salaryDetailView.invoiceFile && this.salaryDetailView.invoiceFile.substring(0, this.salaryDetailView.invoiceFile.length - 1).split(',')
-                        let uploadFile = []
-                        newFile && newFile.map(res => {
-                            // res = res.split('#')[0]
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            uploadFile.push(resObj)
-                        })
-                    this.salaryDetailView.invoiceFile = uploadFile
+                    this.dataSource1 = res.data.invoiceList
+                    // let newFile = this.salaryDetailView.invoiceFile && this.salaryDetailView.invoiceFile.substring(0, this.salaryDetailView.invoiceFile.length - 1).split(',')
+                    //     let uploadFile = []
+                    //     newFile && newFile.map(res => {
+                    //         // res = res.split('#')[0]
+                    //         // let resObj = {
+                    //         //     name: res.split('#')[0],
+                    //         //     url: res.split('#')[1]
+                    //         // }
+                    //         let num = res.lastIndexOf('\#')
+                    //         let resObj = {
+                    //             name: res.substring(0, num),
+                    //             url: res.substring(num + 1, res.length)
+                    //         }
+                    //         uploadFile.push(resObj)
+                    //     })
+                    // this.salaryDetailView.invoiceFile = uploadFile
                     let file = this.salaryDetailView.salaryDetails && this.salaryDetailView.salaryDetails.substring(0, this.salaryDetailView.salaryDetails.length - 1).split(',')
                         let fileUrl = []
                         file && file.map(res => {
@@ -6386,7 +7502,69 @@ export default {
             this.isSalaryVisible = false
             this.isSalarySelect = true
             this.cacheSalary = this.selectionSalaryRows.length > 0 ? this.selectionSalaryRows[0].salaryName : ''
-        }
+        },
+        handleChangeFile(info) {
+            console.log(info)
+            if (info.file.response && info.file.response.status === -1) {
+                this.$message.error(info.file.response.message)
+                info.file.status = 'error'
+                let fileList = [...info.fileList];
+                fileList.map(file => {
+                    if (file.response && file.response.status === -1) {
+                    file.status = 'error';
+                    console.log(1111)
+                    }
+                });
+                this.salaryDetailForm.fileDetails = info.fileList
+                this.payDetailOtherForm.fileDetails = info.fileList
+                this.subContractSalaryDetailForm.fileDetails = info.fileList
+            } else {
+                const status = info.file.status;
+                if (status !== "uploading") {
+                console.log(2)
+                    if (status == "removed") {
+                        const index = this.salaryDetailForm.fileDetails.indexOf(info.file)  
+                        const newFileList = this.salaryDetailForm.fileDetails.slice()  
+                        newFileList.splice(index, 1)  
+                        this.salaryDetailForm.fileDetails = newFileList
+                        this.payDetailOtherForm.fileDetails = newFileList
+                        this.subContractSalaryDetailForm.fileDetails = newFileList
+                    } else {
+                        this.salaryDetailForm.fileDetails = info.fileList
+                        this.payDetailOtherForm.fileDetails = info.fileList
+                        this.subContractSalaryDetailForm.fileDetails = info.fileList
+                    }
+                } else {
+                this.salaryDetailForm.fileDetails = info.fileList
+                this.payDetailOtherForm.fileDetails = info.fileList
+                this.subContractSalaryDetailForm.fileDetails = info.fileList
+                }
+            }
+            // console.log(this.addForm.fileUrlList)
+        },
+        beforeImgUpload(file) {
+            const isLt400M = file.size / 1024 / 1024 <= 400
+            if (!isLt400M) {
+                this.$message.error('上传文件大小不能超过 400MB!')
+                return false
+            }
+
+            return new Promise((resolve, reject) => {
+                let reader = new FileReader()
+                reader.onload = r => {
+                let data = r.target.result
+                let workbook = XLSX.read(data, { type: 'binary' })
+                let worksheet = workbook.Sheets[workbook.SheetNames[0]]
+                let excelData = XLSX.utils.sheet_to_json(worksheet, {
+                    header: ['accNoName', 'accNo', 'idCard', 'amount', 'accBankName', 'openBankNo']
+                })
+                excelData.shift()
+                this.workerSalaryList = excelData
+                resolve()
+                }
+                reader.readAsBinaryString(file)
+            })
+        },
     }
 }
 </script>
@@ -6416,6 +7594,31 @@ export default {
         }
     }
     .modal-title::before{
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 6px;
+        height: 20px;
+        background: #508EDF;
+    }
+    .model-row{
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        span{
+            margin-left: 15px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        strong{
+            font-size: 12px;
+            margin-left: 20px;
+            color: #f5222d;
+        }
+    }
+    .model-row::before{
         content: '';
         position: absolute;
         left: 0;
@@ -6471,7 +7674,7 @@ export default {
     .download-wrapper{
         color: #1890FF;
         position: absolute;
-        right: -100px;
+        right: -50px;
         top: -11px;
     }
     .download-wrapper:hover{
@@ -6535,5 +7738,47 @@ export default {
   word-break: break-all!important;
   overflow: none!important;
   text-overflow: initial!important;
+}
+.editable-cell {
+  position: relative;
+}
+
+.editable-cell-input-wrapper,
+.editable-cell-text-wrapper {
+  padding-right: 24px;
+}
+
+.editable-cell-text-wrapper {
+  padding: 5px 24px 5px 5px;
+}
+
+.editable-cell-icon,
+.editable-cell-icon-check {
+  position: absolute;
+  right: 0;
+  width: 20px;
+  cursor: pointer;
+}
+
+// .editable-cell-icon {
+//   line-height: 18px;
+//   display: none;
+// }
+
+.editable-cell-icon-check {
+  line-height: 28px;
+}
+
+// .editable-cell:hover .editable-cell-icon {
+//   display: inline-block;
+// }
+
+// .editable-cell-icon:hover,
+// .editable-cell-icon-check:hover {
+//   color: #108ee9;
+// }
+
+.editable-add-btn {
+  margin-bottom: 8px;
 }
 </style>

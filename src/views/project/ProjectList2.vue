@@ -6,17 +6,18 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="二级项目编号">
-                <a-input v-model="queryParam.secondPeriodProjectCode" placeholder="请输入"/>
+                <a-input v-model="queryParam.id" placeholder="请输入"/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="二级项目名称">
-                <a-input v-model="queryParam.secondPeriodProjectName" placeholder="请输入"/>
+                <a-input v-model="queryParam.name" placeholder="请输入"/>
               </a-form-item>
             </a-col>
             <a-col :md="!advanced && 8 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                <a-button type="primary" @click="handleSearchClick">查询</a-button>
+                <a-button type="primary" icon="plus" size="small" class="add"  @click="handleAddClick">新建</a-button>
+                <a-button style="margin-left: 8px"  type="primary" @click="handleSearchClick">查询</a-button>
                 <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
                 <!-- <a @click="toggleAdvanced" style="margin-left: 8px">
                   {{ advanced ? '收起' : '展开' }}
@@ -26,7 +27,6 @@
             </a-col>
           </a-row>
         </a-form>
-        <a-button type="primary" icon="plus" size="small" class="add" v-if="isAddBtnShow" @click="handleAddClick">新建</a-button>
       </div>
 
       <a-table
@@ -42,7 +42,7 @@
         </span> -->
         <template slot="operation" slot-scope="scope">
           <a-button type="link" @click="handleReviewClick(scope)">查看</a-button>
-          <a-button type="link" :disabled="!scope.editFlag" @click="handleEditClick(scope)">编辑</a-button>
+          <a-button type="link" @click="handleEditClick(scope)">编辑</a-button>
           <!-- <a-button type="link" @click="handleDeleteClick(scope)">删除</a-button> -->
         </template>
       </a-table>
@@ -52,7 +52,7 @@
         ref='ruleForm'
         :model="addForm"
         :rules="rules"
-        :label-col="{ span: 8 }" 
+        :label-col="{ span: 12 }" 
         :wrapper-col="{ span: 12 }"
       >
         <a-row :gutter="24">
@@ -80,16 +80,34 @@
           <a-col :span="12">
             <a-form-model-item label="所属一级项目" prop="projectIDLv1">
               <a-select v-model="addForm.projectIDLv1" placeholder="请选择所属一个项目">
-                <a-select-option v-for="item of projectList" :key="item.value" :value="item.value">
-                  {{ item.name }}
+                <a-select-option v-for="item of projectList" :key="item.projectIDLv1" :value="item.projectIDLv1">
+                  {{ item.projectNameLv1 }}
                 </a-select-option>
               </a-select>
             </a-form-model-item>
           </a-col>
+           <a-col :span="12">
+            <a-form-model-item label="可研批复年号" prop="feasibilityStudyYear">
+              <a-input 
+                type="text" 
+                v-model="addForm.feasibilityStudyYear"
+                placeholder="请输入可研批复年号"
+              />
+            </a-form-model-item>
+          </a-col>
         </a-row>
-        <a-row :gutter="24">
+         <a-row :gutter="24">
+           <a-col :span="12">
+            <a-form-model-item label="可研批复文件号" prop="feasibilityStudyNo">
+              <a-input 
+                type="text" 
+                v-model="addForm.feasibilityStudyNo"
+                placeholder="请输入可研批复文件号"
+              />
+            </a-form-model-item>
+          </a-col>
           <a-col :span="12">
-            <a-form-model-item label="可研估算投资额" prop="feasibilityStudyEstimate">
+            <a-form-model-item label="可研批复估算-总投资额" prop="feasibilityStudyEstimate">
               <div class="investment">
                 <a-input 
                   type="text"  
@@ -102,7 +120,29 @@
         </a-row>
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-model-item label="初设概算投资额" prop="perliminaryDesignBudget">
+            <a-form-model-item label="可研批复估算-其中工程费" prop="feasibilityStudyEstimateGC">
+              <div class="investment">
+                <a-input 
+                  type="text"  
+                  v-model="addForm.feasibilityStudyEstimateGC"
+                  placeholder="请输入"
+                /> <span>万元</span>
+              </div>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="初设及概算批复年号" prop="preliminaryDesignYear">
+              <a-input 
+                type="text" 
+                v-model="addForm.preliminaryDesignYear"
+                placeholder="请输入"
+              />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-model-item label="初设及概算-总投资额" prop="perliminaryDesignBudget">
               <div class="investment">
                 <a-input 
                   type="text"  
@@ -110,6 +150,57 @@
                   placeholder="请输入"
                 /> <span>万元</span>
               </div>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="初设及概算批复文件号" prop="preliminaryDesignNo">
+              <a-input 
+                type="text" 
+                v-model="addForm.preliminaryDesignNo"
+                placeholder="请输入"
+              />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-model-item label="初设及概算-其中工程费" prop="perliminaryDesignBudgetGC">
+              <div class="investment">
+                <a-input 
+                  type="text"  
+                  v-model="addForm.perliminaryDesignBudgetGC"
+                  placeholder="请输入"
+                /> <span>万元</span>
+              </div>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="二级项目计划开工日期" prop="projectStartDateLv2">
+              <a-date-picker 
+                type="text" 
+                v-model="addForm.projectStartDateLv2"
+                @change="handleStartDateChange"
+              />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-model-item label="二级项目计划完工日期" prop="projectEndDateLv2">
+              <a-date-picker 
+                type="text" 
+                v-model="addForm.projectEndDateLv2"
+                @change="handleEndDateChange"
+              />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="二级项目计划建设工期" prop="projectConstructionPeriodLv2">
+                <a-input 
+                  type="text"  
+                  v-model="addForm.projectConstructionPeriodLv2"
+                  placeholder="请输入"
+                />
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -173,12 +264,12 @@ const columns = [
     key: 'projectIDLv1',
     width: '15%'
   },
-  {
-    title: '一级项目名称',
-    dataIndex: 'projectNameLv1',
-    key: 'projectNameLv1',
-    width: '20%'
-  },
+  // {
+  //   title: '一级项目名称',
+  //   dataIndex: 'projectNameLv1',
+  //   key: 'projectNameLv1',
+  //   width: '20%'
+  // },
   {
     title: '二级项目编号',
     dataIndex: 'projectIDLv2',
@@ -212,8 +303,8 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        secondPeriodProjectCode: '',
-        secondPeriodProjectName: ''
+        id: '',
+        name: ''
       },
       loadData: [],
     //   dataSourceBank: dataSourceBank,
@@ -246,9 +337,11 @@ export default {
       rules: {
         projectIDLv2: [{ required: true, message: '请输入二级项目编号', trigger: 'change' }],
         projectNameLv2: [{ required: true, message: '请输入二级项目名称', trigger: 'change' }],
+        feasibilityStudyYear: [{ required: true, message: '请输入可研批复年号', trigger: 'change' }],
         projectIDLv1: [{ required: true, message: '请选择所属一级项目', trigger: 'change' }],
+        feasibilityStudyNo: [{ required: true, message: '请输入可研批复文件号', trigger: 'change' }],
         feasibilityStudyEstimate: [{ required: true, message: '请输入可研估算投资额', trigger: 'change' }],
-        perliminaryDesignBudget: [{ required: true, message: '请输入初设估算投资额', trigger: 'change' }],
+        // perliminaryDesignBudget: [{ required: true, message: '请输入初设估算投资额', trigger: 'change' }],
       },
       projectType: projectType,
       projectList: [],
@@ -273,8 +366,8 @@ export default {
     getQuotaApplyList() {
       this.loading = true
       let reqObj = {
-        secondPeriodProjectCode: this.queryParam.secondPeriodProjectCode,
-        secondPeriodProjectName: this.queryParam.secondPeriodProjectName,
+        id: this.queryParam.id,
+        name: this.queryParam.name,
         pageNum: this.pagination.current,
         pageSize: this.pagination.pageSize
       }
@@ -289,9 +382,9 @@ export default {
     },
     getProjectList1 () {
       getProList1().then(res => {
-        console.log(res)  
-        if(res && res.length > 0) {
-          this.projectList = res
+        console.log(res.data)  
+        if(res.data && res.data.pageList.length > 0) {
+          this.projectList = res.data.pageList
         }
       })
     },
@@ -323,7 +416,7 @@ export default {
     handleAddClick() {
       this.isAddVisible = true
       this.modalTitle = '新建'
-      this.modalOk = '立即创建'
+      this.modalOk = '保存'
       let result = {
         projectIDLv2: '',
         projectNameLv2: '',
@@ -352,7 +445,7 @@ export default {
           if(self.isEdit) {
             editProjectList2(self.addForm).then(res => {
               if(res.status == 1) {
-                self.$message.success(res.data)
+                self.$message.success('编辑二级项目成功')
                 self.isAddVisible = false
                 self.getQuotaApplyList()
               }
@@ -360,7 +453,7 @@ export default {
           } else {
             addProjectList2(self.addForm).then(res => {
               if(res.status == 1) {
-                self.$message.success(res.data)
+                self.$message.success('新建二级项目成功')
                 self.isAddVisible = false
                 self.getQuotaApplyList()
               }
@@ -382,6 +475,14 @@ export default {
       this.modalTitle = '编辑'
       this.modalOk = '确定'
       this.addForm = record
+    },
+    handleStartDateChange(date, dateString) {
+      console.log(date, dateString)
+      this.addForm.projectStartDateLv2 = dateString
+    },
+    handleEndDateChange(date, dateString) {
+      console.log(date, dateString)
+      this.addForm.projectEndDateLv2 = dateString
     },
     // 删除
     handleDeleteClick(record) {

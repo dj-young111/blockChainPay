@@ -6,27 +6,23 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="三级项目编号">
-                <a-input v-model="queryParam.thirdPeriodProjectCode" placeholder="请输入"/>
+                <a-input v-model="queryParam.id" placeholder="请输入"/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="三级项目名称">
-                <a-input v-model="queryParam.thirdPeriodProjectName" placeholder="请输入"/>
+                <a-input v-model="queryParam.name" placeholder="请输入"/>
               </a-form-item>
             </a-col>
             <a-col :md="!advanced && 8 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                <a-button type="primary" @click="handleSearchClick">查询</a-button>
+                <a-button type="primary" icon="plus" size="small" class="add"  @click="handleAddClick">新建</a-button>
+                <a-button style="margin-left: 8px" type="primary" @click="handleSearchClick">查询</a-button>
                 <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-                <!-- <a @click="toggleAdvanced" style="margin-left: 8px">
-                  {{ advanced ? '收起' : '展开' }}
-                  <a-icon :type="advanced ? 'up' : 'down'"/>
-                </a> -->
               </span>
             </a-col>
           </a-row>
         </a-form>
-        <a-button type="primary" icon="plus" size="small" class="add" v-if="isAddBtnShow" @click="handleAddClick">新建</a-button>
       </div>
 
       <a-table
@@ -45,7 +41,7 @@
         </template> -->
         <template slot="operation" slot-scope="scope">
           <a-button type="link" @click="handleReviewClick(scope)">查看</a-button>
-          <a-button type="link" :disabled="!scope.editFlag" @click="handleEditClick(scope)">编辑</a-button>
+          <a-button type="link" @click="handleEditClick(scope)">编辑</a-button>
         </template>
       </a-table>
     </a-card>
@@ -54,9 +50,21 @@
         ref='ruleForm'
         :model="addForm"
         :rules="rules"
-        :label-col="{ span: 8 }" 
+        :label-col="{ span: 12 }" 
         :wrapper-col="{ span: 12 }"
       >
+      <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-model-item label="所属二级项目" prop="projectIDLv2">
+              <a-select v-model="addForm.projectIDLv2" placeholder="请选择所属二级项目">
+                <a-select-option v-for="item of projectType" :key="item.projectIDLv2" :value="item.projectIDLv2">
+                  {{ item.projectNameLv2 }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+         
+        </a-row>
         <a-row :gutter="24">
           <a-col :span="12">
             <a-form-model-item label="三级项目编号" prop="projectIDLv3">
@@ -78,26 +86,7 @@
             </a-form-model-item>
           </a-col>
         </a-row>
-        <a-row :gutter="24">
-          <a-col :span="12">
-            <a-form-model-item label="所属二级项目" prop="projectIDLv2">
-              <a-select v-model="addForm.projectIDLv2" placeholder="请选择所属二级项目">
-                <a-select-option v-for="item of projectType" :key="item.value" :value="item.value">
-                  {{ item.name }}
-                </a-select-option>
-              </a-select>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-model-item label="业主单位" prop="ownerUnit">
-              <a-select v-model="addForm.ownerUnit" placeholder="请选择业主单位">
-                <a-select-option v-for="item of ownerUnitSelect" :key="item.value" :value="item.value">
-                  {{ item.name }}
-                </a-select-option>
-              </a-select>
-            </a-form-model-item>
-          </a-col>
-        </a-row>
+        
         <a-row :gutter="24">
           <a-col :span="12">
             <a-form-model-item label="建安控制价" prop="ciControlPrice">
@@ -110,8 +99,6 @@
               </div>
             </a-form-model-item>
           </a-col>
-        </a-row>
-        <a-row :gutter="24">
           <a-col :span="12">
             <a-form-model-item label="建安合同金额" prop="ciContractAmount">
               <div class="investment">
@@ -134,6 +121,84 @@
                   placeholder="请输入监理合同金额"
                 /> <span>万元</span>
               </div>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="工程进度" prop="projectProgress">
+              <a-select v-model="addForm.projectProgress" placeholder="请选择工程进度">
+                <a-select-option v-for="item of projectProgressSelect" :key="item.value" :value="item.value">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-model-item label="农民工工资专户账户名称" prop="workerWageSpecialAccountName">
+              <a-input 
+                type="text" 
+                v-model="addForm.workerWageSpecialAccountName"
+                placeholder="请输入农民工工资专户账户名称"
+              />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="农民工工资专户账号" prop="workerWageSpecialAccountNumber">
+              <a-input 
+                type="text"  
+                v-model="addForm.workerWageSpecialAccountNumber"
+                placeholder="请输入农民工工资专户账号"
+              />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-model-item label="农民工工资专户开户行" prop="workerWageSpecialAccountBank">
+              <a-input 
+                type="text" 
+                v-model="addForm.workerWageSpecialAccountBank"
+                placeholder="请输入农民工工资专户开户行"
+              />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="三级项目开工日期" prop="projectStartDateLv3">
+              <a-date-picker 
+                type="text" 
+                v-model="addForm.projectStartDateLv3"
+                @change="handleStartDateChange"
+              />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-model-item label="三级项目竣工日期" prop="projectEndDateLv3">
+              <a-date-picker 
+                type="text" 
+                v-model="addForm.projectEndDateLv3"
+                @change="handleEndDateChange"
+              />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="三级项目工期" prop="projectConstructionPeriodLv3">
+              <a-input 
+                type="text" 
+                v-model="addForm.projectConstructionPeriodLv3"
+                placeholder="请输入三级项目工期"
+              />
+            </a-form-model-item>
+          </a-col>
+           <a-col :span="12">
+            <a-form-model-item label="是否为联合中标" prop="ifJointlySigned">
+              <a-select v-model="addForm.ifJointlySigned" placeholder="请选择工程进度">
+                <a-select-option v-for="item of ifJointlySignedSelect" :key="item.value" :value="item.value">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -203,12 +268,12 @@ const columns = [
     key: 'projectIDLv2',
     width: '20%'
   },
-  {
-    title: '二级项目名称',
-    dataIndex: 'projectNameLv2',
-    key: 'projectNameLv2',
-    width: '20%'
-  },
+  // {
+  //   title: '二级项目名称',
+  //   dataIndex: 'projectNameLv2',
+  //   key: 'projectNameLv2',
+  //   width: '20%'
+  // },
   {
     title: '三级项目编号',
     dataIndex: 'projectIDLv3',
@@ -249,8 +314,8 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        thirdPeriodProjectCode: '',
-        thirdPeriodProjectName: ''
+        id: '',
+        name: ''
       },
       loadData: [],
     //   dataSourceBank: dataSourceBank,
@@ -292,6 +357,8 @@ export default {
         supervisionContractAmount: [{ required: true, message: '请输入监理合同金额', trigger: 'change' }],
       },
       projectType: [],
+      projectProgressSelect: [{name: '建议阶段', value: 1}, {name: '政府审核', value: 2}, {name: '可研阶段', value: 3}, {name: '初设阶段', value: 4}, {name: '设计阶段', value: 5}, {name: '计划阶段', value: 6}, {name: '招标阶段', value: 7}, {name: '施工阶段', value: 8}, {name: '竣工验收', value: 9}],
+      ifJointlySignedSelect: [{name: '单独中标', value: 0}, {name: '联合中标', value: 1}],
       modalTitle: '',
       modalOk: '',
       isEdit: false,
@@ -315,8 +382,8 @@ export default {
     getQuotaApplyList() {
       this.loading = true
       let reqObj = {
-        thirdPeriodProjectCode: this.queryParam.thirdPeriodProjectCode,
-        thirdPeriodProjectName: this.queryParam.thirdPeriodProjectName,
+        id: this.queryParam.id,
+        name: this.queryParam.name,
         pageNum: this.pagination.current,
         pageSize: this.pagination.pageSize
       }
@@ -331,8 +398,8 @@ export default {
     },
     getProList2Select() {
       getProList2().then(res => {
-        if(res && res.length > 0) {
-          this.projectType = res
+        if(res.data && res.data.pageList.length > 0) {
+          this.projectType = res.data.pageList
         }
       })
     },
@@ -381,12 +448,12 @@ export default {
     handleAddClick() {
       this.isAddVisible = true
       this.modalTitle = '新建'
-      this.modalOk = '立即创建'
+      this.modalOk = '保存'
       let result = {
         projectIDLv3: '',
         projectNameLv3: '',
-        projectIDLv2: '',
-        ownerUnit: '',
+        projectIDLv2: undefined,
+        ownerUnit: undefined,
         ciControlPrice: '',
         ciContractAmount: '',
         supervisionContractAmount: '',
@@ -403,7 +470,7 @@ export default {
             editProjectList3(self.addForm).then(res => {
               if(res.status == 1) {
                 self.isAddVisible = false
-                self.$message.success(res.data)
+                self.$message.success('编辑三级项目成功')
                 self.getQuotaApplyList()
               }
             })
@@ -411,7 +478,7 @@ export default {
             addProjectList3(this.addForm).then(res => {
               if(res.status == 1) {
                 self.isAddVisible = false
-                self.$message.success(res.data)
+                self.$message.success('新建三级项目成功')
                 self.getQuotaApplyList()
               }
             })
@@ -446,7 +513,15 @@ export default {
         }
       })
       return newName
-    }
+    },
+    handleStartDateChange(date, dateString) {
+      console.log(date, dateString)
+      this.addForm.startDate = dateString
+    },
+    handleEndDateChange(date, dateString) {
+      console.log(date, dateString)
+      this.addForm.endDate = dateString
+    },
   }
 }
 </script>

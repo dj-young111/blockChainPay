@@ -2,7 +2,7 @@
   <a-dropdown v-if="currentUser && currentUser.name" placement="bottomRight">
     <span class="ant-pro-account-avatar">
       <a-avatar size="small" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" class="antd-pro-global-header-index-avatar" />
-      <span>{{ currentUser.name }}</span>
+      <span>{{ currentUser.name }}{{projectName ? '（' + projectName + '）': ''}}</span>
     </span>
     <template v-slot:overlay>
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
@@ -22,6 +22,10 @@
         <a-menu-item key="modify" @click="handleModifyClick">
           <a-icon type="edit"/>
           修改密码
+        </a-menu-item>
+        <a-menu-item key="modify" @click="switchItemsClick">
+          <a-icon type="swap"/>
+          切换项目
         </a-menu-item>
         <a-menu-item key="logout" @click="handleLogout">
           <a-icon type="logout" />
@@ -50,6 +54,11 @@ export default {
       default: true
     }
   },
+  data() {
+    return {
+      projectName: localStorage.getItem('projectName')
+    }
+  },
   methods: {
     handleToCenter () {
       this.$router.push({ path: '/account/center' })
@@ -72,6 +81,10 @@ export default {
         },
         onCancel () {}
       })
+    },
+    switchItemsClick() {
+      localStorage.removeItem('projectIDLv3')
+      this.$router.push('/project-select')
     },
     handleModifyClick() {
       this.$router.push({ path: '/reports/modifyPassword' })

@@ -59,11 +59,20 @@ export function getContractTypeAll () {
     })
 }
 
+// 获取合同类型
+export function getContractTypeByscene (scene) {
+    return request({
+        url: `/contract/getContractTypeByScene/${scene}`,
+        method: 'get'
+    })
+}
+
 // 获取总包合同名称
-export function getGeneralContract () {
+export function getGeneralContract (params) {
     return request({
         url: contractApi.generalContract,
-        method: 'get'
+        method: 'get',
+        params
     })
 }
 
@@ -129,6 +138,24 @@ export function getDownloadFile(params) {
 export function getCompanyCreditCode (name) {
     return request({
         url: `${contractApi.companyCreditCode}${name}`,
+        method: 'post'
+    })
+}
+
+
+// 返回所属公司信息
+export function getCompanySelf () {
+    return request({
+        url: `/company/self`,
+        method: 'get'
+    })
+}
+
+
+// 其他付款获取不同角色用户
+export function getUserRolePay (id) {
+    return request({
+        url: `/paymentFunds/getUserByRole/${id}`,
         method: 'post'
     })
 }

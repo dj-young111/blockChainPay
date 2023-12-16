@@ -151,12 +151,12 @@ const columns = [
         key: 'contractPaidAmount',
         width: '15%'
     },
-    {
-        title: '合同已结算金额（万元）',
-        dataIndex: 'contractSettlAmount',
-        key: 'contractSettlAmount',
-        width: '15%'
-    },
+    // {
+    //     title: '合同已结算金额（万元）',
+    //     dataIndex: 'contractSettlAmount',
+    //     key: 'contractSettlAmount',
+    //     width: '15%'
+    // },
     { 
         title: '操作', 
         key: 'operation', 
@@ -184,12 +184,12 @@ const modalColumns = [
         key: 'payAmount',
         width: '20%'
     },
-    {
-        title: '结算金额',
-        dataIndex: 'settlementAmount',
-        key: 'settlementAmount',
-        width: '20%'
-    },
+    // {
+    //     title: '结算金额',
+    //     dataIndex: 'settlementAmount',
+    //     key: 'settlementAmount',
+    //     width: '20%'
+    // },
     {
         title: '支付时间',
         dataIndex: 'payDate',

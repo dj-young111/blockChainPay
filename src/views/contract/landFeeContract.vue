@@ -24,7 +24,7 @@
             <a-col :md="!advanced && 8 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="handleSearchClick">查询</a-button>
-                <a-button style="margin-left: 8px" type="primary"  @click="handleAddClick">新建</a-button>
+                <a-button style="margin-left: 8px" type="primary" @click="handleAddClick">新建</a-button>
               </span>
             </a-col>
           </a-row>
@@ -70,8 +70,7 @@
                 <a-col :span="12">
                     <a-form-model-item label="合同创建人" prop="contractCreate">
                         <a-radio-group v-model="addForm.contractCreate" @change="handleContractCreateChange">
-                            <!-- <a-radio value="1">合同甲方</a-radio> -->
-                            <a-radio value="2">合同乙方</a-radio>
+                            <a-radio value="1">合同甲方</a-radio>
                         </a-radio-group>
                     </a-form-model-item>
                 </a-col>
@@ -94,40 +93,6 @@
                 <span>合同背景信息</span>
             </div>
             <a-row :gutter="24">
-                <a-col :span="12" v-if="isContractType">
-                    <a-form-model-item label="归属总包合同名称" prop="belongContractCode">
-                      <a-select v-model="addForm.belongContractCode" placeholder="请选择归属总包合同名称" @change="handleBelongContractCodeChange">
-                        <a-select-option v-for="item of belongGeneralType" :key="item.value" :value="item.value">
-                          {{ item.name }}
-                        </a-select-option>
-                      </a-select>
-                    </a-form-model-item>
-                </a-col>
-                <a-col :span="12" v-else>
-                  <a-form-model-item label="归属总包合同名称" >
-                      <a-select v-model="addForm.belongContractCode" placeholder="请选择归属总包合同名称" disabled>
-                        <a-select-option v-for="item of projectType" :key="item.value" :value="item.value" :title="item.name">
-                          {{ item.name }}
-                        </a-select-option>
-                      </a-select>
-                    </a-form-model-item>
-                </a-col>
-                <!-- <a-col :span="12">
-                    <a-form-model-item label="归属三级项目信息" prop="belongProjectCode">
-                      <a-select
-                        v-model="addForm.belongProjectCode"
-                        show-search
-                        placeholder="请输入搜索选择归属三级项目信息"
-                        :filter-option="filterOption"
-                        @search="handleThirdProjectSearch"
-                        @change="handleThirdProjectChange"
-                      >
-                        <a-select-option v-for="item in thirdProjectSelect" :key="item.value" :value="item.value" :title="item.name">
-                          {{ item.name }}
-                        </a-select-option>
-                      </a-select>
-                    </a-form-model-item>
-                </a-col> -->
                 <a-col :span="12">
                     <a-form-model-item label="归属三级项目信息" >
                     <a-input 
@@ -231,6 +196,26 @@
             </a-row>
             <!-- <a-row :gutter="24">
                 <a-col :span="12">
+                    <a-form-model-item label="合同预付款金额（元）" prop="prepaymentAmou">
+                    <a-input 
+                        type="number" 
+                        v-model="addForm.prepaymentAmou"
+                        placeholder="请输入合同预付款金额"
+                    />
+                    </a-form-model-item>
+                </a-col>
+                <a-col :span="12">
+                    <a-form-model-item label="合同质保金金额（元）" prop="warrantyAmount">
+                    <a-input 
+                        type="number" 
+                        v-model="addForm.warrantyAmount"
+                        placeholder="请输入合同质保金金额"
+                    />
+                    </a-form-model-item>
+                </a-col>
+            </a-row> -->
+            <!-- <a-row :gutter="24">
+                <a-col :span="12">
                     <a-form-model-item label="合同付款周期" prop="contractPaymentPeriod">
                       <a-select v-model="addForm.contractPaymentPeriod" placeholder="请选择合同付款周期" :default-value="defaultPeriod">
                         <a-select-option v-for="item of cycleSelect" :key="item.value" :value="item.value">
@@ -284,10 +269,8 @@
                     /> -->
                     <a-select
                         v-model="addForm.companyAName"
-                        show-search
                         placeholder="请输入搜索选择合同甲方公司名称"
-                        :filter-option="filterCompanyAOption"
-                        @search="handleCompanyASearch"
+                        @focus="handleCompanyASearch"
                         @change="handleCompanyAChange"
                       >
                         <a-select-option v-for="item in companyASelect" :key="item.value" :value="item.value" :title="item.name">
@@ -412,22 +395,11 @@
             <a-row :gutter="24">
                 <a-col :span="12">
                     <a-form-model-item label="合同乙方公司名称" prop="companyBName">
-                    <!-- <a-input 
+                    <a-input 
                         type="text" 
                         v-model="addForm.companyBName"
                         placeholder="请输入合同乙方公司名称"
-                    /> -->
-                    <a-select
-                        v-model="addForm.companyBName"
-                        placeholder="请输入搜索选择合同甲方公司名称"
-                        :filter-option="filterCompanyBOption"
-                        @focus="handleCompanyBSearch"
-                        @change="handleCompanyBChange"
-                      >
-                        <a-select-option v-for="item in companyBSelect" :key="item.value" :value="item.value" :title="item.name">
-                          {{ item.name }}
-                        </a-select-option>
-                      </a-select>
+                    />
                     </a-form-model-item>
                 </a-col>
                 <a-col :span="12">
@@ -436,35 +408,27 @@
                         type="text" 
                         v-model="addForm.contractBCompanyCode"
                         placeholder="请输入合同乙方公司统一社会信用代码"
-                        @blur="handleBlur"
-                        :disabled="addForm.companyBName ? true : false"
                     />
                     </a-form-model-item>
                 </a-col>
             </a-row>
             <a-row :gutter="24">
                 <a-col :span="12">
-                    <a-form-model-item label="合同乙方银行账户名称" prop="payeeAcc">
+                    <a-form-model-item label="合同乙方银行账户名称" prop="payeeName">
                     <a-input 
                         type="text" 
                         v-model="addForm.payeeName"
                         placeholder="请输入合同乙方银行账户名称"
-                        disabled
                     />
                     </a-form-model-item>
                 </a-col>
                 <a-col :span="12">
-                    <a-form-model-item label="合同乙方银行账号" prop="payeeName">
-                    <!-- <a-input 
-                        type="text" 
-                        v-model="addForm.payeeName"
-                        placeholder="请输入合同乙方银行账号名称"
-                    /> -->
-                      <a-select v-model="addForm.payeeAcc" placeholder="请输入合同乙方银行账号" @focus="handlePayeeNameFocus" @change="handlePayeeNameChange">
-                        <a-select-option v-for="item of payeeNameSelect" :key="item.value" :value="item.value">
-                          {{ item.value }}
-                        </a-select-option>
-                      </a-select>
+                    <a-form-model-item label="合同乙方银行账号" prop="payeeAcc">
+                      <a-input 
+                          type="text" 
+                          v-model="addForm.payeeAcc"
+                          placeholder="请输入合同乙方银行账号名称"
+                      />
                     </a-form-model-item>
                 </a-col>
             </a-row>
@@ -475,7 +439,6 @@
                         type="text" 
                         v-model="addForm.payeeOpenBank"
                         placeholder="请输入合同乙方开户行"
-                        disabled
                     />
                     </a-form-model-item>
                 </a-col>
@@ -485,7 +448,6 @@
                         type="text" 
                         v-model="addForm.payeeOpenBankNo"
                         placeholder="请输入合同乙方联行行号"
-                        disabled
                     />
                     </a-form-model-item>
                 </a-col>
@@ -700,10 +662,6 @@
                 <span>合同背景信息</span>
             </div>
             <a-row :gutter="24" class="model-col">
-                <a-col :span="12">
-                    <span>归属总包合同名称：</span>
-                    <span>{{ contractDetail.belongContractName }}</span>
-                </a-col>
                 <a-col :span="12">
                     <span>归属三级项目信息：</span>
                     <span>{{ contractDetail.belongProjectName }}</span>
@@ -1193,8 +1151,6 @@ export default {
         peasantWorkerPayeeAcc: '',
         peasantWorkerPayeeOpenBank: '',
         peasantWorkerPayeeOpenBankNo: '',
-        contractRetentionRatio: '',
-        contractAdvancePaymentRatio: '',
         contractOperator: undefined,
         contractPrimaryReviewer: undefined,
         contractSecondaryReviewer: undefined,
@@ -1203,19 +1159,21 @@ export default {
         fileUrlList: [],
         fileSupplementUrlList: [],
         settledAmount: '',
-        paidAmount: ''
+        paidAmount: '',
+        contractRetentionRatio: '',
+        contractAdvancePaymentRatio: '',
       },
       rules: {
         contractCreate: [{ required: true, message: '请选择合同创建人', trigger: 'change' }],
         contractType: [{ required: true, message: '请选择合同类型', trigger: 'change' }],
         belongContractCode: [{ required: true, message: '请输入归属总包合同名称', trigger: 'change' }],
-        // belongProjectCode: [{ required: true, message: '请输入归属三级项目信息', trigger: 'change' }],
+        belongProjectCode: [{ required: true, message: '请输入归属三级项目信息', trigger: 'change' }],
         contractName: [{ required: true, message: '请输入合同名称', trigger: 'change' }],
         contractCode: [{ required: true, message: '请输入合同编号', trigger: 'change' }],
-        contractRetentionRatio: [{ required: true, message: '请输入合同质保金比例（%）', trigger: 'change' }],
-        contractAdvancePaymentRatio: [{ required: true, message: '请输入合同预付款比例（%）', trigger: 'change' }],
         contractSignDate: [{ required: true, message: '请选择合同签订日期', trigger: 'change' }],
         contractStartDate: [{ required: true, message: '请选择合同开始日期', trigger: 'change' }],
+        contractRetentionRatio: [{ required: true, message: '请输入合同质保金比例（%）', trigger: 'change' }],
+        contractAdvancePaymentRatio: [{ required: true, message: '请输入合同预付款比例（%）', trigger: 'change' }],
         contractEndDate: [{ required: true, message: '请选择合同结束日期', trigger: 'change' }],
         contractAmount: [{ required: true, message: '请输入合同总金额', trigger: 'change' }],
         prepaymentAmou: [{ required: true, message: '请输入合同预付款金额', trigger: 'change' }],
@@ -1332,13 +1290,10 @@ export default {
     }, 1000)
   },
   mounted () {
-    getCompanySelf()
     this.getQuotaApplyList()
     this.getContractTypeSelect()
     this.getGeneralContractList()
     this.getThirdProjectList()
-    console.log(localStorage.getItem('projectName'))
-    
   },
   methods: {
     getQuotaApplyList() {
@@ -1349,7 +1304,7 @@ export default {
         pageNum: this.pagination.current,
         pageSize: this.pagination.pageSize,
         projectIDLv3: localStorage.getItem('projectIDLv3'),
-        scene: 1
+        scene: 3
       }
       getContractList(resObj).then(res => {
         if(res.status == 1 && res.data) {
@@ -1361,7 +1316,7 @@ export default {
       })
     },
     getContractTypeSelect () {
-      getContractTypeByscene(1).then(res => {
+      getContractTypeByscene(3).then(res => {
         if(res && res.length > 0) {
           this.projectType = res
         }
@@ -1555,7 +1510,7 @@ export default {
       // this.addForm.fileUrlList = []
       // this.$refs.ruleForm.resetFields()
       this.addForm = {
-        contractCreate: '2',
+        contractCreate: '1',
         contractType: [],
         belongContractCode: undefined,
         belongProjectCode: localStorage.getItem('projectIDLv3'),
@@ -1779,7 +1734,7 @@ export default {
       this.addForm.contractCreate = ''
       this.addForm.contractType = []
       this.addForm.belongContractCode = undefined
-      this.addForm.belongProjectCode = localStorage.getItem('projectIDLv3')
+      this.addForm.belongProjectCode = undefined
       this.addForm.contractName = ''
       this.addForm.contractCode = ''
       this.addForm.contractSignDate = ''
@@ -1868,6 +1823,7 @@ export default {
         contractType: [],
         belongContractCode: undefined,
         belongProjectCode: localStorage.getItem('projectIDLv3'),
+        projectIDLv3Name: localStorage.getItem('projectName'),
         contractName: '',
         contractCode: '',
         contractSignDate: '',
@@ -1933,7 +1889,7 @@ export default {
           console.log(this.addForm.contractCreate)
         
         this.addForm.belongContractCode = data.belongContractCode
-        this.addForm.belongProjectCode = localStorage.getItem('projectIDLv3')  //data.belongProjectCode
+        this.addForm.belongProjectCode = data.belongProjectCode
         console.log(this.thirdProjectSelect)
         this.addForm.contractName = data.contractName
         this.addForm.contractCode = data.contractCode
@@ -2237,17 +2193,10 @@ export default {
           this.addForm.companyAName = v.name
         }
       })
-      let reqObj = {
-        accountName: '',
-        accountType: 1,
-        companyName: this.addForm.companyAName,
-        unifiedCreditCode: this.addForm.contractACompanyCode
-      }
-      getSelectAccount(reqObj).then(res => {
-        console.log(res)
-        if(res.status == 1 && res.data) {
+       getCompanySelf().then(res => {
+        if(res.status == 1 && res.data.accountList) {
           let result = []
-          res.data && res.data.map(v => {
+          res.data.accountList && res.data.accountList.map(v => {
             let resObj = {
               name: v.accountName,
               value: v.accountNum,
@@ -2256,9 +2205,25 @@ export default {
             }
             result.push(resObj)
           })
-          this.payerNameSelect = result
+          this.payerNameSelect = result 
         }
       })
+      // getSelectAccount(reqObj).then(res => {
+      //   console.log(res)
+      //   if(res.status == 1 && res.data) {
+      //     let result = []
+      //     res.data && res.data.map(v => {
+      //       let resObj = {
+      //         name: v.accountName,
+      //         value: v.accountNum,
+      //         openBank: v.openBank,
+      //         openBankNum: v.openBankNum
+      //       }
+      //       result.push(resObj)
+      //     })
+      //     this.payerNameSelect = result
+      //   }
+      // })
     },
     handlePayerNameChange(value) {
       console.log(value)
@@ -2316,12 +2281,12 @@ export default {
           this.addForm.companyBName = v.name
         }
       })
-      // let reqObj = {
-      //   accountName: '',
-      //   accountType: 1,
-      //   companyName: this.addForm.companyBName,
-      //   unifiedCreditCode: this.addForm.contractBCompanyCode
-      // }
+      let reqObj = {
+        accountName: '',
+        accountType: 1,
+        companyName: this.addForm.companyBName,
+        unifiedCreditCode: this.addForm.contractBCompanyCode
+      }
       // getSelectAccount(reqObj).then(res => {
       //   if(res.status == 1 && res.data) {
       //     let result = []
@@ -2338,22 +2303,6 @@ export default {
       //     console.log(this.payeeNameSelect)
       //   }
       // })
-      getCompanySelf().then(res => {
-        if(res.status == 1 && res.data.accountList) {
-          let result = []
-          res.data.accountList && res.data.accountList.map(v => {
-            let resObj = {
-              name: v.accountName,
-              value: v.accountNum,
-              openBank: v.openBank,
-              openBankNum: v.openBankNum
-            }
-            result.push(resObj)
-          })
-          this.payeeNameSelect = result
-          console.log(this.payeeNameSelect)
-        }
-      })
     },
     handlePayeeNameChange(value) {
       if(this.payeeNameSelect && this.payeeNameSelect.length > 0) {
@@ -2421,13 +2370,34 @@ export default {
         option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
       );
     },
-    handleCompanyASearch(value) {
-      if(value){
-        getCompanyCreditCode(value).then(res => {
-          this.companyASelect = res
-          console.log(this.companyASelect)
-        })
-      }
+    handleCompanyASearch() {
+        // getCompanyCreditCode(value).then(res => {
+        //   this.companyASelect = res
+        //   console.log(this.companyASelect)
+        // })
+        getCompanySelf().then(res => {
+        if(res.status == 1 && res.data.accountList) {
+          let result = []
+          let result1 = []
+          res.data.accountList && res.data.accountList.map(v => {
+            let resObj = {
+              name: v.accountName,
+              value: v.accountNum,
+              openBank: v.openBank,
+              openBankNum: v.openBankNum
+            }
+            result.push(resObj)
+          })
+          let resObj1 = {
+            name: res.data.companyInfo.companyName,
+            value: res.data.companyInfo.unifiedCreditCode,
+          }
+          result1.push(resObj1)
+          this.payerNameSelect = result 
+          this.companyASelect = result1
+          console.log(this.payerNameSelect)
+        }
+      })
     },
     handleCompanyAChange(value) {
       if(value) {
@@ -2439,26 +2409,13 @@ export default {
         option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
       );
     },
-    handleCompanyBSearch() {
-      // if(value){
-        // getCompanyCreditCode(value).then(res => {
-        //   this.companyBSelect = res
-        //   console.log(this.companyBSelect)
-        // })
-      // }
-      getCompanySelf().then(res => {
-          // console.log(this.companyBSelect)
-          console.log(res.data)
-          if(res.status == 1 && res.data.companyInfo) {
-              let result = []
-              let resObj = {
-                name: res.data.companyInfo.companyName,
-                value: res.data.companyInfo.unifiedCreditCode,
-              }
-              result.push(resObj)
-              this.companyBSelect = result
-          }
+    handleCompanyBSearch(value) {
+      if(value){
+        getCompanyCreditCode(value).then(res => {
+          this.companyBSelect = res
+          console.log(this.companyBSelect)
         })
+      }
     },
     handleCompanyBChange(value) {
       if(value) {

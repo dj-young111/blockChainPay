@@ -262,7 +262,7 @@
                 />
             </a-form-model-item>
           </a-col>
-          <a-col :span="12">
+          <!-- <a-col :span="12">
             <a-form-model-item label="已结算金额（元）">
               <a-input 
                   type="number"  
@@ -270,7 +270,7 @@
                   disabled
                 />
             </a-form-model-item>
-          </a-col>
+          </a-col> -->
         </a-row>
         <a-row :gutter="24">
           <a-col :span="12">
@@ -282,7 +282,7 @@
                 />
             </a-form-model-item>
           </a-col>
-          <a-col :span="12">
+          <!-- <a-col :span="12">
             <a-form-model-item label="本次结算金额（元）">
               <a-input 
                   type="number"  
@@ -290,7 +290,7 @@
                   placeholder="请输入"
                 />
             </a-form-model-item>
-          </a-col>
+          </a-col> -->
         </a-row>
         <a-row :gutter="24">
           <a-col :span="12">
@@ -315,12 +315,12 @@
                     </a-col>
         </a-row>
         <a-row :gutter="24">
-          <a-col :span="12">
+          <!-- <a-col :span="12">
             <a-form-model-item label="所属结算批次">
               <span v-if="isSettleSelect">{{ cacheSettle }}</span>
               <a-button type="link" @click="handleSettleClick">选择</a-button>
             </a-form-model-item>
-          </a-col>
+          </a-col> -->
           <a-col :span="12" v-if="cacheValue === '4'">
                 <a-form-model-item label="工资单月份" prop="salaryMonth">
                     <a-month-picker
@@ -356,7 +356,7 @@
             <a-col :span="24" class="upload-wrapper-item">
               <a-form-model-item class="upload-wrapper" label="请上传对应成功支付的工资单" prop="fileUrlList">
                 <a-upload
-                  :action="`${$fileUrl}/salaryMonth`"
+                  :action="`${$fileUrl}/salaryFiles`"
                   @change="handleChangeFile"
                   :before-upload="beforeImgUpload"
                   :default-file-list="addForm.fileUrlList"
@@ -504,20 +504,20 @@
             <span>已支付金额（元）：</span>
             <span>{{ detailObj.contractPaidAmount }}</span>
           </a-col>
-          <a-col :span="12">
+          <!-- <a-col :span="12">
             <span>已结算金额（元）：</span>
             <span>{{ detailObj.contractSettlAmount }}</span>
-          </a-col>
+          </a-col> -->
         </a-row>
         <a-row :gutter="24" class="modal-row">
           <a-col :span="12">
             <span>本次支付金额（元）：</span>
             <span>{{ detailObj.transactionAmount }}</span>
           </a-col>
-          <a-col :span="12">
+          <!-- <a-col :span="12">
             <span>本次结算金额（元）:</span>
             <span>{{ detailObj.currentSettlementAmount }}</span>
-          </a-col>
+          </a-col> -->
         </a-row>
         <a-row :gutter="24" class="modal-row">
           <a-col :span="12">
@@ -530,10 +530,10 @@
           </a-col>
         </a-row>
         <a-row :gutter="24" class="modal-row">
-          <a-col :span="12">
+          <!-- <a-col :span="12">
             <span>所属结算批次：</span>
             <span>{{ detailObj.settlementBatchName }}</span>
-          </a-col>
+          </a-col> -->
            <a-col :span="12">
             <span>工资单月份：</span>
             <span>{{ detailObj.salaryMonth ? detailObj.salaryMonth: '' }}</span>
@@ -892,7 +892,8 @@ export default {
         belongPaymentScene: this.queryParam.belongPaymentScene ? Number(this.queryParam.belongPaymentScene) : 0,
         belongContractCode: this.queryParam.belongContractCode,
         pageNum: this.pagination.current,
-        pageSize: this.pagination.pageSize
+        pageSize: this.pagination.pageSize,
+        projectIDLv3: localStorage.getItem('projectIDLv3')
       }
       getPayCollectionList(resObj).then(res => {
         if(res.status == 1 && res.data) {
@@ -909,7 +910,10 @@ export default {
       })
     },
     getContractNameList() {
-      getContractName().then(res => {
+      let params = {
+          projectIDLv3: localStorage.getItem('projectIDLv3')
+      }
+      getContractName(params).then(res => {
         this.contractNameSelect = res
       })
     },
@@ -994,6 +998,7 @@ export default {
           reqObj.settlementBatchName = this.selectionRows.length > 0 ? this.selectionRows[0].companyName : ''
           reqObj.payDate = moment(reqObj.payDate).format('YYYY-MM-DD')
           reqObj.salaryMonth = moment(reqObj.salaryMonth).format('YYYY-MM')
+          reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
           addCollection(reqObj).then(res => {
             if(res.status == 1) {
               this.isAddVisible = false

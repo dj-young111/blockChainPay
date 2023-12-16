@@ -4,7 +4,7 @@
       <div class="table-page-fund-wrapper" style="margin-bottom: 20px;">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
+            <a-col :md="12" :sm="24">
               <a-form-item label="企业名称">
                 <a-input v-model="queryParam.companyName" placeholder="请输入" style="width: 300px;"/>
               </a-form-item>

@@ -1285,16 +1285,22 @@ export default {
     },
     methods: {
         getPaymentApplyInfo() {
-            getPaymentApplyList().then(res => {
+            let params = {
+                projectIDLv3: localStorage.getItem('projectIDLv3')
+            }
+            getPaymentApplyList(params).then(res => {
                 const filterArr =  res.filter(v => {
                     return v.name !== '建设者工资请款+发放'
                 })
                 this.applyList = filterArr
-                // console.log(res)
+                console.log(res)
             })
         },
         getContractNameList() {
-            getContractName().then(res => {
+            let params = {
+                projectIDLv3: localStorage.getItem('projectIDLv3')
+            }
+            getContractName(params).then(res => {
                 this.contractNameSelect = res
             })
         },
@@ -1304,7 +1310,10 @@ export default {
             })
         },
         getTotalContractList() {
-            getTotalContract().then(res => {
+            let params = {
+                projectIDLv3: localStorage.getItem('projectIDLv3')
+            }
+            getTotalContract(params).then(res => {
                 this.totalContractSelect = res
             })
         },
@@ -1314,7 +1323,10 @@ export default {
             })
         },
         getPaymentContractNameList () {
-            getPaymentContractName().then(res => {
+            let params = {
+                projectIDLv3: localStorage.getItem('projectIDLv3')
+            }
+            getPaymentContractName(params).then(res => {
                 this.payContractNameSelect = res
             })
         },
@@ -1325,43 +1337,43 @@ export default {
             })
         },
         handleClick(item) {
-            // if(!item.editFlag) {
-            //     this.$message.warning('当前用户无做操作权限！')
-            //     return
-            // }
-            if(item.companyRole == 1) {
-                this.$message.warning('当前用户无操作权限, 请联系管理员！')
-                return
-            }
-            if(item.companyRole == 2 && item.name == '工程预付款请款') {
-                this.$message.warning('当前用户无操作权限, 请联系管理员！')
-                return
-            }
-            if(item.companyRole == 2 && item.name == '工程进度款请款') {
-                this.$message.warning('当前用户无操作权限, 请联系管理员！')
-                return
-            }
-            // if(item.companyRole == 2 && item.name == '建设者工资请款+发放') {
+            // // if(!item.editFlag) {
+            // //     this.$message.warning('当前用户无做操作权限！')
+            // //     return
+            // // }
+            // if(item.companyRole == 1) {
             //     this.$message.warning('当前用户无操作权限, 请联系管理员！')
             //     return
             // }
-            // if(item.companyRole == 3 && item.name == '建设者工资请款+发放') {
+            // if(item.companyRole == 2 && item.name == '工程预付款请款') {
             //     this.$message.warning('当前用户无操作权限, 请联系管理员！')
             //     return
             // }
-            // if(item.companyRole == 6 && item.name == '建设者工资请款+发放') {
+            // if(item.companyRole == 2 && item.name == '工程进度款请款') {
             //     this.$message.warning('当前用户无操作权限, 请联系管理员！')
             //     return
             // }
+            // // if(item.companyRole == 2 && item.name == '建设者工资请款+发放') {
+            // //     this.$message.warning('当前用户无操作权限, 请联系管理员！')
+            // //     return
+            // // }
+            // // if(item.companyRole == 3 && item.name == '建设者工资请款+发放') {
+            // //     this.$message.warning('当前用户无操作权限, 请联系管理员！')
+            // //     return
+            // // }
+            // // if(item.companyRole == 6 && item.name == '建设者工资请款+发放') {
+            // //     this.$message.warning('当前用户无操作权限, 请联系管理员！')
+            // //     return
+            // // }
 
-            if(item.companyRole == 2 && item.name == '二类费用请款') {
-                this.$message.warning('当前用户无操作权限, 请联系管理员！')
-                return
-            }
-            if(item.companyRole == 2 && item.name == '建设者工资请款') {
-                this.$message.warning('当前用户无操作权限, 请联系管理员！')
-                return
-            }
+            // if(item.companyRole == 2 && item.name == '二类费用请款') {
+            //     this.$message.warning('当前用户无操作权限, 请联系管理员！')
+            //     return
+            // }
+            // if(item.companyRole == 2 && item.name == '建设者工资请款') {
+            //     this.$message.warning('当前用户无操作权限, 请联系管理员！')
+            //     return
+            // }
             this.$router.push({
                 path: '/payment/applyList',
                 query: {
@@ -1464,6 +1476,7 @@ export default {
                         })
                     reqObj.paymentFile = resultFile
                     delete reqObj.fileUrlList
+                    reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
                     addReqFund(reqObj).then(res => {
                         if(res.status == 1) {
                             this.isReqDetailVisible = false
@@ -1497,6 +1510,7 @@ export default {
                         })
                     reqObj.paymentFile = resultFile
                     delete reqObj.fileUrlList
+                    reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
                     addReqFund(reqObj).then(res => {
                         if(res.status == 1) {
                             this.isProgressReqDetailVisible = false
@@ -1654,6 +1668,7 @@ export default {
                     reqObj.salaryDetails = detailFile
                     delete reqObj.fileUrlList
                     delete reqObj.fileDetails
+                    reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
                     addSalaryFund(reqObj).then(res => {
                         this.isSalaryDetailVisible = false
                         this.$message.success(res.message)
@@ -1688,6 +1703,7 @@ export default {
                     reqObj.salaryDetails = detailFile
                     delete reqObj.fileUrlList
                     delete reqObj.fileDetails
+                    reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
                     addSalaryFund(reqObj).then(res => {
                         if(res.status == 1) {
                             this.isReqAndPayDetailVisible = false
@@ -2080,6 +2096,24 @@ export default {
                 return '二类费用相关单位向业主单位申请二类费用款'
             } else if(name == '二类费用请款' && code == 9) {
                 return '二类费用相关单位向业主单位申请二类费用款'
+            } else if(name == '建设者工资付款-总包农民工专户' && code == 1) {
+                return '业主单位向总包单位工资专户付劳务工资专用款'
+            } else if(name == '土地费用付款' && code == 1) {
+                return '业主单位向政府支付土地费用款项'
+            } else if(name == '其他付款-对私' && code == 1) {
+                return '支付项目报销款、项目工资款等非合同类对私付款费用'
+            } else if(name == '建设者工资代付-农民工个人账户' && code == 1) {
+                return '业主单位代总包单位对劳务工人做工资代付'
+            } else if(name == '其他付款-对公' && code == 1) {
+                return '支付水电燃气费、小额采购等非合同对公付款费用'
+            } else if(name == '其他付款-对私' && code == 2) {
+                return '支付项目报销款、项目工资款等非合同类对私付款费用'
+            } else if(name == '其他付款-对公' && code == 2) {
+                return '支付水电燃气费、小额采购等非合同对公付款费用'
+            } else if(name == '建设者工资请款-总包农民工专户' && code == 2) {
+                return '总包单位向业主单位情况，付款到总包农民工工资专户'
+            } else if(name == '建设者工资请款-农民工个人账户' && code == 3) {
+                return '分包单位向总包单位请款，由总包农民工工资专户向劳务工人做工资代发'
             }
         },
         setDeatilText(name, type) {
@@ -2102,6 +2136,7 @@ export default {
             } else if(name == '材料款付款' && type == 2) {
                 return '1.分包合同  2.供货单  3.增值税专用发票'
             } else if(name == '工程款付款' && type == 2) {
+                console.log(11111)
                 return '1.分包合同  2.验工计价单 3.增值税专用发票'
             } else if(name == '建设者工资代发' && type == 2) {
                 return '1.付款明细'
@@ -2143,7 +2178,28 @@ export default {
                 return '1.二类费用合同 2.增值税专用发票'
             } else if(name == '二类费用请款' && type == 9) {
                 return '1.二类费用合同 2.增值税专用发票'
+            } else if(name == '建设者工资付款-总包农民工专户' && type == 1) {
+                return '1.总承包合同 2.增值税专用发票'
+            } else if(name == '土地费用付款' && type == 1) {
+                return '1.土地费用合同 2.增值税专用发票'
+            } else if(name == '其他付款-对公' && type == 1) {
+                return '增值税专用发票（非必填，根据项目部要求选择）'
+            } else if(name == '其他付款-对私' && type == 1) {
+                return '增值税专用发票（非必填，根据项目部要求选择）'
+            } else if(name == '建设者工资代付-农民工个人账户' && type == 1) {
+                return '1.总承包合同 2.工资单 3.签字后的工资单扫描件'
+            } else if(name == '其他付款-对公' && type == 2) {
+                return '增值税专用发票（非必填，根据项目部要求选择）'
+            } else if(name == '其他付款-对私' && type == 2) {
+                return '增值税专用发票（非必填，根据项目部要求选择）'
+            } else if(name == '建设者工资请款-总包农民工专户' && type == 2) {
+                return '1.总承包合同 2.增值税专用发票'
+            } else if(name == '建设者工资请款-农民工个人账户' && type == 3) {
+                return '1.工资单  2.签字后的工资单扫描件'
             }
+            
+            
+
         }
 
     }
@@ -2156,6 +2212,7 @@ export default {
         margin: 20px;
         border-radius: 8px;
         background: #FAFAFA;
+        min-height: 298px;
         .title{
             color: #ACACAC;
         }

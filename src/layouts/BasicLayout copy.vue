@@ -2,7 +2,6 @@
   <pro-layout
     :menus="menus"
     :collapsed="collapsed"
-    :title="title"
     :mediaQuery="query"
     :isMobile="isMobile"
     :handleMediaQuery="handleMediaQuery"
@@ -11,6 +10,14 @@
     :i18nRender="i18nRender"
     v-bind="settings"
   >
+    <!-- Ads begin
+      广告代码 真实项目中请移除
+      production remove this Ads
+    -->
+    <!-- <ads v-if="isProPreviewSite && !collapsed"/> -->
+    <!-- Ads end -->
+
+    <!-- <setting-drawer :settings="settings" @change="handleSettingChange" /> -->
     <template v-slot:rightContentRender>
       <right-content :top-menu="settings.layout === 'topmenu'" :is-mobile="isMobile" :theme="settings.theme" />
     </template>
@@ -91,9 +98,25 @@ export default {
     getMenuList({}).then(res => {
       if(res.status == 1 && res.data) {
         const data = res.data
-        console.log(routes.children)
+//         console.log(data)
+//         let obj = {
+// btn: {add: true},
+// createTime: "2022-03-11",
+// description: "三级项目管理",
+// id: 17,
+// jumpUrl: null,
+// layer: 2,
+// list: [],
+// menuName: "项目管理1",
+// method: "post",
+// parentId: 4,
+// sort: 17,
+// status: true,
+// type: 1,
+// url: "/project/list1",
+//         }
+//         data[1].list.push(obj)
         newData = this.getMenuData(data, routes.children)
-        console.log(newData)
         
         let showRouter = []
         newData.map(v => {
@@ -169,9 +192,6 @@ export default {
     // 处理侧栏收起状态
     this.$watch('collapsed', () => {
       this.$store.commit(SIDEBAR_TYPE, this.collapsed)
-      if (this.collapsed) {
-
-      }
     })
     this.$watch('isMobile', () => {
       this.$store.commit(TOGGLE_MOBILE_TYPE, this.isMobile)
@@ -238,8 +258,6 @@ export default {
           }
         })
       })
-
-      console.log(newData)
       return newData
     }
   }

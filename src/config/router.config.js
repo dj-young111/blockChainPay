@@ -330,7 +330,7 @@ export const constantRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: '主页' },
-    redirect: '/workbench/todo',
+    redirect: '/project-select',
     children: [
       {
         path: '/workbench',
@@ -357,16 +357,16 @@ export const constantRouterMap = [
       {
         path: '/project',
         name: 'Project',
-        redirect: '/project/projectList',
+        redirect: '/project/projectList1',
         component: RouteView,
         meta: { title: '项目管理', icon: 'project' },
         children: [
-          {
-            path: '/project/projectList',
-            name: 'ProjectList',
-            component: () => import('@/views/project/ProjectList'),
-            meta: { title: '项目管理' }
-          },
+          // {
+          //   path: '/project/projectList',
+          //   name: 'ProjectList',
+          //   component: () => import('@/views/project/ProjectList'),
+          //   meta: { title: '项目管理' }
+          // },
           // 一级项目信息明细表
           {
             path: '/project/projectList1',
@@ -402,7 +402,22 @@ export const constantRouterMap = [
             path: '/contract/contract',
             name: 'Contract',
             component: () => import('@/views/contract/Contract'),
-            meta: { title: '工程合同管理' }
+            meta: { title: '工程合同管理' },
+            hidden: true
+          },
+          {
+            path: '/contract/IIFeeContract',
+            name: 'IIFeeContract',
+            component: () => import('@/views/contract/IIFeeContract'),
+            meta: { title: '二类费用合同管理' },
+            hidden: true
+          },
+          {
+            path: '/contract/landFeeContract',
+            name: 'landFeeContract',
+            component: () => import('@/views/contract/landFeeContract'),
+            meta: { title: '土地费用合同管理' },
+            hidden: true
           }
         ]
       },
@@ -452,12 +467,12 @@ export const constantRouterMap = [
             meta: { title: '' },
             hidden: true
           },
-          {
-            path: '/payment/settleBatch',
-            name: 'SettleBatch',
-            component: () => import('@/views/payment/SettleBatch'),
-            meta: { title: '结算批次管理' },
-          }
+          // {
+          //   path: '/payment/settleBatch',
+          //   name: 'SettleBatch',
+          //   component: () => import('@/views/payment/SettleBatch'),
+          //   meta: { title: '结算批次管理' },
+          // }
         ]
       },
       {
@@ -566,6 +581,12 @@ export const constantRouterMap = [
         component: undefined
       }
     ]
+  },
+  {
+    path: '/project-select',
+    name: 'projectSelect',
+    component: () => import('@/views/user/UserEntrance'),
+    hidden: true
   },
   {
     path: '/screenHome',

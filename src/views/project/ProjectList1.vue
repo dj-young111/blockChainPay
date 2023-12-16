@@ -6,49 +6,25 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="一级项目编号">
-                <a-input v-model="queryParam.firstPeriodProjectCode" placeholder="请输入一级项目编号"/>
+                <a-input v-model="queryParam.id" placeholder="请输入一级项目编号"/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="一级项目名称">
-                <a-input v-model="queryParam.firstPeriodProjectName" placeholder="请输入一级项目名称"/>
+                <a-input v-model="queryParam.name" placeholder="请输入一级项目名称"/>
               </a-form-item>
             </a-col>
-            <template v-if="advanced">
-              <a-col :md="8" :sm="24">
-                <a-form-item label="项目投资年度">
-                    <a-input v-model="queryParam.projectInvestmentYear" placeholder="请输入项目投资年度"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="项目区域">
-                  <a-input v-model="queryParam.projectArea" placeholder="请输入项目区域">
-                  </a-input>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="项目类别">
-                  <a-select v-model="queryParam.projectType" placeholder="请选择项目类别">
-                      <a-select-option v-for="item of projectTypeList" :key="item.value" :value="item.value">
-                        {{ item.name }}
-                      </a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-            </template>
+           
             <a-col :md="!advanced && 8 || 24" :sm="24">
-              <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                <a-button type="primary" @click="handleSearchClick">查询</a-button>
+              <span class="table-page-search-submitButtons">
+                <a-button type="primary" icon="plus" class="add"  @click="handleAddClick">新建</a-button>
+                <a-button type="primary" icon="search" style="margin-left: 8px" @click="handleSearchClick">查询</a-button>
                 <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-                <a @click="toggleAdvanced" style="margin-left: 8px">
-                  {{ advanced ? '收起' : '展开' }}
-                  <a-icon :type="advanced ? 'up' : 'down'"/>
-                </a>
               </span>
             </a-col>
           </a-row>
         </a-form>
-        <a-button type="primary" icon="plus" size="small" class="add" v-if="isAddBtnShow" @click="handleAddClick">新建</a-button>
+       
       </div>
 
       <a-table
@@ -66,8 +42,8 @@
           {{ record.projectType ? setProjectType(record.projectType) : ''}}
         </span>
         <template slot="operation" slot-scope="scope">
-          <a-button type="link" @click="handleReviewClick(scope)">查看</a-button>
-          <a-button type="link" :disabled="!scope.editFlag" @click="handleEditClick(scope)">编辑</a-button>
+          <a-button  @click="handleReviewClick(scope)">查看</a-button>
+          <a-button type="link" @click="handleEditClick(scope)">编辑</a-button>
         </template>
       </a-table>
     </a-card>
@@ -76,12 +52,12 @@
         ref='ruleForm'
         :model="addForm"
         :rules="rules"
-        :label-col="{ span: 8 }" 
+        :label-col="{ span: 10 }" 
         :wrapper-col="{ span: 12 }"
       >
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-model-item label="一级项目编号" prop="projectIDLv1">
+            <a-form-model-item label="一级项目编码" prop="projectIDLv1">
               <a-input 
                 type="text"  
                 v-model="addForm.projectIDLv1"
@@ -112,11 +88,11 @@
           </a-col>
           <a-col :span="12">
             <a-form-model-item label="项目所属区域" prop="projectRegion">
-              <a-input 
-                type="text" 
-                v-model="addForm.projectRegion"
-                placeholder="请输入"
-              />
+              <a-select v-model="addForm.projectRegion" placeholder="请选择" >
+                <a-select-option v-for="item of projectRegionList" :key="item.value" :value="item.value">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -131,7 +107,41 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="12">
-            <a-form-model-item label="建设单位名称" prop="constructionUnit">
+            <a-form-model-item label="招标项目类型代码" prop="bidInvestProjectType">
+              <a-select v-model="addForm.bidInvestProjectType" placeholder="请选择" >
+                <a-select-option v-for="item of bidInvestProjectTypeList" :key="item.value" :value="item.value">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+            <!--  -->
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-model-item label="资金来源" prop="fundsSource">
+              <a-select v-model="addForm.fundsSource" placeholder="请选择" >
+                <a-select-option v-for="item of fundsSourceList" :key="item.value" :value="item.value">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="项目总投资额" prop="totalInvestAmount">
+              <div class="investment">
+                <a-input 
+                  type="text"  
+                  v-model="addForm.totalInvestAmount"
+                  placeholder="请输入"
+                /> <span>万元</span>
+              </div>
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+         <a-row :gutter="24">
+          <a-col :span="12">
+           <a-form-model-item label="建设单位名称" prop="constructionUnit">
               <a-input 
                 type="text" 
                 v-model="addForm.constructionUnit"
@@ -139,28 +149,13 @@
               />
             </a-form-model-item>
           </a-col>
-        </a-row>
-        <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-model-item label="资金来源" prop="fundingSource">
-              <a-radio-group v-model="addForm.fundingSource">
-                <a-radio value="1">政府投资</a-radio>
-                <a-radio value="2">企业投资</a-radio>
-                <a-radio value="3">政府投资+企业投资</a-radio>
-              </a-radio-group>
-            </a-form-model-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="24">
-          <a-col :span="12">
-            <a-form-model-item label="项目总投资额" prop="projectTotalInvestment">
-              <div class="investment">
-                <a-input 
-                  type="text"  
-                  v-model="addForm.projectTotalInvestment"
-                  placeholder="请输入"
-                /> <span>万元</span>
-              </div>
+            <a-form-model-item label="项目分配日期" prop="projectAllotime">
+              <a-date-picker 
+                type="text" 
+                v-model="addForm.projectAllotime"
+                @change="handleprojectAllotimeDateChange"
+              />
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -174,8 +169,6 @@
               />
             </a-form-model-item>
           </a-col>
-        </a-row>
-        <a-row :gutter="24">
           <a-col :span="12">
             <a-form-model-item label="项目拟竣工日期" prop="endDate">
               <a-date-picker 
@@ -183,6 +176,49 @@
                 v-model="addForm.endDate"
                 @change="handleEndDateChange"
               />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+       
+        <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-model-item label="委托部门" prop="delegateDepartment">
+              <a-input 
+                  type="text"  
+                  v-model="addForm.delegateDepartment"
+                  placeholder="请输入"
+                />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="项目主管部门" prop="competentDepartment">
+               <a-input 
+                  type="text"  
+                  v-model="addForm.competentDepartment"
+                  placeholder="请输入"
+                />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+         <a-row :gutter="24">
+          <a-col :span="12">
+            <a-form-model-item label="前期工作函年份" prop="preWorkYear">
+              <!-- <div class="investment"> -->
+               <a-input 
+                  type="text"  
+                  v-model="addForm.preWorkYear"
+                  placeholder="请输入"
+                />
+              <!-- </div> -->
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="前期工作函文件号" prop="preWorkNo">
+               <a-input 
+                  type="text"  
+                  v-model="addForm.preWorkNo"
+                  placeholder="请输入"
+                />
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -237,13 +273,13 @@
         <a-row :gutter="24" class="modal-row">
           <a-col :span="12">
             <span>资金来源：</span>
-            <span>{{ setFundingSource(detailObj.fundingSource) }}</span>
+            <span>{{ setfundsSource(detailObj.fundsSource) }}</span>
           </a-col>
         </a-row>
         <a-row :gutter="24" class="modal-row">
           <a-col :span="12">
             <span>项目总投资额：</span>
-            <span>{{ detailObj.projectTotalInvestment }} 万元</span>
+            <span>{{ detailObj.totalInvestAmount }} 万元</span>
           </a-col>
         </a-row>
         <a-row :gutter="24" class="modal-row">
@@ -273,7 +309,6 @@
 
 <script>
 import moment from 'moment'
-import { projectType } from '@/utils/util'
 import { getProjectList1, addProjectList1, getProjectList1Type, editProjectList1, checkProjectList1 } from '@/api/projectList1'
 
 
@@ -294,7 +329,7 @@ const columns = [
     title: '一级项目名称',
     dataIndex: 'projectNameLv1',
     key: 'projectNameLv1',
-    width: '20%'
+    width: '15%'
   },
   {
     title: '项目投资年度',
@@ -317,8 +352,8 @@ const columns = [
   },
   {
     title: '总投资额度（万元）',
-    dataIndex: 'projectTotalInvestment',
-    key: 'projectTotalInvestment',
+    dataIndex: 'totalInvestAmount',
+    key: 'totalInvestAmount',
     width: '15%'
   },
   { 
@@ -342,11 +377,8 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        firstPeriodProjectCode: '',
-        firstPeriodProjectName: '',
-        projectInvestmentYear: '',
-        projectArea: '',
-        projectType: undefined
+        id: '',
+        name: '',
       },
       loadData: [],
     //   dataSourceBank: dataSourceBank,
@@ -373,29 +405,36 @@ export default {
         projectIDLv1: '',
         projectNameLv1: '',
         investYear: '',
-        projectRegion: '',
+        projectRegion: undefined,
         projectType: undefined,
+        bidInvestProjectType: undefined,
         constructionUnit: '',
-        fundingSource: '',
-        projectTotalInvestment: '',
+        fundsSource: undefined,
+        totalInvestAmount: '',
         startDate: '',
         endDate: '',
+        projectAllotime: '',
         projectDescription: '',
       },
       rules: {
-        projectIDLv1: [{ required: true, message: '请输入一级项目编号', trigger: 'change' }],
+        projectIDLv1: [{ required: true, message: '请输入一级项目编码', trigger: 'change' }],
         projectNameLv1: [{ required: true, message: '请输入一级项目名称', trigger: 'change' }],
         investYear: [{ required: true, message: '请选择项目投资年度', trigger: 'change' }],
         projectRegion: [{ required: true, message: '请输入项目所属区域', trigger: 'change' }],
         projectType: [{ required: true, message: '请选择项目类型', trigger: 'change' }],
+        bidInvestProjectType: [{ required: true, message: '招标项目类型代码', trigger: 'change' }],
         constructionUnit: [{ required: true, message: '请输入建设单位名称', trigger: 'change' }],
-        fundingSource: [{ required: true, message: '请输入资金来源', trigger: 'change' }],
-        projectTotalInvestment: [{ required: true, message: '请输入项目总投资额', trigger: 'change' }],
-        startDate: [{ required: true, message: '请选择拟开工日期', trigger: 'change' }],
-        endDate: [{ required: true, message: '请选择拟竣工日期', trigger: 'change' }],
-        projectDescription: [{ required: true, message: '请输入建设规模及内容', trigger: 'change' }],
+        fundsSource: [{ required: true, message: '请输入资金来源', trigger: 'change' }],
+        totalInvestAmount: [{ required: true, message: '请输入项目总投资额', trigger: 'change' }],
+        projectAllotime: [{ required: true, message: '项目分配日期', trigger: 'change' }],
+        // startDate: [{ required: true, message: '请选择拟开工日期', trigger: 'change' }],
+        // endDate: [{ required: true, message: '请选择拟竣工日期', trigger: 'change' }],
+        // projectDescription: [{ required: true, message: '请输入建设规模及内容', trigger: 'change' }],
       },
-      projectTypeList: [],
+      projectTypeList: [{name: '重点项目', value: 1}, {name: '一般项目', value: 2}, {name: '土储项目', value: 3}, {name: '发改立项', value: 4}],
+      projectRegionList: [{name: '容东片区', value: 1},{name: '昝岗片区', value: 2},{name: '启动区', value: 3},{name: '起步区', value: 4},{name: '雄东片区', value: 5},{name: '容西片区', value: 6},{name: '寨里片区', value: 7},{name: '安州小镇', value: 8},{name: '美丽乡村', value: 9},{name: '白洋淀综合治理', value: 10},{name: '基础设施', value: 11},{name: '新区内道路', value: 12},{name: '水利防洪', value: 13},{name: '造林绿化', value: 14},{name: '施工配套', value: 15},{name: '智能城市', value: 16},{name: '其它片区外项目', value: 17},{name: '容城', value: 18},{name: '雄县', value: 19},{name: '安新', value: 20}],
+      bidInvestProjectTypeList: [{name: '建筑市政', value: 1},{name: '园林绿化', value: 2},{name: '水利工程', value: 3},{name: '交通工程', value: 4},{name: '电力工程', value: 5},{name: '公路工程', value: 6},{name: '海口与航道工程', value: 7},{name: '机电安装工程', value: 8},{name: '地质矿产工程', value: 9},{name: '其他', value: 10}],
+      fundsSourceList: [{name: '政府投资', value: 1},{name: '政府投资+社会投资', value: 2},{name: '雄安集团投资', value: 3},{name: '雄安集团投资+社会投资', value: 4},{name: '雄安集团投资+政府补贴/回购', value: 5},{name: '企业投资', value: 6}],
       modalTitle: '',
       modalOk: '',
       isEdit: false,
@@ -405,23 +444,20 @@ export default {
     }
   },
   created() {
-    setTimeout(() => {
-      this.isAddBtnShow = this.$route.meta.btn ? this.$route.meta.btn.add : false
-    }, 1000)
+    // setTimeout(() => {
+    //   this.isAddBtnShow = this.$route.meta.btn ? this.$route.meta.btn.add : false
+    // }, 1000)
   },
   mounted () {
     this.getQuotaApplyList()
-    this.getProjectSelectList()
+    // this.getProjectSelectList()
   },
   methods: {
     getQuotaApplyList() {
       this.loading = true
       let reqObj = {
-        firstPeriodProjectCode: this.queryParam.firstPeriodProjectCode,
-        firstPeriodProjectName: this.queryParam.firstPeriodProjectName,
-        projectInvestmentYear: this.queryParam.projectInvestmentYear,
-        projectArea: this.queryParam.projectArea,
-        projectType: this.queryParam.projectType,
+        id: this.queryParam.id,
+        name: this.queryParam.name,
         pageNum: this.pagination.current,
         pageSize: this.pagination.pageSize
       }
@@ -430,18 +466,18 @@ export default {
           this.loading = false
           const data = res.data
           this.loadData = data.pageList
-          // this.pagination.total = data.rowCount
+          this.pagination.total = data.rowCount
         }
       })
     },
     // 获取一级项目类型
-    getProjectSelectList() {
-      getProjectList1Type().then(res => {
-        if(res && res.length > 0) {
-          this.projectTypeList = res
-        }
-      })
-    },
+    // getProjectSelectList() {
+    //   getProjectList1Type().then(res => {
+    //     if(res && res.length > 0) {
+    //       this.projectTypeList = res
+    //     }
+    //   })
+    // },
    handleSearchClick() {
      this.getQuotaApplyList()
    }, 
@@ -461,16 +497,16 @@ export default {
     handleAddClick() {
       this.isAddVisible = true
       this.modalTitle = '新建'
-      this.modalOk = '立即创建'
+      this.modalOk = '保存'
       let result = {
         projectIDLv1: '',
         projectNameLv1: '',
         investYear: '',
-        projectRegion: '',
+        projectRegion: undefined,
         projectType: undefined,
         constructionUnit: '',
-        fundingSource: '',
-        projectTotalInvestment: '',
+        fundsSource: undefined,
+        totalInvestAmount: '',
         startDate: '',
         endDate: '',
         projectDescription: ''
@@ -486,6 +522,10 @@ export default {
       console.log(date, dateString)
       this.addForm.endDate = dateString
     },
+    handleprojectAllotimeDateChange(date, dateString) {
+      console.log(date, dateString)
+      this.addForm.projectAllotime = dateString
+    },
     handleSubmitModalClick(e) {
       e.preventDefault()
       let self = this
@@ -494,7 +534,7 @@ export default {
           if(self.isEdit) {
             editProjectList1(self.addForm).then(res => {
               if(res.status == 1) {
-                self.$message.success(res.data)
+                self.$message.success('编辑一级项目成功')
                 self.isAddVisible = false
                 self.getQuotaApplyList()
               }
@@ -502,7 +542,7 @@ export default {
           } else {
             addProjectList1(self.addForm).then(res => {
               if(res.status == 1) {
-                self.$message.success(res.data)
+                self.$message.success('新建一级项目成功')
                 self.isAddVisible = false
                 self.$refs.ruleForm.resetFields()
                 self.getQuotaApplyList()
@@ -538,7 +578,7 @@ export default {
       console.log(row)
       this.addForm = row
       this.addForm.projectType = String(row.projectType)
-      this.addForm.fundingSource = String(row.fundingSource)
+      this.addForm.fundsSource = String(row.fundsSource)
       this.addForm.startDate = moment(row.startDate, 'YYYY-MM-DD')
       this.addForm.endDate = moment(row.endDate, 'YYYY-MM-DD')
     },
@@ -563,7 +603,7 @@ export default {
       })
       return newName
     },
-    setFundingSource(status) {
+    setfundsSource(status) {
       switch (status) {
         case 1: 
           return '政府投资';
@@ -613,7 +653,7 @@ export default {
   .modal-row{
     span{
       display: inline-block;
-      line-height: 60px;
+      // line-height: 60px;
 
     }
   }

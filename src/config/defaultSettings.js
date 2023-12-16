@@ -13,7 +13,7 @@
  */
 
 export default {
-  navTheme: 'dark', // theme for nav menu
+  navTheme: 'light', // theme for nav menu
   primaryColor: '#1890ff', // primary color of ant design
   layout: 'sidemenu', // nav menu position: `sidemenu` or `topmenu`
   contentWidth: 'Fluid', // layout of content: `Fluid` or `Fixed`, only works when layout is topmenu
@@ -23,7 +23,7 @@ export default {
   menu: {
     locale: true
   },
-  title: '雄安区块链实验室',
+  title: '雄安政府投资项目区块链支付系统',
   pwa: false,
   iconfontUrl: '',
   production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true'

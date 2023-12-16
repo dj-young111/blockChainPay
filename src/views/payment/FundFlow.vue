@@ -4,30 +4,30 @@
       <div class="table-page-fund-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
+            <a-col :md="9" :sm="24">
               <a-form-item label="项目名称">
-                <a-input v-model="queryParam.prjName" placeholder="请输入"/>
+                <a-input v-model="queryParam.prjName" placeholder="请输入" />
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :md="9" :sm="24">
               <a-form-item label="业主单位名称">
                 <a-input v-model="queryParam.ownerUnitName" placeholder="请输入"/>
               </a-form-item>
             </a-col>
             <template v-if="advanced">
-              <a-col :md="8" :sm="24">
+              <a-col :md="9" :sm="24">
                 <a-form-item label="中标主体名称">
                     <a-input v-model="queryParam.bidWinnerName" placeholder="请输入"/>
                 </a-form-item>
               </a-col>
-              <a-col :md="8" :sm="24">
+              <a-col :md="9" :sm="24">
                 <a-form-item label="总承包合同名称">
                   <a-input v-model="queryParam.generalContractName" placeholder="请输入">
                   </a-input>
                 </a-form-item>
               </a-col>
             </template>
-            <a-col :md="!advanced && 8 || 24" :sm="24">
+            <a-col :md="!advanced && 6 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="handleSearchClick">查询</a-button>
                 <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
@@ -247,7 +247,7 @@ export default {
             width: 120px;
         }
         .ant-form-item-control{
-            width: 300px;
+            width: 200px;
         }
     }
 }

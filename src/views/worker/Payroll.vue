@@ -301,7 +301,11 @@ export default {
     mounted() {
         this.getSalaryList()
         this.getContractInfo()
-        getCompMsgData(' ').then(res => {
+        let projectIDLv3 = localStorage.getItem('projectIDLv3')
+        let data = {
+            projectIDLv3
+        }
+        getCompMsgData(data).then(res => {
             this.companyBNameList = res
         })
     },
@@ -329,7 +333,8 @@ export default {
                 contractName: this.queryParam.contractName,
                 salaryName: this.queryParam.salaryName,
                 pageNum: this.pagination.current,
-                pageSize: this.pagination.pageSize
+                pageSize: this.pagination.pageSize,
+                projectIDLv3: localStorage.getItem('projectIDLv3')
             }
             getWorkerSalaryPayrollList(reqObj).then(res => {
                 if(res.status == 1 && res.data) {
@@ -394,6 +399,7 @@ export default {
                     reqObj.totalSalary = Number(reqObj.totalSalary)
                     reqObj.month = moment(reqObj.month).format('YYYY-MM')
                     reqObj.workerSalaryList = this.workerSalaryList
+                    reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
                     delete reqObj.fileUrlList
                     if(!this.isEdit) {
                         console.log(reqObj)

@@ -102,10 +102,10 @@ export function getContractSalaryList(data) {
 
 
 // 获取企业名称
-export function getCompMsgData (name) {
+export function getCompMsgData (data) {
   return request({
-      url: workerApi.getCompMsg + name,
+      url: workerApi.getCompMsg,
       method: 'post',
-      data: {name}
+      data
   })
 }

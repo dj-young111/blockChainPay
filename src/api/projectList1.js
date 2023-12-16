@@ -1,19 +1,18 @@
 import request from '@/utils/request'
 
 let proApi = {
-    list: '/firstPeriodProject/list',
-    add: '/firstPeriodProject/add',
+    list: '/project/lv1',
+    add: '/project/lv1',
     check: '/firstPeriodProject/detail/',
-    edit: '/firstPeriodProject/edit',
-    type: '/firstPeriodProject/getPrjType'
+    edit: '/project/lv1',
 }
 
 // 获取一级项目管理列表
-export function getProjectList1 (data) {
+export function getProjectList1 (params) {
     return request({
         url: proApi.list,
-        method: 'post',
-        data
+        method: 'get',
+        params
     })
 }
 
@@ -38,15 +37,7 @@ export function checkProjectList1 (id) {
 export function editProjectList1 (data) {
     return request({
         url: proApi.edit,
-        method: 'post',
+        method: 'put',
         data
-    })
-}
-
-// 获取一级项目类型
-export function getProjectList1Type () {
-    return request({
-        url: proApi.type,
-        method: 'get'
     })
 }

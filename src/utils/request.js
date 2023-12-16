@@ -7,19 +7,12 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 
 // 生产
 let baseURL = 'https://203.110.222.136:13448'
-
-// let baseURL = 'http://35.201.215.236:13448' // test
 if (process.env.NODE_ENV == 'development') {
-  // baseURL = 'http://120.53.124.140:8083'
-  // baseURL = 'http://192.168.3.33:8080'
-    // baseURL = 'http://203.110.221.120:8889'
-    // baseURL = 'http://192.168.3.190:8081' 
-    baseURL = 'http://35.201.215.236:13448'
-    // baseURL = 'https://203.110.222.136:13448'
-
+    // baseURL = 'http://35.201.215.236:13448'  'http://172.16.10.97:8081' //
+    baseURL = 'http://144.7.99.96:12448'
 }
 // 生产
-export const fileUrl = 'https://203.110.222.136:13448/api'
+export const fileUrl = 'http://144.7.99.96:12448/api'
 
 
 // export const fileUrl = 'https://203.110.222.136:13448/api' 
@@ -27,8 +20,8 @@ export const fileUrl = 'https://203.110.222.136:13448/api'
 
 // export const fileUrl = 'http://27.128.239.88:13448/api'
 
-// export const fileUrl = 'http://35.201.215.236:13448/api'
-
+// export const fileUrl = 'http://172.16.10.97:8081'
+// 
 
 // 创建 axios 实例
 const request = axios.create({
@@ -81,18 +74,19 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
-  if(response.data.data && response.data.data.status == -99) {
-    storage.remove('Access-Token')
+  console.log(response.data)
+  if(response.data && response.data.status == -9 || response.data && response.data.status == -99) {
+    // storage.remove('Access-Token')
     notification.error({
-      message: `${response.data.data.message}`
+      message: `${response.data.message}`
     });
-    setTimeout(() => {
-      window.location.reload()
-    }, 1000)
+    // setTimeout(() => {
+    //   window.location.reload()
+    // }, 1000)
   } else {
     return response.data
   }
-  if(response.data.data.status == -1) {
+  if(response.data.status == -1) {
     notification.error({
       message: `${response.data.data.message}`
     });
