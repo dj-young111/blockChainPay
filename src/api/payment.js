@@ -486,3 +486,20 @@ export function getComp1ContractList (data) {
       data
   })
 }
+
+export function getSearchPayList (data) {
+  return request({
+      url: '/payment/detail/list',
+      method: 'post',
+      data
+  })
+}
+
+
+export function getSearchPayDetailList (data) {
+  return request({
+      url: '/payment/detail/info/list',
+      method: 'post',
+      data
+  })
+}

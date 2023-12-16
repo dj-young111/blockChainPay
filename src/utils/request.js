@@ -6,10 +6,11 @@ import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
 // 生产
-let baseURL = 'https://203.110.222.136:13448'
+let baseURL = 'http://144.7.99.96:12448'
 if (process.env.NODE_ENV == 'development') {
     // baseURL = 'http://35.201.215.236:13448'  'http://172.16.10.97:8081' //
-    baseURL = 'http://144.7.99.96:12448'
+    // baseURL = 'http://144.7.99.96:12448'
+    baseURL = 'http://172.16.10.97:8081'
 }
 // 生产
 export const fileUrl = 'http://144.7.99.96:12448/api'
@@ -74,15 +75,15 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
-  console.log(response.data)
-  if(response.data && response.data.status == -9 || response.data && response.data.status == -99) {
-    // storage.remove('Access-Token')
+  // console.log(response.data)
+  if(response.data && response.data.status == -9 || response.data && response.data.status == -99 || response.data && response.data.status == -8) {
+    storage.remove('Access-Token')
     notification.error({
       message: `${response.data.message}`
     });
-    // setTimeout(() => {
-    //   window.location.reload()
-    // }, 1000)
+    setTimeout(() => {
+      window.location.reload()
+    }, 1000)
   } else {
     return response.data
   }

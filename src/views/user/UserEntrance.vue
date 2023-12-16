@@ -126,6 +126,7 @@ export default {
       let arr = this.list.filter(v => {
         return v.projectIDLv3 === value
       })
+      arr[0].generalName = arr[0].generalName.join(',')
       this.selectProject = arr[0]
     },
   },

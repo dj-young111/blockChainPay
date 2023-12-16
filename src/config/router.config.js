@@ -418,7 +418,7 @@ export const constantRouterMap = [
             component: () => import('@/views/contract/landFeeContract'),
             meta: { title: '土地费用合同管理' },
             hidden: true
-          }
+          },
         ]
       },
       {
@@ -433,6 +433,12 @@ export const constantRouterMap = [
             name: 'Apply',
             component: () => import('@/views/payment/Apply'),
             meta: { title: '支付申请' }
+          },
+          {
+            path: '/payment/applySearch',
+            name: 'ApplySearch',
+            component: () => import('@/views/payment/Search'),
+            meta: { title: '支付明细查询' }
           },
           {
             path: '/payment/applyList',

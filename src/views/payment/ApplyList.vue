@@ -4396,11 +4396,7 @@ const EditableCell = {
   template: `
       <div class="editable-cell">
         <div v-if="editable" class="editable-cell-input-wrapper">
-          <a-input :value="value" @change="handleChange" @pressEnter="check" /><a-icon
-            type="check"
-            class="editable-cell-icon-check"
-            @click="check"
-          />
+          <a-input :value="value" @change="handleChange" @pressEnter="check" />
         </div>
         <div v-else class="editable-cell-text-wrapper">
           {{ value || ' ' }}
@@ -4414,13 +4410,14 @@ const EditableCell = {
   data() {
     return {
       value: this.text,
-      editable: false,
+      editable: true,
     };
   },
   methods: {
     handleChange(e) {
       const value = e.target.value;
       this.value = value;
+      this.$emit('change', this.value);
     },
     check() {
       this.editable = false;

@@ -58,7 +58,7 @@
             </a-tabs>
         </a-card>
         <!-- contract -->
-        <a-modal v-model="isAddVisible" class="addContractTodoModal" title="审批详情" :footer="false">
+        <a-modal v-model="isAddVisible" class="addContractTodoModal" width="80%" title="审批详情" :footer="false">
             <div class="model-row">
                 <span>当前进度</span>
             </div>
@@ -426,7 +426,7 @@
         </a-modal>
 
         <!-- payment -->
-        <a-modal v-model="isPayVisible" class="addContractTodoModal" title="审批详情" ok-text="确认" cancel-text="取消" @ok="handlePaymentSubmitClick" @cancel="handlePaymentCancelClick">
+        <a-modal v-model="isPayVisible" class="addContractTodoModal" width="80%" title="审批详情" ok-text="确认" cancel-text="取消" @ok="handlePaymentSubmitClick" @cancel="handlePaymentCancelClick">
             <div class="model-row">
                 <span>当前进度</span>
             </div>
@@ -555,17 +555,25 @@
                             </a-col>
                         </a-row> -->
                     </div>
+                    <div class="modal-title">
+                        <span>发票文件</span>
+                    </div>
+                    <a-table bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
+                        <template slot="invoiceFile" slot-scope="text, record, index">
+                            <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${text}&flag=true`)">下载</a>
+                        </template>
+                    </a-table>
                     <div>
                         <div class="model-row">
                             <span>支付要件</span>
                         </div>
                         <a-row :gutter="24" class="model-col">
-                            <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
+                            <!-- <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                 <span>上传发票附件：</span>
                                 <div class="upload-wrapper">
                                     <span v-for="(item, index) of paymentObj.invoiceFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
                                 </div>
-                            </a-col>
+                            </a-col> -->
                             <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                 <span>上传审批文件：</span>
                                 <div class="upload-wrapper">
@@ -702,17 +710,25 @@
                             </a-col>
                         </a-row> -->
                     </div>
+                    <div class="modal-title">
+                        <span>发票文件</span>
+                    </div>
+                    <a-table bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
+                        <template slot="invoiceFile" slot-scope="text, record, index">
+                            <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${text}&flag=true`)">下载</a>
+                        </template>
+                    </a-table>
                     <div>
                         <div class="model-row">
                             <span>支付要件</span>
                         </div>
                         <a-row :gutter="24" class="model-col">
-                            <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
+                            <!-- <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                 <span>上传发票附件：</span>
                                 <div class="upload-wrapper">
                                     <span v-for="(item, index) of paymentObj.invoiceFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
                                 </div>
-                            </a-col>
+                            </a-col> -->
                             <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                 <span>上传审批文件：</span>
                                 <div class="upload-wrapper">
@@ -798,17 +814,25 @@
                             </a-col>
                         </a-row> -->
                     </div>
+                    <div class="modal-title">
+                        <span>发票文件</span>
+                    </div>
+                    <a-table bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
+                        <template slot="invoiceFile" slot-scope="text, record, index">
+                            <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${text}&flag=true`)">下载</a>
+                        </template>
+                    </a-table>
                     <div>
                         <div class="model-row">
                             <span>支付要件</span>
                         </div>
                         <a-row :gutter="24" class="model-col">
-                            <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
+                            <!-- <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                 <span>上传发票附件：</span>
                                 <div class="upload-wrapper">
                                     <span v-for="(item, index) of paymentObj.paymentFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
                                 </div>
-                            </a-col>
+                            </a-col> -->
                             <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                 <span>上传审批文件：</span>
                                 <div class="upload-wrapper">
@@ -955,17 +979,25 @@
                                 </div>
                             </a-col>
                         </a-row> -->
+                        <div class="modal-title">
+                            <span>发票文件</span>
+                        </div>
+                        <a-table bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
+                            <template slot="invoiceFile" slot-scope="text, record, index">
+                                <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${text}&flag=true`)">下载</a>
+                            </template>
+                        </a-table>
                         <div>
                                 <div class="model-row">
                                     <span>支付要件</span>
                                 </div>
                                 <a-row :gutter="24" class="model-col">
-                                    <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
+                                    <!-- <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                         <span>上传发票附件：</span>
                                         <div class="upload-wrapper">
                                             <span v-for="(item, index) of paymentObj.invoiceFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
                                         </div>
-                                    </a-col>
+                                    </a-col> -->
                                     <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                         <span>上传审批文件：</span>
                                         <div class="upload-wrapper">
@@ -1025,7 +1057,7 @@
         </a-modal>
 
         <!-- 合同审批日志 -->
-        <a-modal v-model="isLogVisible" class="addContractTodoModal" title="审批日志" :footer="false">
+        <a-modal v-model="isLogVisible" class="addContractTodoModal" width="80%" title="审批日志" :footer="false">
             <div class="contract-log-wrapper">
                 <div v-for="(item, index) of contractLogList" :key="index">
                     <div>{{ item.handleDate }}:</div>
@@ -1041,7 +1073,7 @@
 
 
         <!-- 支付审批日志 -->
-        <a-modal v-model="isPayLogVisible" class="addContractTodoModal" title="审批日志" :footer="false">
+        <a-modal v-model="isPayLogVisible" class="addContractTodoModal" width="80%" title="审批日志" :footer="false">
             <div class="contract-log-wrapper">
                 <div v-for="(item, index) of payLogList" :key="index">
                     <div>{{ item.handleDate }}:</div>
@@ -2587,6 +2619,47 @@ export default {
             paymentData: [],
             paymentCount: '',
             contractData: [],
+             billColumns: [
+                {
+                title: '发票批次号',
+                dataIndex: 'invoiceBatchNo',
+                width: '16%',
+                scopedSlots: { customRender: 'invoiceBatchNo' },
+                },
+                {
+                title: '发票代码',
+                dataIndex: 'invoiceCode',
+                width: '16%',
+                scopedSlots: { customRender: 'invoiceCode' },
+                },
+                {
+                title: '发票号码',
+                dataIndex: 'invoiceNo',
+                width: '16%',
+                scopedSlots: { customRender: 'invoiceNo' },
+                },
+                {
+                title: '票⾯价税合计⾦额 （元）',
+                dataIndex: 'invoiceAmount',
+                scopedSlots: { customRender: 'invoiceAmount' },
+                },
+                {
+                title: '是否本地纳税',
+                dataIndex: 'isLocalTax',
+                scopedSlots: { customRender: 'isLocalTax' },
+                },
+                {
+                title: '发票扫描件',
+                dataIndex: 'invoiceFile',
+                scopedSlots: { customRender: 'invoiceFile' },
+                },
+                {
+                title: '操作',
+                dataIndex: 'operation',
+                scopedSlots: { customRender: 'operation' },
+                },
+            ],
+            dataSource1: [],
             contractCount: '',
             pagination: {
                 current: 1,
@@ -3293,23 +3366,24 @@ export default {
                     console.log('pay: ', res)
                     if(res.status == 1 && res.data) {
                         self.paymentObj = res.data
-                        let invoiceStr = self.paymentObj.invoiceFile && self.paymentObj.invoiceFile.substring(0, self.paymentObj.invoiceFile.length - 1).split(',')
-                        let invoiceArr = []
-                        invoiceStr && invoiceStr.map(res => {
-                            // res = res.split('#')[0]
-                            // invoiceArr.push(res)
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            invoiceArr.push(resObj)
-                        })
-                        self.paymentObj.invoiceFile = invoiceArr
+                        this.dataSource1 = res.data.invoiceList
+                        // let invoiceStr = self.paymentObj.invoiceFile && self.paymentObj.invoiceFile.substring(0, self.paymentObj.invoiceFile.length - 1).split(',')
+                        // let invoiceArr = []
+                        // invoiceStr && invoiceStr.map(res => {
+                        //     // res = res.split('#')[0]
+                        //     // invoiceArr.push(res)
+                        //     // let resObj = {
+                        //     //     name: res.split('#')[0],
+                        //     //     url: res.split('#')[1]
+                        //     // }
+                        //     let num = res.lastIndexOf('\#')
+                        //     let resObj = {
+                        //         name: res.substring(0, num),
+                        //         url: res.substring(num + 1, res.length)
+                        //     }
+                        //     invoiceArr.push(resObj)
+                        // })
+                        // self.paymentObj.invoiceFile = invoiceArr
 
                         let approveStr = self.paymentObj.approveFile && self.paymentObj.approveFile.substring(0, self.paymentObj.approveFile.length - 1).split(',')
                         let approveArr = []
@@ -3354,24 +3428,24 @@ export default {
                     console.log("req: ", res)
                     if(res.status == 1 && res.data) {
                         self.paymentObj = res.data
-
-                        let invoiceStr = self.paymentObj.invoiceFile && self.paymentObj.invoiceFile.substring(0, self.paymentObj.invoiceFile.length - 1).split(',')
-                        let invoiceArr = []
-                        invoiceStr && invoiceStr.map(res => {
-                            // res = res.split('#')[0]
-                            // invoiceArr.push(res)
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            invoiceArr.push(resObj)
-                        })
-                        self.paymentObj.invoiceFile = invoiceArr
+                        this.dataSource1 = res.data.invoiceList
+                        // let invoiceStr = self.paymentObj.invoiceFile && self.paymentObj.invoiceFile.substring(0, self.paymentObj.invoiceFile.length - 1).split(',')
+                        // let invoiceArr = []
+                        // invoiceStr && invoiceStr.map(res => {
+                        //     // res = res.split('#')[0]
+                        //     // invoiceArr.push(res)
+                        //     // let resObj = {
+                        //     //     name: res.split('#')[0],
+                        //     //     url: res.split('#')[1]
+                        //     // }
+                        //     let num = res.lastIndexOf('\#')
+                        //     let resObj = {
+                        //         name: res.substring(0, num),
+                        //         url: res.substring(num + 1, res.length)
+                        //     }
+                        //     invoiceArr.push(resObj)
+                        // })
+                        // self.paymentObj.invoiceFile = invoiceArr
 
                         let approveStr = self.paymentObj.approveFile && self.paymentObj.approveFile.substring(0, self.paymentObj.approveFile.length - 1).split(',')
                         let approveArr = []
@@ -3431,23 +3505,24 @@ export default {
                     console.log("salary: ", res)
                     if(res.status == 1 && res.data) {
                         self.paymentObj = res.data
-                        let invoiceStr = self.paymentObj.invoiceFile && self.paymentObj.invoiceFile.substring(0, self.paymentObj.invoiceFile.length - 1).split(',')
-                        let invoiceArr = []
-                        invoiceStr && invoiceStr.map(res => {
-                            // res = res.split('#')[0]
-                            // invoiceArr.push(res)
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            invoiceArr.push(resObj)
-                        })
-                        self.paymentObj.invoiceFile = invoiceArr
+                        this.dataSource1 = res.data.invoiceList
+                        // let invoiceStr = self.paymentObj.invoiceFile && self.paymentObj.invoiceFile.substring(0, self.paymentObj.invoiceFile.length - 1).split(',')
+                        // let invoiceArr = []
+                        // invoiceStr && invoiceStr.map(res => {
+                        //     // res = res.split('#')[0]
+                        //     // invoiceArr.push(res)
+                        //     // let resObj = {
+                        //     //     name: res.split('#')[0],
+                        //     //     url: res.split('#')[1]
+                        //     // }
+                        //     let num = res.lastIndexOf('\#')
+                        //     let resObj = {
+                        //         name: res.substring(0, num),
+                        //         url: res.substring(num + 1, res.length)
+                        //     }
+                        //     invoiceArr.push(resObj)
+                        // })
+                        // self.paymentObj.invoiceFile = invoiceArr
 
                         let approveStr = self.paymentObj.approveFile && self.paymentObj.approveFile.substring(0, self.paymentObj.approveFile.length - 1).split(',')
                         let approveArr = []
@@ -5058,8 +5133,8 @@ export default {
         text-align: right;
     }
   .ant-modal-content{
-    width: 1200px;
-    margin-left: -120px;
+    // width: 1200px;
+    // margin-left: -120px;
     .ant-radio-group{
       width: 400px;
     }
