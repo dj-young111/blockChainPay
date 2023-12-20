@@ -246,8 +246,8 @@ export default {
 <style lang="less">
 .payDetailModal{
   .ant-modal-content{
-    width: 1200px;
-    margin-left: -200px;
+    // width: 1200px;
+    // margin-left: -200px;
   }
 }
 </style>

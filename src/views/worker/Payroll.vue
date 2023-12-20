@@ -571,8 +571,8 @@ export default {
 }
 .addPayrollModal{
   .ant-modal-content{
-    width: 1000px;
-    margin-left: -120px;
+    // width: 1000px;
+    // margin-left: -120px;
     .ant-radio-group{
       width: 400px;
     }

@@ -54,7 +54,7 @@
         </template>
       </a-table>
     </a-card>
-    <a-modal v-model="isAddVisible" class="addContractModal" title="新增合同" ok-text="确认" cancel-text="取消" @ok="handleSubmitModalClick" @cancel="handleCancelClick" :confirmLoading="confirmLoading">
+    <a-modal v-model="isAddVisible" class="addContractModal" width="80%" title="新增合同" ok-text="确认" cancel-text="取消" @ok="handleSubmitModalClick" @cancel="handleCancelClick" :confirmLoading="confirmLoading">
       <a-form-model
         ref='ruleForm'
         :model="addForm"
@@ -679,7 +679,7 @@
     </a-modal>
 
 
-    <a-modal v-model="isDetailVisible" class="addContractModal" title="详情" :footer="null">
+    <a-modal v-model="isDetailVisible" class="addContractModal" width="80%" title="详情" :footer="null">
         <div>
             <div class="model-row">
                 <span>模板信息</span>
@@ -946,7 +946,7 @@
         </div>
     </a-modal>
 
-    <a-modal v-model="isSettleVisible" class="addContractModal" title="合同结算信息" :footer="null">
+    <a-modal v-model="isSettleVisible" class="addContractModal" width="80%" title="合同结算信息" :footer="null">
         <a-table
         :rowKey="((record, index) => {return index})"
         :columns="settleColumns"
@@ -2570,8 +2570,8 @@ export default {
         background: #508EDF;
     }
   .ant-modal-content{
-    width: 1200px;
-    margin-left: -220px;
+    // width: 1200px;
+    // margin-left: -220px;
     .ant-radio-group{
       width: 400px;
     }

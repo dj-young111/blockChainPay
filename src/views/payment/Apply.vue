@@ -2114,6 +2114,8 @@ export default {
                 return '总包单位向业主单位情况，付款到总包农民工工资专户'
             } else if(name == '建设者工资请款-农民工个人账户' && code == 3) {
                 return '分包单位向总包单位请款，由总包农民工工资专户向劳务工人做工资代发'
+            } else if(name == '建设者工资请款-农民工个人账户' && code == 6) {
+                return '分包单位向总包单位请款，由总包农民工工资专户向劳务工人做工资代发'
             }
         },
         setDeatilText(name, type) {
@@ -2196,6 +2198,8 @@ export default {
                 return '1.总承包合同 2.增值税专用发票'
             } else if(name == '建设者工资请款-农民工个人账户' && type == 3) {
                 return '1.工资单  2.签字后的工资单扫描件'
+            } else if(name == '建设者工资请款-农民工个人账户' && type == 6) {
+                return '1.工资单  2.签字后的工资单扫描件'
             }
             
             
@@ -2259,8 +2263,8 @@ export default {
         background: #508EDF;
     }
   .ant-modal-content{
-    width: 1150px;
-    margin-left: -140px;
+    // width: 1150px;
+    // margin-left: -140px;
     .ant-radio-group{
       width: 400px;
     }

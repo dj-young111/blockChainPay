@@ -411,6 +411,19 @@ export const projectType = [
 
 
 export function newExportsExcel(href, name = '文件', flag = true) {
+  var key = ''
+  let arr = []
+  arr = name.split('')
+  let nameDoin = arr.some((v, k) => {
+    key = k
+    return v == '.'
+  })
+  console.log(arr)
+  console.log(nameDoin)
+  console.log(name.substring(0, key))
+  if(nameDoin) {
+    name = name.substring(0, key)
+  }
   let anchor = document.createElement('a')
   let herf = href
   let token = storage.get(ACCESS_TOKEN)

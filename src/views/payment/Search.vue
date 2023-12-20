@@ -61,7 +61,7 @@
           {{ index + 1 }}
         </span>
         <template slot="paymentType" slot-scope="text, record">
-          <span>{{ record.status == 1 ? '对公' : '对私'}}</span>
+          <span>{{ record.paymentType == '1' ? '对公' : '对私'}}</span>
         </template>
         <template slot="receiverName" slot-scope="text, record">
           <span>{{record.paymentType == '1' ? text : '-'}}</span>
@@ -92,6 +92,12 @@
         :pagination="settlePagination"
         :scroll="{ x: 1200, y: 600 }"
       >
+       <template slot="paymentStatus" slot-scope="text, record">
+          <span v-if="record.paymentStatus == 0">待支付</span>
+          <span v-if="record.paymentStatus == 1">支付成功</span>
+          <span v-if="record.paymentStatus == 2">支付失败</span>
+          <span v-if="record.paymentStatus == 3">部分成功</span>
+        </template>
       </a-table>
         <div class="footer-wrapper">
           <a-button type="primary" @click="handleDetailSubmitClick">确定</a-button>
@@ -253,6 +259,7 @@ const detailColumns = [
         title: '付款状态',
         dataIndex: 'paymentStatus',
         key: 'paymentStatus',
+        scopedSlots: { customRender: 'paymentStatus' },
         width: '100px'
     },
     {
@@ -522,7 +529,6 @@ export default {
 }
 .addModal{
   .ant-modal-content{
-    // width: 900px;
     .ant-radio-group{
       width: 400px;
     }

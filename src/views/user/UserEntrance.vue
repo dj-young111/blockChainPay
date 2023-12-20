@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    <a-modal v-model="visible" class="addModal" title="关联项目" @ok='handleClick'>
+    <a-modal v-model="visible" class="" title="关联项目" @ok='handleClick'>
       <a-row :gutter="24" class="modal-row">
           <div class="content-item">
             <span class="item-name">项目名称：</span>
@@ -89,7 +89,7 @@ export default {
     go(item) {
       localStorage.setItem('projectIDLv3', item.projectIDLv3)
       localStorage.setItem('projectName', item.projectName)
-      this.$router.replace('/workbench')
+      this.$router.push('/workbench')
     },
     getDataList() {
       getUserList().then(res => {

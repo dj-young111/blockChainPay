@@ -19,10 +19,10 @@
                         <template slot="paymentStatus" slot-scope="text, record">
                             <span>{{ setPaymentStatus(record.paymentStatus) }}</span>
                         </template>
-                        <template slot="operation" slot-scope="scope">
+                        <!-- <template slot="operation" slot-scope="scope">
                             <a-button type="link" @click="handlePaymentReviewClick(scope)">查看</a-button>
                             <a-button v-if="scope.processStatus == 3" type="link" @click="handlePaymenDetailClick(scope)">明细</a-button>
-                        </template>
+                        </template> -->
                     </a-table>
                 </a-tab-pane>
                 <a-tab-pane key="2" :tab="`支付补录${payCollectionCount ? '(' + payCollectionCount + ')' : ''}`" force-render>
@@ -144,6 +144,16 @@
                         <a-col :span="12">
                             <span>合同总金额（元）：</span>
                             <span>{{ contractObj.contractAmount }}</span>
+                        </a-col>
+                    </a-row>
+                     <a-row :gutter="24" class="model-col">
+                        <a-col :span="12">
+                            <span>合同质保金比例（%）</span>
+                            <span>{{ contractObj.contractRetentionRatio }} %</span>
+                        </a-col>
+                        <a-col :span="12">
+                            <span>合同预付款比例（%）</span>
+                            <span>{{ contractObj.contractAdvancePaymentRatio }} %</span>
                         </a-col>
                     </a-row>
                     <!-- <a-row :gutter="24" class="model-col">
@@ -722,7 +732,7 @@
                         </a-row>
                     </div>
                 </div>
-                <div v-else>
+                <div v-else-if="paymentObj.paymentScene >= 7 && paymentObj.paymentScene < 13 || paymentObj.paymentScene == 17">
                     <div>
                         <div class="model-row">
                             <span>付款方信息</span>
@@ -730,21 +740,7 @@
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
                                 <span>付款方银行账号：</span>
-                                <span>{{ paymentObj.payerAcc }}</span>
-                            </a-col>
-                            <a-col :span="12">
-                                <span>付款方银行账号户名：</span>
-                                <span>{{ paymentObj.payerName }}</span>
-                            </a-col>
-                        </a-row>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>付款方开户行：</span>
-                                <span>{{ paymentObj.payerOpenBank }}</span>
-                            </a-col>
-                            <a-col :span="12">
-                                <span>付款方联行行号：</span>
-                                <span>{{ paymentObj.payerOpenBankNo }}</span>
+                                <span>{{ paymentObj.paymentBankNum }}</span>
                             </a-col>
                         </a-row>
                     </div>
@@ -754,12 +750,22 @@
                         </div>
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
-                                <span>收款方银行账号：</span>
-                                <span>{{ paymentObj.payeeAcc }}</span>
+                                <span>收款方名称：</span>
+                                <span>{{ paymentObj.payeeName }}</span>
                             </a-col>
                             <a-col :span="12">
                                 <span>收款方银行账号户名：</span>
                                 <span>{{ paymentObj.payeeName }}</span>
+                            </a-col>
+                        </a-row>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12">
+                                <span>收款方银行账号：</span>
+                                <span>{{ paymentObj.payeeAcc }}</span>
+                            </a-col>
+                             <a-col :span="12">
+                                <span>收款方联行行号：</span>
+                                <span>{{ paymentObj.payeeOpenBankNo }}</span>
                             </a-col>
                         </a-row>
                         <a-row :gutter="24" class='model-col'>
@@ -767,10 +773,7 @@
                                 <span>收款方开户行：</span>
                                 <span>{{ paymentObj.payeeOpenBank }}</span>
                             </a-col>
-                            <a-col :span="12">
-                                <span>收款方联行行号：</span>
-                                <span>{{ paymentObj.payeeOpenBankNo }}</span>
-                            </a-col>
+                           
                         </a-row>
                     </div>
                     <div>
@@ -779,14 +782,15 @@
                         </div>
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
+                                <span>已支付金额（元）：</span>
+                                <span>{{ paymentObj.contractPaidAmount }}</span>
+                            </a-col>
+                        </a-row>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12">
                                 <span>申请金额（元）：</span>
                                 <span>{{ paymentObj.paymentAmount }}</span>
                             </a-col>
-                            <!-- <a-col :span="12">
-                                <span>本次结算金额（元）：</span>
-                                <span>{{ paymentObj.currentSettlementAmount }}</span>
-                            </a-col> -->
-                            
                         </a-row>
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
@@ -796,27 +800,22 @@
                         </a-row>
                     </div>
                     <div>
-                        <!-- <div class="model-row">
-                            <span>支付要件</span>
+                        <div class="model-row">
+                            <span>发票文件</span>
                         </div>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <div class="upload-wrapper">
-                                    <span v-for="(item, index) of paymentObj.paymentFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" :href="`${fileUrl}/files?fileId=${item.url}&flag=true`">下载</a></span>
-                                </div>
-                            </a-col>
-                        </a-row> -->
+                        <a-table  bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
+                            <template slot="invoiceFile" slot-scope="text, record, index">
+                                <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${text}&flag=true`)">下载</a>
+                            </template>
+                            <template slot="isLocalTax" slot-scope="text, record, index">
+                                <div>{{text === 1 ? '是': '否'}}</div>
+                            </template>
+                        </a-table>
                         <div>
                                 <div class="model-row">
                                     <span>支付要件</span>
                                 </div>
                                 <a-row :gutter="24" class="model-col">
-                                    <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
-                                        <span>上传发票附件：</span>
-                                        <div class="upload-wrapper">
-                                            <span v-for="(item, index) of paymentObj.invoiceFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
-                                        </div>
-                                    </a-col>
                                     <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                         <span>上传审批文件：</span>
                                         <div class="upload-wrapper">
@@ -1426,6 +1425,47 @@ export default {
             contractCount: '',
             paymentCount: '',
             paymentData: [],
+              billColumns: [
+                {
+                title: '发票批次号',
+                dataIndex: 'invoiceBatchNo',
+                width: '16%',
+                scopedSlots: { customRender: 'invoiceBatchNo' },
+                },
+                {
+                title: '发票代码',
+                dataIndex: 'invoiceCode',
+                width: '16%',
+                scopedSlots: { customRender: 'invoiceCode' },
+                },
+                {
+                title: '发票号码',
+                dataIndex: 'invoiceNo',
+                width: '16%',
+                scopedSlots: { customRender: 'invoiceNo' },
+                },
+                {
+                title: '票⾯价税合计⾦额 （元）',
+                dataIndex: 'invoiceAmount',
+                scopedSlots: { customRender: 'invoiceAmount' },
+                },
+                {
+                title: '是否本地纳税',
+                dataIndex: 'isLocalTax',
+                scopedSlots: { customRender: 'isLocalTax' },
+                },
+                {
+                title: '发票扫描件',
+                dataIndex: 'invoiceFile',
+                scopedSlots: { customRender: 'invoiceFile' },
+                },
+                {
+                title: '操作',
+                dataIndex: 'operation',
+                scopedSlots: { customRender: 'operation' },
+                },
+            ],
+            dataSource1: [],
             paymentPagination: {
                 current: 1,
                 pageSize: 20,
@@ -1715,29 +1755,12 @@ export default {
                         self.paymentObj.otherFile = otherArr
                     }
                 })
-            } else if(scope.paymentScene >= 7 && scope.paymentScene <= 13) {
+            } else if(scope.paymentScene >= 7 && scope.paymentScene <= 13 || scope.paymentScene == 17) {
                 getPaymentPayDetail(scope.id).then(res => {
                     console.log("req: ", res)
                     if(res.status == 1 && res.data) {
                         self.paymentObj = res.data
-
-                        let invoiceStr = self.paymentObj.invoiceFile && self.paymentObj.invoiceFile.substring(0, self.paymentObj.invoiceFile.length - 1).split(',')
-                        let invoiceArr = []
-                        invoiceStr && invoiceStr.map(res => {
-                            // res = res.split('#')[0]
-                            // invoiceArr.push(res)
-                            // let resObj = {
-                            //     name: res.split('#')[0],
-                            //     url: res.split('#')[1]
-                            // }
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            invoiceArr.push(resObj)
-                        })
-                        self.paymentObj.invoiceFile = invoiceArr
+                        this.dataSource1 = res.data.invoiceList
 
                         let approveStr = self.paymentObj.approveFile && self.paymentObj.approveFile.substring(0, self.paymentObj.approveFile.length - 1).split(',')
                         let approveArr = []
@@ -1778,21 +1801,20 @@ export default {
                         let newStr = self.paymentObj.paymentDetails && self.paymentObj.paymentDetails.substring(0, self.paymentObj.paymentDetails.length - 1).split(',')
                         let uploadArr = []
                         newStr && newStr.map(res => {
-                            // res = res.split('#')[0]
-                            // let resObj = {
+                            // let obj = {
                             //     name: res.split('#')[0],
                             //     url: res.split('#')[1]
                             // }
                             let num = res.lastIndexOf('\#')
-                            let resObj = {
+                            let obj = {
                                 name: res.substring(0, num),
                                 url: res.substring(num + 1, res.length)
                             }
-                            uploadArr.push(resObj)
+                            uploadArr.push(obj)
                         })
                         self.paymentObj.paymentDetails = uploadArr
                     }
-                }) 
+                })  
             } else if(scope.paymentScene > 13) {
                 getPaymentSalaryDetail(scope.id).then(res => {
                     console.log("salary: ", res)
@@ -2134,8 +2156,8 @@ export default {
         text-align: right;
     }
   .ant-modal-content{
-    width: 1000px;
-    margin-left: -120px;
+    // width: 1000px;
+    // margin-left: -120px;
     .ant-radio-group{
       width: 400px;
     }

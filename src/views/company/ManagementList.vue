@@ -974,17 +974,17 @@ export default {
       })
     },
     getRelationPrjSelect() {
-      getRelationPrj().then(res => {
-        let result = []
-        res && res.map(v => {
-          let obj = {
-            label: v.name,
-            value: v.id
-          }
-          result.push(obj)
-        })
-        this.relationPrjSelect = result
-      })
+      // getRelationPrj().then(res => {
+      //   let result = []
+      //   res && res.map(v => {
+      //     let obj = {
+      //       label: v.name,
+      //       value: v.id
+      //     }
+      //     result.push(obj)
+      //   })
+      //   this.relationPrjSelect = result
+      // })
     },
    handleSearchClick() {
      this.getQuotaApplyList()
