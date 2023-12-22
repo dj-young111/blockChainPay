@@ -6,7 +6,7 @@ import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
 // 生产
-let baseURL = 'http://144.7.99.96:23559'
+let baseURL =  'https://sharechain.xacip.net' //'http://144.7.99.96:12448' //'http://144.7.99.96:23559'
 
 if (process.env.NODE_ENV == 'development') {
     // baseURL = 'http://35.201.215.236:13448'  'http://172.16.10.97:8081' //
@@ -14,10 +14,10 @@ if (process.env.NODE_ENV == 'development') {
     // baseURL = 'http://172.16.10.97:8081'
 }
 // 生产
-// export const fileUrl = 'http://144.7.99.96:23559/api'
+export const fileUrl = 'https://sharechain.xacip.net/api'
 
 // 测试
-export const fileUrl = 'http://144.7.99.96:12448/api'
+// export const fileUrl = 'http://144.7.99.96:12448/api'
 
 // 
 

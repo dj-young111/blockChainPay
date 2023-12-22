@@ -77,20 +77,31 @@
                 <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="付款方银行账号">
-                            <a-input 
-                                type="text" 
-                                v-model="requestObj.payerAcc"
-                                disabled
-                            />
+                            <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.payerAcc}}
+                                </template>
+                                    <a-input 
+                                    type="text" 
+                                    v-model="requestObj.payerAcc"
+                                    disabled
+                                />
+                            </a-tooltip>
                         </a-form-model-item>
                     </a-col>
                     <a-col :span="12">
                         <a-form-model-item label="付款银行账号户名">
-                        <a-input 
-                            type="text" 
-                            v-model="requestObj.payerName"
-                            disabled
-                        />
+                            <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.payerName}}
+                                </template>
+                                    <a-input 
+                                            type="text" 
+                                            v-model="requestObj.payerName"
+                                            disabled
+                                        />
+                            </a-tooltip>
+                        
                         </a-form-model-item>
                         <!-- <a-form-model-item label="付款银行账号户名">
                             <a-select v-model="requestObj.payerName" 
@@ -110,20 +121,32 @@
                 <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="付款方开户行">
-                        <a-input 
+                            <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.payerOpenBank}}
+                                </template>
+                                    <a-input 
                             type="text" 
                             v-model="requestObj.payerOpenBank"
                             disabled
                         />
+                            </a-tooltip>
+                        
                         </a-form-model-item>
                     </a-col>
                     <a-col :span="12">
                         <a-form-model-item label="付款方联行行号">
-                        <a-input 
-                            type="text" 
-                            v-model="requestObj.payerOpenBankNo"
-                            disabled
-                        />
+                            <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.payerOpenBankNo}}
+                                </template>
+                                   <a-input 
+                                        type="text" 
+                                        v-model="requestObj.payerOpenBankNo"
+                                        disabled
+                                    />
+                            </a-tooltip>
+                        
                         </a-form-model-item>
                     </a-col>
                 </a-row>
@@ -134,40 +157,64 @@
                 <a-row :gutter="24">
                     <a-col :span="12">
                     <a-form-model-item label="收款方银行账号">
-                    <a-input 
-                        type="text" 
-                        v-model="requestObj.payeeAcc"
-                        disabled
-                    />
+                        <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.payeeAcc}}
+                                </template>
+                                   <a-input 
+                                        type="text" 
+                                        v-model="requestObj.payeeAcc"
+                                        disabled
+                                    />
+                            </a-tooltip>
+                    
                     </a-form-model-item>
                 </a-col>
                 <a-col :span="12">
                     <a-form-model-item label="收款银行账号户名">
-                    <a-input 
-                        type="text" 
-                        v-model="requestObj.payeeName"
-                        disabled
-                    />
+                         <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.payeeName}}
+                                </template>
+                                   <a-input 
+                                        type="text" 
+                                        v-model="requestObj.payeeName"
+                                        disabled
+                                    />
+                            </a-tooltip>
+                    
                     </a-form-model-item>
                 </a-col>
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="收款方开户行">
-                        <a-input 
-                            type="text" 
-                            v-model="requestObj.payeeOpenBank"
-                            disabled
-                        />
+                            <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.payeeOpenBank}}
+                                </template>
+                                   <a-input 
+                                    type="text" 
+                                    v-model="requestObj.payeeOpenBank"
+                                    disabled
+                                />
+                            </a-tooltip>
+                        
                         </a-form-model-item>
                     </a-col>
                     <a-col :span="12">
                         <a-form-model-item label="收款方联行行号">
-                        <a-input 
-                            type="text" 
-                            v-model="requestObj.payeeOpenBankNo"
-                            disabled
-                        />
+                             <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.payeeOpenBankNo}}
+                                </template>
+                                   <a-input 
+                                    type="text" 
+                                    v-model="requestObj.payeeOpenBankNo"
+                                    disabled
+                                />
+                            </a-tooltip>
+                        
                         </a-form-model-item>
                     </a-col>
                 </a-row>
@@ -179,40 +226,64 @@
                 <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="收款方名称">
-                            <a-input 
-                                type="text" 
-                                v-model="requestObj.peasantWorkerPayeeName"
-                                disabled
-                            />
+                            <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.peasantWorkerPayeeName}}
+                                </template>
+                                   <a-input 
+                                    type="text" 
+                                    v-model="requestObj.peasantWorkerPayeeName"
+                                    disabled
+                                />
+                            </a-tooltip>
+                            
                         </a-form-model-item>
                     </a-col>
                     <a-col :span="12">
                         <a-form-model-item label="收款银行账号户名">
-                            <a-input 
-                                type="text" 
-                                v-model="requestObj.peasantWorkerPayeeName"
-                                disabled
-                            />
+                            <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.peasantWorkerPayeeName}}
+                                </template>
+                                   <a-input 
+                                    type="text" 
+                                    v-model="requestObj.peasantWorkerPayeeName"
+                                    disabled
+                                />
+                            </a-tooltip>
+                            
                             </a-form-model-item>
                         </a-col>
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="收款方银行账号">
-                            <a-input 
-                                type="text" 
-                                v-model="requestObj.peasantWorkerPayeeAcc"
-                                disabled
-                            />
+                             <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.peasantWorkerPayeeAcc}}
+                                </template>
+                                   <a-input 
+                                        type="text" 
+                                        v-model="requestObj.peasantWorkerPayeeAcc"
+                                        disabled
+                                    />
+                            </a-tooltip>
+                            
                         </a-form-model-item>
                     </a-col>
                     <a-col :span="12">
                         <a-form-model-item label="收款方联行行号">
-                        <a-input 
-                            type="text" 
-                            v-model="requestObj.peasantWorkerPayeeOpenBankNo"
-                            disabled
-                        />
+                             <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.peasantWorkerPayeeOpenBankNo}}
+                                </template>
+                                   <a-input 
+                                    type="text" 
+                                    v-model="requestObj.peasantWorkerPayeeOpenBankNo"
+                                    disabled
+                                />
+                            </a-tooltip>
+                        
                         </a-form-model-item>
                     </a-col>
                     
@@ -220,11 +291,16 @@
                 <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="收款方开户行">
-                        <a-input 
-                            type="text" 
-                            v-model="requestObj.peasantWorkerPayeeOpenBank"
-                            disabled
-                        />
+                             <a-tooltip>
+                                <template slot="title">
+                                {{requestObj.peasantWorkerPayeeOpenBank}}
+                                </template>
+                                   <a-input 
+                                        type="text" 
+                                        v-model="requestObj.peasantWorkerPayeeOpenBank"
+                                        disabled
+                                    />
+                            </a-tooltip>
                         </a-form-model-item>
                     </a-col>
                 </a-row>
@@ -233,7 +309,7 @@
                     <span>支付申请信息</span>
                 </div>
                 <a-row :gutter="24">
-                    <a-col :span="12">
+                    <!-- <a-col :span="12">
                         <a-form-model-item label="已支付金额（元）">
                         <a-input 
                             type="text"  
@@ -241,7 +317,7 @@
                             disabled
                             />
                         </a-form-model-item>
-                    </a-col>
+                    </a-col> -->
                     <!-- <a-col :span="12">
                         <a-form-model-item label="已结算金额（元）">
                         <a-input 
@@ -753,40 +829,63 @@
                 <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="收款方名称">
-                            <a-input 
-                                type="text" 
-                                v-model="paymentObj.payeeName"
-                                disabled
-                            />
+                            <a-tooltip>
+                                <template slot="title">
+                                {{paymentObj.payeeName}}
+                                </template>
+                                <a-input 
+                                    type="text" 
+                                    v-model="paymentObj.payeeName"
+                                    disabled
+                                />
+                            </a-tooltip>
+                            
                         </a-form-model-item>
                     </a-col>
                     <a-col :span="12">
                         <a-form-model-item label="收款银行账号户名">
-                            <a-input 
-                                type="text" 
-                                v-model="paymentObj.payeeName"
-                                disabled
-                            />
+                            <a-tooltip>
+                                <template slot="title">
+                                {{paymentObj.payeeName}}
+                                </template>
+                                <a-input 
+                                    type="text" 
+                                    v-model="paymentObj.payeeName"
+                                    disabled
+                                />
+                            </a-tooltip>
+                            
                             </a-form-model-item>
                         </a-col>
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
                         <a-form-model-item label="收款方银行账号">
-                            <a-input 
-                                type="text" 
-                                v-model="paymentObj.payeeAcc"
-                                disabled
-                            />
+                            <a-tooltip>
+                                <template slot="title">
+                                {{paymentObj.payeeAcc}}
+                                </template>
+                                <a-input 
+                                    type="text" 
+                                    v-model="paymentObj.payeeAcc"
+                                    disabled
+                                />
+                                </a-tooltip>
                         </a-form-model-item>
                     </a-col>
                     <a-col :span="12">
                         <a-form-model-item label="收款方联行行号">
-                        <a-input 
-                            type="text" 
-                            v-model="paymentObj.payeeOpenBankNo"
-                            disabled
-                        />
+                            <a-tooltip>
+                                <template slot="title">
+                                {{paymentObj.payeeOpenBankNo}}
+                                </template>
+                                <a-input 
+                                    type="text" 
+                                    v-model="paymentObj.payeeOpenBankNo"
+                                    disabled
+                                />
+                            </a-tooltip>
+                        
                         </a-form-model-item>
                     </a-col>
                     
@@ -4883,7 +4982,7 @@ export default {
         this.getPaymentBankNumList()
         this.getApplyInfo()
         this.getPayAccountSelect()
-        this.getSettleInfo()
+        // this.getSettleInfo()
         this.getSalaryManageInfo()
         getCompContractList({name: ' ', projectIDLv3: localStorage.getItem('projectIDLv3')}).then(res => {
             this.companyBNameList = res
@@ -7414,7 +7513,7 @@ export default {
             this.isSettleVisible = true
         },
         handleSettleSearchClick() {
-            this.getSettleInfo()
+            // this.getSettleInfo()
         },
         handleSettlePageChange(page, pageSize) {
             console.log(page, pageSize)

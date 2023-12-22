@@ -42,7 +42,7 @@
           {{ record.projectType ? setProjectType(record.projectType) : ''}}
         </span>
         <template slot="operation" slot-scope="scope">
-          <a-button  @click="handleReviewClick(scope)">查看</a-button>
+          <!-- <a-button  @click="handleReviewClick(scope)">查看</a-button> -->
           <a-button type="link" @click="handleEditClick(scope)">编辑</a-button>
         </template>
       </a-table>

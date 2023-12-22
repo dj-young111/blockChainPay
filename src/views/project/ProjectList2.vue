@@ -41,7 +41,7 @@
           {{ index + 1 }}
         </span> -->
         <template slot="operation" slot-scope="scope">
-          <a-button type="link" @click="handleReviewClick(scope)">查看</a-button>
+          <!-- <a-button type="link" @click="handleReviewClick(scope)">查看</a-button> -->
           <a-button type="link" @click="handleEditClick(scope)">编辑</a-button>
           <!-- <a-button type="link" @click="handleDeleteClick(scope)">删除</a-button> -->
         </template>

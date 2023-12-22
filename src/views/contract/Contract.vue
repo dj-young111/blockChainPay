@@ -24,7 +24,7 @@
             <a-col :md="!advanced && 8 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="handleSearchClick">查询</a-button>
-                <a-button style="margin-left: 8px" type="primary"  @click="handleAddClick">新建</a-button>
+                <a-button style="margin-left: 8px" type="primary" v-if="isAddBtnShow"  @click="handleAddClick">新建</a-button>
               </span>
             </a-col>
           </a-row>
@@ -310,12 +310,18 @@
             <a-row :gutter="24">
                 <a-col :span="12">
                     <a-form-model-item label="合同甲方银行账户名称">
-                    <a-input 
-                        type="text" 
-                        v-model="addForm.payerName"
-                        placeholder="请输入合同甲方银行账户名称"
-                        disabled
-                    />
+                      <a-tooltip>
+                          <template slot="title">
+                          {{addForm.payerName}}
+                          </template>
+                          <a-input 
+                              type="text" 
+                              v-model="addForm.payerName"
+                              placeholder="请输入合同甲方银行账户名称"
+                              disabled
+                          />
+                      </a-tooltip>
+                    
                     </a-form-model-item>
                 </a-col>
                 <a-col :span="12">
@@ -359,12 +365,18 @@
             <a-row :gutter="24" v-if="isShowAWorker">
               <a-col :span="12">
                 <a-form-model-item label="甲方农民工工资专户户名">
-                    <a-input 
-                        type="text" 
-                        v-model="addForm.peasantWorkerPayerName"
-                        placeholder="请输入甲方农民工工资专户户名"
-                        disabled
-                    />
+                  <a-tooltip>
+                          <template slot="title">
+                          {{addForm.peasantWorkerPayerName}}
+                          </template>
+                          <a-input 
+                              type="text" 
+                              v-model="addForm.peasantWorkerPayerName"
+                              placeholder="请输入甲方农民工工资专户户名"
+                              disabled
+                          />
+                      </a-tooltip>
+                    
                   </a-form-model-item>
               </a-col>
               <a-col :span="12">
@@ -445,12 +457,18 @@
             <a-row :gutter="24">
                 <a-col :span="12">
                     <a-form-model-item label="合同乙方银行账户名称" prop="payeeAcc">
-                    <a-input 
-                        type="text" 
-                        v-model="addForm.payeeName"
-                        placeholder="请输入合同乙方银行账户名称"
-                        disabled
-                    />
+                      <a-tooltip>
+                          <template slot="title">
+                          {{addForm.payeeName}}
+                          </template>
+                          <a-input 
+                              type="text" 
+                              v-model="addForm.payeeName"
+                              placeholder="请输入合同乙方银行账户名称"
+                              disabled
+                          />
+                      </a-tooltip>
+                    
                     </a-form-model-item>
                 </a-col>
                 <a-col :span="12">
@@ -933,7 +951,7 @@
                     </div>
                   </a-col>
                   <a-col :span="12" style="display: flex; flex-direction: row; align-items: center;">
-                    <span>上传合同文件:</span>
+                    <span>合同相关补充材料:</span>
                     <div class="upload-wrapper">
                       <!-- <span v-for="(item, index) of contractDetail.contractFile" :key="index">{{ item }} <span class="download" @click="handleDownloadClick(addForm)">下载</span></span> -->
                       <span v-for="(item, index) of contractDetail.contractSupFile" :key="index">{{ item.name }} <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
@@ -1033,8 +1051,8 @@ const columns = [
   },
   {
     title: '创建日期',
-    dataIndex: 'contractCreateDate;',
-    key: 'contractCreateDate;',
+    dataIndex: 'contractCreateDate',
+    key: 'contractCreateDate',
     width: '180px'
   },
   { 
@@ -1852,11 +1870,11 @@ export default {
             uploadSupArr.push(resObj)
           })
           this.contractDetail.contractSupFile = uploadSupArr
-          if(this.contractDetail.contractACompanyCode && this.contractDetail.contractBCompanyCode) {
-              this.getUserRoleList(1, this.contractDetail.contractACompanyCode, this.contractDetail.contractBCompanyCode)
-              this.getUserRoleList(2, this.contractDetail.contractACompanyCode, this.contractDetail.contractBCompanyCode)
-              this.getUserRoleList(3, this.contractDetail.contractACompanyCode, this.contractDetail.contractBCompanyCode)
-          }
+          // if(this.contractDetail.contractACompanyCode && this.contractDetail.contractBCompanyCode) {
+          //     this.getUserRoleList(1, this.contractDetail.contractACompanyCode, this.contractDetail.contractBCompanyCode)
+          //     this.getUserRoleList(2, this.contractDetail.contractACompanyCode, this.contractDetail.contractBCompanyCode)
+          //     this.getUserRoleList(3, this.contractDetail.contractACompanyCode, this.contractDetail.contractBCompanyCode)
+          // }
         }
       })
     },

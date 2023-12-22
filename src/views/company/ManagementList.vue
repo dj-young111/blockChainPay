@@ -38,13 +38,13 @@
         <template slot="operation" slot-scope="scope">
           <a-button type="link" @click="handleReviewClick(scope)">查看</a-button>
           <a-button type="link" :disabled="!scope.editFlag" @click="handleEditClick(scope)">编辑</a-button>
-          <a-button type="link" @click="handleRelatedClick(scope)">关联项目</a-button>
+          <!-- <a-button type="link" @click="handleRelatedClick(scope)">关联项目</a-button> -->
         </template>
       </a-table>
     </a-card>
 
     <!-- 企业基本信息form  -->
-    <a-modal v-model="isAddVisible" class="addCompanyModal" :closable="false" :footer="null" :maskClosable="false">
+    <a-modal v-model="isAddVisible" class="addCompanyModal" width="60%" :closable="false" :footer="null" :maskClosable="false">
       <a-form-model
         ref='ruleForm'
         :model="addForm"
@@ -261,7 +261,7 @@
       
     </a-modal>
     <!-- 企业账户信息列表  -->
-    <a-modal v-model="isAddCompanyVisible" class="addCompanyModal" :closable="false" :footer="null" :maskClosable="false" >
+    <a-modal v-model="isAddCompanyVisible" class="addCompanyModal" width="60%" :closable="false" :footer="null" :maskClosable="false" >
       <div class="modal-wrapper">
         <div class="title">
           <span>企业账户信息</span>
@@ -292,7 +292,7 @@
       </div>
     </a-modal>
     <!-- 企业账户form  -->
-    <a-modal v-model="isAddCompanyAccountVisible" class="addCompanyModal" :closable="false" :footer="null" :maskClosable="false">
+    <a-modal v-model="isAddCompanyAccountVisible" class="addCompanyModal" width="60%" :closable="false" :footer="null" :maskClosable="false">
       <a-form-model
         ref='companyForm'
         :model="companyAccountForm"
@@ -348,7 +348,7 @@
       </a-form-model>
     </a-modal>
     <!-- 企业用户信息列表 -->
-    <a-modal v-model="isAddCompanyUserAccountVisible" class="addCompanyModal" :closable="false" :footer="null" :maskClosable="false">
+    <a-modal v-model="isAddCompanyUserAccountVisible" class="addCompanyModal" width="60%" :closable="false" :footer="null" :maskClosable="false">
       <div class="modal-wrapper">
         <div class="title">
           <span>企业用户信息</span>
@@ -379,7 +379,7 @@
       </div>
     </a-modal>
     <!-- 企业用户form -->
-    <a-modal v-model="isAddCompanyUserFormVisible" class="addCompanyModal" :closable="false" :footer="null" :maskClosable="false">
+    <a-modal v-model="isAddCompanyUserFormVisible" class="addCompanyModal" width="60%" :closable="false" :footer="null" :maskClosable="false">
       <div class="modal-wrapper">
         <a-form-model
           ref='companyUserForm'
@@ -427,7 +427,7 @@
       </div>
     </a-modal>
 
-    <a-modal v-model="isAddCompanyDetailVisible" class="addCompanyModal" :closable="false" :footer="null" :maskClosable="false">
+    <a-modal v-model="isAddCompanyDetailVisible" class="addCompanyModal" width="60%" :closable="false" :footer="null" :maskClosable="false">
       <a-form-model
         ref='ruleForm'
         :model="addForm"
@@ -551,7 +551,7 @@
       </div>
     </a-modal>
 
-    <a-modal v-model="isRelatedVisible" class="addCompanyModal" :footer="null" :maskClosable="false">
+    <a-modal v-model="isRelatedVisible" class="addCompanyModal" width="60%" :footer="null" :maskClosable="false">
       <div class="modal-wrapper">
         <div class="title">
           <span>关联项目</span>
@@ -1643,9 +1643,9 @@ export default {
     }
   }
   .ant-modal-content{
-    width: 800px;
+    // width: 800px;
     .ant-radio-group{
-      width: 400px;
+      // width: 400px;
     }
     .investment{
       display: flex;

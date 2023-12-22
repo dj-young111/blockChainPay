@@ -386,6 +386,14 @@
                             </div>
                         </a-col>
                     </a-row>
+                    <a-row :gutter="24" class="model-col">
+                        <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
+                            <span>合同相关补充材料：</span>
+                            <div class="upload-wrapper">
+                                <span v-for="(item, index) of contractObj.contractSupFile" :key="index">{{ item.name }}<a @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
+                            </div>
+                        </a-col>
+                    </a-row>
                 </div>
                 
                 <div class="process">
@@ -842,26 +850,42 @@
                         <div class="model-row">
                             <span>付款方信息</span>
                         </div>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>付款方银行账号：</span>
-                                <span>{{ paymentObj.payerAcc }}</span>
-                            </a-col>
-                            <a-col :span="12">
-                                <span>付款银行账号户名：</span>
-                                <span>{{ paymentObj.payerName }}</span>
-                            </a-col>
-                        </a-row>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>付款方开户行：</span>
-                                <span>{{ paymentObj.payerOpenBank }}</span>
-                            </a-col>
-                            <a-col :span="12">
-                                <span>付款方联行行号：</span>
-                                <span>{{ paymentObj.payerOpenBankNo }}</span>
-                            </a-col>
-                        </a-row>
+                        <div v-if="paymentObj.paymentScene !== 3 && paymentObj.roleId == 1 && paymentObj.companyType == 1">
+                            <a-row :gutter="24" style="margin-left: -105px">
+                                <a-col :span="12">
+                                    <a-form-model-item label="付款方银行账号">
+                                        <a-select v-model="payerAcc" placeholder="请选择" @select="selectAccount">
+                                            <a-select-option v-for="item of bankNumSelect" :key="item.value" :value="item.value">
+                                                {{ item.name }}
+                                            </a-select-option>
+                                        </a-select>
+                                    </a-form-model-item>
+                                </a-col>
+                            </a-row>
+                        </div>
+                        <div >
+                            <a-row :gutter="24" class="model-col">
+                                <a-col :span="12">
+                                    <span>付款方银行账号：</span>
+                                    <span>{{ paymentObj.payerAcc }}</span>
+                                </a-col>
+                                <a-col :span="12">
+                                    <span>付款银行账号户名：</span>
+                                    <span>{{ paymentObj.payerName }}</span>
+                                </a-col>
+                            </a-row>
+                            <a-row :gutter="24" class="model-col">
+                                <a-col :span="12">
+                                    <span>付款方开户行：</span>
+                                    <span>{{ paymentObj.payerOpenBank }}</span>
+                                </a-col>
+                                <a-col :span="12">
+                                    <span>付款方联行行号：</span>
+                                    <span>{{ paymentObj.payerOpenBankNo }}</span>
+                                </a-col>
+                            </a-row>
+                        </div>
+                        
                     </div>
                     <div>
                         <div class="model-row">
@@ -2392,20 +2416,29 @@
         </a-modal>
 
         <!-- 审批最终弹窗 -->
-        <a-modal v-model="isapplyModalVisible" width="80%" class="applyModal" title="审批确认信息" :footer="null">
+        <a-modal v-model="isapplyModalVisible" width="80%" :maskClosable='false' class="applyModal" title="付款确认信息" :footer="null">
             <div class="tip">
-                请仔细核对本次付款的收付款账号信息及金额，提交后，系统将自动通知付款银行支付，您可在支付管理-支付明细查询页面追踪付款状态，请再次确认，如无误，请点击确认按钮！
+                【请仔细核对本次付款的收付款账号信息及金额，提交后，系统将自动通知付款银行支付，您可在支付管理-支付明细查询页面追踪付款状态，请再次确认，如无误，请点击确认按钮！】
             </div>
             <a-table
                 :rowKey="((record, index) => {return index})"
                 :columns="applyModalColumns"
                 :data-source="applyData"
+                :pagination="applyPagination"
                 style="margin-top: 20px;"
             >
             </a-table>
+            <a-descriptions title="">
+                <a-descriptions-item label="总金额">
+                 {{paymentInfoListTotalAmount}} （元）
+                </a-descriptions-item>
+                <a-descriptions-item label="总笔数">
+                    {{applyData.length}}
+                </a-descriptions-item>
+            </a-descriptions>
             <div class="footer-wrapper">
                 <a-button type="" class="cancle" @click="handleApplyModalCancelClick">取消</a-button>
-                <a-button type="primary" :disabled='btn' @click="handleApplyModalSubmitClick">确定</a-button>
+                <a-button type="primary" class="btns" :disabled='btn' @click="handleApplyModalSubmitClick">{{countNum ? countNum + 's': '确认'}}</a-button>
             </div>
         </a-modal>
     </page-header-wrapper>
@@ -2432,7 +2465,7 @@ import {
     getPaymentProcessInfo
 } from '@/api/workbench'
 import { getContractList, addContractInfo, getContractTypeAll, getGeneralContract, getThirdProject, getUserRole, getContractDetail, editContractInfo, getThirdPrjName, getDownloadFile, getCompanyCreditCode } from '@/api/contract'
-import { getCurrentSmsInfo, getPaymentScene, getTaskName, getContractName, getReceive, getSettleList } from '@/api/payment'
+import { getCurrentSmsInfo, getPaymentScene, getTaskName, getContractName, getReceive, getSettleList, getPaymentBankNum } from '@/api/payment'
 import { resolveOnChange } from 'ant-design-vue/es/input/Input'
 import moment from 'moment'
 import { fileUrl } from '@/utils/request'
@@ -2992,6 +3025,24 @@ export default {
             },
             advanced: false,
             settleData: [],
+            applyPagination: {
+                current: 1,
+                pageSize: 10,
+                defaultCurrent: 1,
+                defaultPageSize: 10,
+                showSizeChanger: true,
+                showQuickJumper: true,
+                showTotal: total => `共${this.applyData.length}条`,
+                pageSizeOptions: ['10', '20', '30', '40'],
+                onChange: (page, pageSize) => {
+                    this.applyPagination.current = page
+                    this.applyPagination.pageSize = pageSize
+                },
+                onShowSizeChange: (current, size) => {
+                    this.applyPagination.current = current
+                    this.applyPagination.pageSize = size
+                },
+            },
             settlePagination: {
                 current: 1,
                 pageSize: 20,
@@ -3029,6 +3080,7 @@ export default {
             isSalarySelect: false,
             cacheSalary: '',
             intervalID: '',
+            timer: '',
             isapplyModalVisible: false,
             applyData: [],
             applyModalColumns: [
@@ -3041,6 +3093,7 @@ export default {
                     title: '付款账号',
                     dataIndex: 'payeeAccount',
                     key: 'payeeAccount',
+                    width:'200px'
                 },
                 {
                     title: '付款账号开户行',
@@ -3051,6 +3104,7 @@ export default {
                     title: '收款户名',
                     dataIndex: 'receiverName',
                     key: 'receiverName',
+                    width:'200px'
                 },
                 {
                     title: '收款账号',
@@ -3068,7 +3122,11 @@ export default {
                     key: 'paymentAmount',
                 },
             ],
-            btn: true
+            btn: true,
+            paymentInfoListTotalAmount: '',
+            countNum: 10,
+            bankNumSelect: [],
+            payerAcc: ''
         }
     },
     watch: {
@@ -3184,11 +3242,14 @@ export default {
         //                                 //   Modal.destroyAll();
         // })
         
-      
+        getPaymentBankNum().then(res => {
+            this.bankNumSelect = res
+        })
        
     },
     destroyed() {
         clearInterval(this.intervalID)
+        clearInterval(this.timer)
     },
     methods: {
         // 获取合同审批信息
@@ -3458,6 +3519,23 @@ export default {
                             uploadArr.push(resObj)
                         })
                         this.contractObj.contractFile = uploadArr
+
+                        let newStr1 = this.contractObj.contractSupFile.substring(0, this.contractObj.contractSupFile.length - 1).split(',')
+                        let uploadArr1 = []
+                        newStr1 && newStr1.map(res => {
+                            // res = res.split('#')[0]
+                            // let resObj = {
+                            //     name: res.split('#')[0],
+                            //     url: res.split('#')[1]
+                            // }
+                            let num = res.lastIndexOf('\#')
+                            let resObj = {
+                                name: res.substring(0, num),
+                                url: res.substring(num + 1, res.length)
+                            }
+                            uploadArr1.push(resObj)
+                        })
+                        this.contractObj.contractSupFile = uploadArr1
                         if(!this.contractObj.settlementBatchId) {
                             this.selectionRows = []
                         }
@@ -3786,7 +3864,18 @@ export default {
         handleCancelClick() {
             this.isAddVisible = false
         },
+        selectAccount(val) {
+            console.log(val)
+            let arr = this.bankNumSelect.filter(v => {
+                return v.value == val
+            })
+            this.paymentObj.payerAcc = arr[0].value
+            this.paymentObj.payerName = arr[0].accName
+            this.paymentObj.payerOpenBank = arr[0].openBank
+            this.paymentObj.payerOpenBankNo = arr[0].openBankNum
+        },
         handlePaymentSubmitClick(e) {
+            clearInterval(this.timer)
             e.preventDefault()
             let self = this
             this.$refs.rulePaymentForm.validate(valid => {
@@ -3822,10 +3911,18 @@ export default {
                         this.isPayVisible = false
                         this.isapplyModalVisible = true
                         this.btn = true
+                        this.countNum = 10
                         this.applyData = this.paymentObj.paymentInfoList
-                        setTimeout(() => {
-                            this.btn = false
-                        }, 10000);
+                        this.paymentInfoListTotalAmount = this.paymentObj.paymentInfoListTotalAmount
+                        this.timer = setInterval(() => {
+                            this.countNum--
+                            if(this.countNum <= 0) {
+                                clearInterval(this.timer)
+                                this.countNum = 0
+                                this.btn = false
+                                return
+                            } 
+                        }, 1000)
                         return
                     } else {
                         paymentSubmit(reqObj).then(res => {
@@ -3920,8 +4017,12 @@ export default {
         },
         handlePaymentCancelClick() {
             this.isPayVisible  = false
+            clearInterval(this.timer)
+            this.countNum = 10
+            this.btn = true
         },
         handleApplyModalSubmitClick() {
+            clearInterval(this.timer)
             let reqObj = Object.assign({}, this.paymentForm)
             reqObj.belongId = this.paymentObj.belongId
             reqObj.contractCode = this.paymentObj.contractCode
@@ -5573,6 +5674,10 @@ export default {
         align-items: center;
         .cancle {
             margin-right: 20px;
+            width: 80px;
+        }
+        .btns {
+            width: 80px;
         }
     }
 }

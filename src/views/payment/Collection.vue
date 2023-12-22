@@ -254,13 +254,13 @@
         </div>
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-model-item label="已支付金额（元）">
+            <!-- <a-form-model-item label="已支付金额（元）">
               <a-input 
                   type="number"  
                   v-model="addForm.contractPaidAmount"
                   disabled
                 />
-            </a-form-model-item>
+            </a-form-model-item> -->
           </a-col>
           <!-- <a-col :span="12">
             <a-form-model-item label="已结算金额（元）">
@@ -500,10 +500,10 @@
             <span>交易信息</span>
         </div>
         <a-row :gutter="24" class="modal-row">
-          <a-col :span="12">
+          <!-- <a-col :span="12">
             <span>已支付金额（元）：</span>
             <span>{{ detailObj.contractPaidAmount }}</span>
-          </a-col>
+          </a-col> -->
           <!-- <a-col :span="12">
             <span>已结算金额（元）：</span>
             <span>{{ detailObj.contractSettlAmount }}</span>
