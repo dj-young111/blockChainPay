@@ -444,7 +444,7 @@
         </a-modal>
 
         <!-- payment -->
-        <a-modal v-model="isPayVisible" class="addContractTodoModal" width="80%" title="审批详情" ok-text="确认" cancel-text="取消" @ok="handlePaymentSubmitClick" @cancel="handlePaymentCancelClick">
+        <a-modal :destroyOnClose='true' v-model="isPayVisible" class="addContractTodoModal" width="80%" title="审批详情" ok-text="确认" cancel-text="取消" @ok="handlePaymentSubmitClick" @cancel="handlePaymentCancelClick">
             <div class="model-row" v-if="paymentObj.paymentScene != 18 && paymentObj.paymentScene != 13">
                 <span>当前进度</span>
             </div>
@@ -3931,6 +3931,8 @@ export default {
                                 this.$message.success(res.data)
                                 this.$refs.rulePaymentForm.resetFields()
                                 this.getPaymentTodoInfo()
+                                this.payerAcc = ''
+                                this.paymentForm.remark = ''
 
                                 // if (reqObj.currentHandle === 1 && this.paymentObj.nodeList[this.paymentObj.nodeList.length-1].handleStatus === '进行中') {
                                 //      let moda = this.$info({
@@ -4017,6 +4019,9 @@ export default {
         },
         handlePaymentCancelClick() {
             this.isPayVisible  = false
+            this.$refs.rulePaymentForm.resetFields();
+            this.payerAcc = ''
+            this.paymentForm.remark = ''
             clearInterval(this.timer)
             this.countNum = 10
             this.btn = true

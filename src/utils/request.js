@@ -14,10 +14,10 @@ if (process.env.NODE_ENV == 'development') {
     // baseURL = 'http://172.16.10.97:8081'
 }
 // 生产
-export const fileUrl = 'https://sharechain.xacip.net/api'
+// export const fileUrl = 'https://sharechain.xacip.net/api'
 
 // 测试
-// export const fileUrl = 'http://144.7.99.96:12448/api'
+export const fileUrl = 'http://144.7.99.96:12448/api'
 
 // 
 
