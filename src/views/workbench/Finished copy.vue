@@ -2,10 +2,7 @@
     <page-header-wrapper>
         <a-card :bordered="false">
             <a-tabs :default-active-key="activeKey" @change="handleTabsChange">
-                <a-tab-pane key="1" >
-                    <span slot="tab">
-                        <span class="title-name">{{`支付审批${paymentCount ? '(' + paymentCount + ')' : ''}`}}</span> 
-                    </span>
+                <a-tab-pane key="1" :tab="`支付审批${paymentCount ? '(' + paymentCount + ')' : ''}`">
                     <a-table
                         :rowKey="((record, index) => {return index})"
                         :data-source='paymentData'
@@ -24,13 +21,11 @@
                         </template>
                         <template slot="operation" slot-scope="scope">
                             <a-button type="link" @click="handlePaymentReviewClick(scope)">查看</a-button>
+                            <a-button v-if="scope.processStatus == 3" type="link" @click="handlePaymenDetailClick(scope)">明细</a-button>
                         </template>
                     </a-table>
                 </a-tab-pane>
-                <a-tab-pane key="2" force-render>
-                    <span slot="tab">
-                        <span class="title-name">{{`支付补录${payCollectionCount ? '(' + payCollectionCount + ')' : ''}`}}</span> 
-                    </span>
+                <a-tab-pane key="2" :tab="`支付补录${payCollectionCount ? '(' + payCollectionCount + ')' : ''}`" force-render>
                     <a-table
                         :rowKey="((record, index) => {return index})"
                         :data-source='payCollectionData'
@@ -49,10 +44,7 @@
                         </template>
                     </a-table>
                 </a-tab-pane>
-                <a-tab-pane key="3" force-render>
-                    <span slot="tab">
-                        <span class="title-name">{{`合同审批${contractCount ? '(' + contractCount + ')' : ''}`}}</span> 
-                    </span>
+                <a-tab-pane key="3" :tab="`合同审批${contractCount ? '(' + contractCount + ')' : ''}`" force-render>
                     <a-table
                         :rowKey="((record, index) => {return index})"
                         :data-source='contractData'
@@ -83,7 +75,6 @@
                     v-for="item of contractObj.nodeList" 
                     :key="item.value"
                     :title="item.name"
-                    :status="item.handleStatus == '已通过' ? 'finish': item.handleStatus == '进行中' ? 'process': 'wait'"
                     :subTitle="setMoment(item.handleDate)"
                     :description="item.handleStatus"
                 ></a-step>
@@ -394,11 +385,13 @@
                     v-for="item of paymentObj.nodeList" 
                     :key="item.value"
                     :title="item.name"
-                    :status="item.handleStatus == '已通过' ? 'finish': item.handleStatus == '进行中' ? 'process': 'wait'"
                     :subTitle="setMoment(item.handleDate)"
                     :description="item.handleStatus"
                 ></a-step>
             </a-steps>
+            <div class="model-log">
+                <a-button type="primary" @click="handlePayLogClick(paymentObj.id)">审批日志</a-button>
+            </div>
                 <div>
                     <div class="model-row">
                         <span>基本信息</span>
@@ -420,63 +413,18 @@
                         </a-col>
                     </a-row>
                 </div>
-                <div v-if="paymentObj.paymentScene == 15 || paymentObj.paymentScene == 19 || paymentObj.paymentScene == 20 || paymentObj.paymentScene == 22">
-                    <div v-if="paymentObj.paymentScene != 19">
+                <div v-if="scene == 3 && paymentObj.paymentScene >= 14 || scene == 6 && paymentObj.paymentScene >= 14 || scene == 2 && paymentObj.paymentScene > 14">
+                    <div>
                         <div class="model-row">
                             <span>中标主体信息</span>
                         </div>
                         <a-row :gutter="24" class="model-col">
-                            <a-col :span="12" >
+                            <a-col :span="12">
                                 <span>中标主体名称：</span>
                                 <span>{{ paymentObj.companyAName }}</span>
                             </a-col>
-                            <a-col :span="12" v-if="paymentObj.paymentScene != 20">
-                                <span>中标主体工资专户名称：</span>
-                                <span>{{ paymentObj.payerName }}</span>
-                            </a-col>
-                        </a-row>
-                        <a-row :gutter="24" class="model-col" v-if="paymentObj.paymentScene != 20">
-                            <a-col :span="12">
-                                <span>中标主体工资专户账号：</span>
-                                <span>{{ paymentObj.payerAcc }}</span>
-                            </a-col>
-                            <a-col :span="12">
-                                <span>中标主体工资专户开户行：</span>
-                                <span>{{ paymentObj.payerOpenBank }}</span>
-                            </a-col>
                         </a-row>
                     </div>
-                    <div v-if="paymentObj.paymentScene == 15">    
-                            <div class="model-row">
-                                <span>分包商信息</span>
-                            </div>
-                            <a-row :gutter="24" class="model-col">
-                                <a-col :span="12">
-                                    <span>分包商名称：</span>
-                                    <span>{{ paymentObj.companyBName }}</span>
-                                </a-col>
-                                <a-col :span="12">
-                                    <span>分包商账户名称：</span>
-                                    <span>{{ paymentObj.payeeName }}</span>
-                                </a-col>
-                            </a-row>
-                            <a-row :gutter="24" class="model-col">
-                                <a-col :span="12">
-                                    <span>分包商银行账号：</span>
-                                    <span>{{ paymentObj.payeeAcc }}</span>
-                                </a-col>
-                                <a-col :span="12">
-                                    <span>分包商开户行：</span>
-                                    <span>{{ paymentObj.payeeOpenBank }}</span>
-                                </a-col>
-                            </a-row>
-                            <a-row :gutter="24" class="model-col">
-                                <a-col :span="12">
-                                    <span>分包商开户行联行号：</span>
-                                    <span>{{ paymentObj.payeeOpenBankNo }}</span>
-                                </a-col>
-                            </a-row>
-                        </div>   
                     <div>
                         <div class="model-row">
                             <span>付款方信息</span>
@@ -500,32 +448,6 @@
                                 <span>付款方联行行号：</span>
                                 <span>{{ paymentObj.payerOpenBankNo }}</span>
                             </a-col>
-                        </a-row>
-                    </div>
-                    <div v-if="paymentObj.paymentScene == 22">
-                        <div class="model-row">
-                            <span>收款方信息</span>
-                        </div>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>收款方银行账号：</span>
-                                <span>{{ paymentObj.payeeAcc }}</span>
-                            </a-col>
-                            <a-col :span="12">
-                                <span>收款方银行账号户名：</span>
-                                <span>{{ paymentObj.payeeName }}</span>
-                            </a-col>
-                        </a-row>
-                        <a-row :gutter="24" class='model-col'>
-                            <a-col :span="12">
-                                <span>收款方开户行：</span>
-                                <span>{{ paymentObj.payeeOpenBank }}</span>
-                            </a-col>
-                             <a-col :span="12">
-                                <span>收款方联行行号：</span>
-                                <span>{{ paymentObj.payeeOpenBankNo }}</span>
-                            </a-col>
-                           
                         </a-row>
                     </div>
                     <div>
@@ -557,46 +479,33 @@
                                 <span>工资月份：</span>
                                 <span>{{ paymentObj.month }}</span>
                             </a-col>
-                            <a-col :span="12">
-                                <span>是否补发：</span>
-                                <span>{{ paymentObj.isBackPay == 0 ? '否' : '是' }}</span>
-                            </a-col>
                         </a-row>
-                        <!-- <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>所属结算批次：</span>
-                                <span v-if="paymentObj.settlementBatchName">{{ paymentObj.settlementBatchName }}</span>
-                                <a-button type="link" @click="handleSettleClick">选择</a-button>
-                            </a-col>
-                        </a-row> -->
                     </div>
-                    <div class="modal-row">
-                        <span>发票文件</span>
-                    </div>
-                    <a-table bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
-                        <template slot="invoiceFile" slot-scope="text, record, index">
-                            <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${record.fileUrl[0].url}&flag=true`, record.fileUrl[0].name)">{{record.fileUrl[0].name}}下载</a>
-                        </template>
-                        <template slot="isLocalTax" slot-scope="text, record, index">
-                                <div>{{text === 1 ? '是': '否'}}</div>
-                            </template>
-                    </a-table>
                     <div>
                         <div class="model-row">
                             <span>支付要件</span>
                         </div>
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
-                                <span>上传审批文件：</span>
+                                <span>上传发票附件：</span>
                                 <div class="upload-wrapper">
-                                    <span v-for="(item, index) of paymentObj.approveFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
+                                    <span v-for="(item, index) of paymentObj.invoiceFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
                                 </div>
                             </a-col>
                             <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
-                                <span>工资单文件：</span>
+                                <span>上传审批文件：</span>
                                 <div class="upload-wrapper">
-                                    <span v-for="(item, index) of paymentObj.salaryDetails" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
+                                    <span v-for="(item, index) of paymentObj.approveFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
                                 </div>
+                            </a-col>
+                        </a-row>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
+                                <span>合同相关联工资单：</span>
+                                <!-- <div class="upload-wrapper">
+                                    <span v-for="(item, index) of paymentObj.salaryDetails" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
+                                </div> -->
+                                <span>{{ paymentObj.salaryManageName }}</span>
                             </a-col>
                         </a-row>
                     </div>
@@ -608,13 +517,143 @@
                             <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                 <span>上传材料：</span>
                                 <div class="upload-wrapper">
-                                    <span v-for="(item, index) of paymentObj.otherFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
+                                    <span v-for="(item, index) of paymentObj.otherFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
                                 </div>
                             </a-col>
                         </a-row>
                     </div>
                 </div>
-                <div v-else-if="paymentObj.paymentScene == 18">
+                <div v-else-if="scene == 2 && paymentObj.paymentScene == 14">
+                    <div>
+                        <div class="model-row">
+                            <span>中标主体信息</span>
+                        </div>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12">
+                                <span>中标主体名称：</span>
+                                <span>{{ paymentObj.companyAName }}</span>
+                            </a-col>
+                            <a-col :span="12">
+                                <span>中标主体工资专户名称：</span>
+                                <span>{{ paymentObj.payerName }}</span>
+                            </a-col>
+                        </a-row>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12">
+                                <span>中标主体工资专户账号：</span>
+                                <span>{{ paymentObj.payerAcc }}</span>
+                            </a-col>
+                            <a-col :span="12">
+                                <span>中标主体工资专户开户行：</span>
+                                <span>{{ paymentObj.payerOpenBank }}</span>
+                            </a-col>
+                        </a-row>
+                    </div>
+                    <div>
+                        <div class="model-row">
+                            <span>分包商信息</span>
+                        </div>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12">
+                                <span>分包商名称：</span>
+                                <span>{{ paymentObj.companyBName }}</span>
+                            </a-col>
+                            <a-col :span="12">
+                                <span>分包商账户名称：</span>
+                                <span>{{ paymentObj.payeeName }}</span>
+                            </a-col>
+                        </a-row>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12">
+                                <span>分包商银行账号：</span>
+                                <span>{{ paymentObj.payeeAcc }}</span>
+                            </a-col>
+                            <a-col :span="12">
+                                <span>分包商开户行：</span>
+                                <span>{{ paymentObj.payeeOpenBank }}</span>
+                            </a-col>
+                        </a-row>
+                        <!-- <a-row :gutter="24" class="model-col">
+                            <a-col :span="12">
+                                <span>分包商开户行联行号：</span>
+                                <span>{{ paymentObj.payeeOpenBankNo }}</span>
+                            </a-col>
+                        </a-row> -->
+                    </div>
+                    <div>
+                        <div class="model-row">
+                            <span>支付申请信息</span>
+                        </div>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12">
+                                <span>工资总金额（元）：</span>
+                                <span>{{ paymentObj.paymentAmount }}</span>
+                            </a-col>
+                            <a-col :span="12">
+                                <span>工资总笔数：</span>
+                                <span>{{ paymentObj.totalNum }}</span>
+                            </a-col>
+                        </a-row>
+                        <a-row :gutter="24" class="model-col">
+                            <!-- <a-col :span="12">
+                                <span>本次结算金额（元）：</span>
+                                <span>{{ paymentObj.currentSettlementAmount }}</span>
+                            </a-col> -->
+                            <a-col :span="12">
+                                <span>交易附言：</span>
+                                <span>{{ paymentObj.transactionRemark }}</span>
+                            </a-col>
+                        </a-row>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12">
+                                <span>工资月份：</span>
+                                <span>{{ paymentObj.month }}</span>
+                            </a-col>
+                        </a-row>
+                    </div>
+                    <div>
+                        <div class="model-row">
+                            <span>支付要件</span>
+                        </div>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
+                                <span>上传发票附件：</span>
+                                <div class="upload-wrapper">
+                                    <span v-for="(item, index) of paymentObj.invoiceFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
+                                </div>
+                            </a-col>
+                            <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
+                                <span>上传审批文件：</span>
+                                <div class="upload-wrapper">
+                                    <span v-for="(item, index) of paymentObj.approveFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
+                                </div>
+                            </a-col>
+                        </a-row>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
+                                <span>合同相关联工资单：</span>
+                                <!-- <div class="upload-wrapper">
+                                    <span v-for="(item, index) of paymentObj.salaryDetails" :key="index">{{ item.name }} <a style="margin-left: 10px;" :href="`${fileUrl}/files?fileId=${item.url}&flag=true`">下载</a></span>
+                                </div> -->
+                                <span>{{ paymentObj.salaryManageName }}</span>
+                            </a-col>
+                        </a-row>
+                    </div>
+                    <div>
+                        <div class="model-row">
+                            <span>其他附件</span>
+                        </div>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
+                                <span>上传材料：</span>
+                                <div class="upload-wrapper">
+                                    <span v-for="(item, index) of paymentObj.otherFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
+                                </div>
+                            </a-col>
+                        </a-row>
+                    </div>
+                </div>
+                <div v-else-if="paymentObj.paymentScene == 13">
                     <div>
                         <div class="model-row">
                             <span>付款方信息</span>
@@ -630,12 +669,6 @@
                         <div class="model-row">
                             <span>支付申请信息</span>
                         </div>
-                        <!-- <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>已支付金额（元）：</span>
-                                <span>{{ paymentObj.contractPaidAmount }}</span>
-                            </a-col>
-                        </a-row> -->
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
                                 <span>工资总金额（元）：</span>
@@ -643,43 +676,45 @@
                             </a-col>
                             <a-col :span="12">
                                 <span>工资总笔数：</span>
-                                <span>{{ paymentObj.totalNum }}</span>
+                                <span>{{ paymentObj.paymentNum }}</span>
                             </a-col>
                         </a-row>
                         <a-row :gutter="24" class="model-col">
+                            <!-- <a-col :span="12">
+                                <span>本次结算金额（元）：</span>
+                                <span>{{ paymentObj.currentSettlementAmount }}</span>
+                            </a-col> -->
                             <a-col :span="12">
                                 <span>交易附言：</span>
                                 <span>{{ paymentObj.transactionRemark }}</span>
                             </a-col>
                         </a-row>
                     </div>
-                    <div class="model-row">
-                        <span>发票文件</span>
-                    </div>
-                    <a-table bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
-                       <template slot="invoiceFile" slot-scope="text, record, index">
-                            <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${record.fileUrl[0].url}&flag=true`, record.fileUrl[0].name)">{{record.fileUrl[0].name}}下载</a>
-                        </template>
-                        <template slot="isLocalTax" slot-scope="text, record, index">
-                                <div>{{text === 1 ? '是': '否'}}</div>
-                            </template>
-                    </a-table>
                     <div>
                         <div class="model-row">
                             <span>支付要件</span>
                         </div>
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
-                                <span>上传审批文件：</span>
+                                <span>上传发票附件：</span>
                                 <div class="upload-wrapper">
-                                    <span v-for="(item, index) of paymentObj.approveFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
+                                    <span v-for="(item, index) of paymentObj.invoiceFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
                                 </div>
                             </a-col>
                             <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
-                                <span>工资单文件：</span>
+                                <span>上传审批文件：</span>
                                 <div class="upload-wrapper">
-                                    <span v-for="(item, index) of paymentObj.salaryDetails" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
+                                    <span v-for="(item, index) of paymentObj.approveFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
                                 </div>
+                            </a-col>
+                        </a-row>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
+                                <span>合同相关联工资单：</span>
+                                <!-- <div class="upload-wrapper">
+                                    <span v-for="(item, index) of paymentObj.paymentDetails" :key="index">{{ item.name }} <a style="margin-left: 10px;" :href="`${fileUrl}/files?fileId=${item.url}&flag=true`">下载</a></span>
+                                </div> -->
+                                <span>{{ paymentObj.salaryManageName }}</span>
                             </a-col>
                         </a-row>
                     </div>
@@ -691,13 +726,12 @@
                             <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                 <span>上传材料：</span>
                                 <div class="upload-wrapper">
-                                    <span v-for="(item, index) of paymentObj.otherFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
+                                    <span v-for="(item, index) of paymentObj.otherFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
                                 </div>
                             </a-col>
                         </a-row>
                     </div>
                 </div>
-                <!-- 付款 -->
                 <div v-else-if="paymentObj.paymentScene >= 7 && paymentObj.paymentScene < 13 || paymentObj.paymentScene == 17">
                     <div>
                         <div class="model-row">
@@ -748,129 +782,10 @@
                         </div>
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
-                                <span>申请金额（元）：</span>
-                                <span>{{ paymentObj.paymentAmount }}</span>
-                            </a-col>
-                        </a-row>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>交易附言：</span>
-                                <span>{{ paymentObj.transactionRemark }}</span>
-                            </a-col>
-                        </a-row>
-                    </div>
-                    <div>
-                        <div class="model-row">
-                            <span>发票文件</span>
-                        </div>
-                        <a-table  bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
-                            <template slot="invoiceFile" slot-scope="text, record, index">
-                            <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${record.fileUrl[0].url}&flag=true`, record.fileUrl[0].name)">{{record.fileUrl[0].name}}下载</a>
-                        </template>
-                            <template slot="isLocalTax" slot-scope="text, record, index">
-                                <div>{{text === 1 ? '是': '否'}}</div>
-                            </template>
-                        </a-table>
-                        <div>
-                                <div class="model-row">
-                                    <span>支付要件</span>
-                                </div>
-                                <a-row :gutter="24" class="model-col">
-                                    <!-- <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
-                                        <span>上传发票附件：</span>
-                                        <div class="upload-wrapper">
-                                            <span v-for="(item, index) of paymentObj.invoiceFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
-                                        </div>
-                                    </a-col> -->
-                                    <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
-                                        <span>上传审批文件：</span>
-                                        <div class="upload-wrapper">
-                                            <span v-for="(item, index) of paymentObj.approveFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
-                                        </div>
-                                    </a-col>
-                                </a-row>
-                        </div>
-                        <div>
-                            <div class="model-row">
-                                <span>其他附件</span>
-                            </div>
-                            <a-row :gutter="24" class="model-col">
-                                <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
-                                    <span>上传材料：</span>
-                                    <div class="upload-wrapper">
-                                        <span v-for="(item, index) of paymentObj.otherFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
-                                    </div>
-                                </a-col>
-                            </a-row>
-                        </div>
-                    </div>
-                </div>
-                <!-- 请款 -->
-                <div v-else-if="paymentObj.paymentScene == 1 || paymentObj.paymentScene == 2 || paymentObj.paymentScene == 3 || paymentObj.paymentScene == 14 || paymentObj.paymentScene == 21">
-                    <div>
-                        <div class="model-row">
-                            <span>付款方信息</span>
-                        </div>
-                        <div >
-                            <a-row :gutter="24" class="model-col">
-                                <a-col :span="12">
-                                    <span>付款方银行账号：</span>
-                                    <span>{{ paymentObj.payerAcc }}</span>
-                                </a-col>
-                                <a-col :span="12">
-                                    <span>付款银行账号户名：</span>
-                                    <span>{{ paymentObj.payerName }}</span>
-                                </a-col>
-                            </a-row>
-                            <a-row :gutter="24" class="model-col">
-                                <a-col :span="12">
-                                    <span>付款方开户行：</span>
-                                    <span>{{ paymentObj.payerOpenBank }}</span>
-                                </a-col>
-                                <a-col :span="12">
-                                    <span>付款方联行行号：</span>
-                                    <span>{{ paymentObj.payerOpenBankNo }}</span>
-                                </a-col>
-                            </a-row>
-                        </div>
-                        
-                    </div>
-                    <div>
-                        <div class="model-row">
-                            <span>收款方信息</span>
-                        </div>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>收款方银行账号：</span>
-                                <span>{{ paymentObj.payeeAcc }}</span>
-                            </a-col>
-                            <a-col :span="12">
-                                <span>收款方银行账号户名：</span>
-                                <span>{{ paymentObj.payeeName }}</span>
-                            </a-col>
-                        </a-row>
-                        <a-row :gutter="24" class='model-col'>
-                            <a-col :span="12">
-                                <span>收款方开户行：</span>
-                                <span>{{ paymentObj.payeeOpenBank }}</span>
-                            </a-col>
-                             <a-col :span="12">
-                                <span>收款方联行行号：</span>
-                                <span>{{ paymentObj.payeeOpenBankNo }}</span>
-                            </a-col>
-                           
-                        </a-row>
-                    </div>
-                    <div>
-                        <div class="model-row">
-                            <span>支付申请信息</span>
-                        </div>
-                        <!-- <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
                                 <span>已支付金额（元）：</span>
                                 <span>{{ paymentObj.contractPaidAmount }}</span>
                             </a-col>
-                        </a-row> -->
+                        </a-row>
                         <a-row :gutter="24" class="model-col">
                             <a-col :span="12">
                                 <span>申请金额（元）：</span>
@@ -890,126 +805,8 @@
                         </div>
                         <a-table  bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
                             <template slot="invoiceFile" slot-scope="text, record, index">
-                            <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${record.fileUrl[0].url}&flag=true`, record.fileUrl[0].name)">{{record.fileUrl[0].name}}下载</a>
-                        </template>
-                            <template slot="isLocalTax" slot-scope="text, record, index">
-                                <div>{{text === 1 ? '是': '否'}}</div>
+                                <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${text}&flag=true`)">下载</a>
                             </template>
-                        </a-table>
-                        <div>
-                                <div class="model-row">
-                                    <span>支付要件</span>
-                                </div>
-                                <a-row :gutter="24" class="model-col">
-                                    <!-- <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
-                                        <span>上传发票附件：</span>
-                                        <div class="upload-wrapper">
-                                            <span v-for="(item, index) of paymentObj.invoiceFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
-                                        </div>
-                                    </a-col> -->
-                                    <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
-                                        <span>上传审批文件：</span>
-                                        <div class="upload-wrapper">
-                                            <span v-for="(item, index) of paymentObj.approveFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
-                                        </div>
-                                    </a-col>
-                                </a-row>
-                        </div>
-                        <div>
-                            <div class="model-row">
-                                <span>其他附件</span>
-                            </div>
-                            <a-row :gutter="24" class="model-col">
-                                <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
-                                    <span>上传材料：</span>
-                                    <div class="upload-wrapper">
-                                        <span v-for="(item, index) of paymentObj.otherFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
-                                    </div>
-                                </a-col>
-                            </a-row>
-                        </div>
-                    </div>
-                </div>
-                <!-- 其他付款-对公 13  对私 18-->
-                <div v-else-if="paymentObj.paymentScene == 13 || paymentObj.paymentScene == 18">
-                    <div>
-                        <div class="model-row">
-                            <span>付款方信息</span>
-                        </div>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>付款方银行账号：</span>
-                                <span>{{ paymentObj.payerAcc }}</span>
-                            </a-col>
-                        </a-row>
-                    </div>
-                    <div v-if="paymentObj.paymentScene == 13">
-                        <div class="model-row" >
-                            <span>收款方信息</span>
-                        </div>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>收款方银行账号户名：</span>
-                                <span>{{ paymentObj.payeeName }}</span>
-                            </a-col>
-                            <a-col :span="12">
-                                <span>收款方银行账号：</span>
-                                <span>{{ paymentObj.payeeAcc }}</span>
-                            </a-col>
-                        </a-row>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>收款方开户行：</span>
-                                <span>{{ paymentObj.payeeOpenBank }}</span>
-                            </a-col>
-                            <a-col :span="12">
-                                <span>收款方联行行号：</span>
-                                <span>{{ paymentObj.payeeOpenBankNo }}</span>
-                            </a-col>
-                        </a-row>
-                    </div>
-                    <div v-if="paymentObj.paymentScene == 13">
-                        <div class="model-row">
-                            <span>支付申请信息</span>
-                        </div>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>申请金额（元）：</span>
-                                <span>{{ paymentObj.paymentAmount }}</span>
-                            </a-col>
-                        </a-row>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>交易附言：</span>
-                                <span>{{ paymentObj.transactionRemark }}</span>
-                            </a-col>
-                        </a-row>
-                    </div>
-                    <div v-if="paymentObj.paymentScene == 18">
-                        <div class="model-row">
-                            <span>支付申请信息</span>
-                        </div>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>总金额（元）：</span>
-                                <span>{{ paymentObj.paymentAmount }}</span>
-                            </a-col>
-                        </a-row>
-                        <a-row :gutter="24" class="model-col">
-                            <a-col :span="12">
-                                <span>笔数：</span>
-                                <span>{{ paymentObj.totalNum }}</span>
-                            </a-col>
-                        </a-row>
-                    </div>
-                    <div>
-                        <div class="model-row">
-                            <span>发票文件</span>
-                        </div>
-                        <a-table  bordered :data-source="dataSource1" :columns="billColumns" :pagination="false" style="margin-bottom: 40px" >
-                            <template slot="invoiceFile" slot-scope="text, record, index">
-                            <a @click="$newExportsExcel(`${fileUrl}/files?fileId=${record.fileUrl[0].url}&flag=true`, record.fileUrl[0].name)">{{record.fileUrl[0].name}}下载</a>
-                        </template>
                             <template slot="isLocalTax" slot-scope="text, record, index">
                                 <div>{{text === 1 ? '是': '否'}}</div>
                             </template>
@@ -1022,17 +819,10 @@
                                     <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                         <span>上传审批文件：</span>
                                         <div class="upload-wrapper">
-                                            <span v-for="(item, index) of paymentObj.approveFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
-                                        </div>
-                                    </a-col>
-                                    <a-col v-if="paymentObj.paymentScene == 18" :span="12" style="display: flex; flex-direction: row;align-items: center;">
-                                        <span>工资单文件：</span>
-                                        <div class="upload-wrapper">
-                                            <span v-for="(item, index) of paymentObj.salaryDetails" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
+                                            <span v-for="(item, index) of paymentObj.approveFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
                                         </div>
                                     </a-col>
                                 </a-row>
-                                
                         </div>
                         <div>
                             <div class="model-row">
@@ -1042,7 +832,7 @@
                                 <a-col :span="12" style="display: flex; flex-direction: row;align-items: center;">
                                     <span>上传材料：</span>
                                     <div class="upload-wrapper">
-                                        <span v-for="(item, index) of paymentObj.otherFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`, item.name)">下载</a></span>
+                                        <span v-for="(item, index) of paymentObj.otherFile" :key="index">{{ item.name }} <a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
                                     </div>
                                 </a-col>
                             </a-row>
@@ -1497,13 +1287,13 @@ const paymentColumns = [
         scopedSlots: { customRender: 'processStatus' },
         width: '100px'
     },
-    // {
-    //     title: '支付状态',
-    //     dataIndex: 'paymentStatus',
-    //     key: 'paymentStatus',
-    //     scopedSlots: { customRender: 'paymentStatus' },
-    //     width: '180px'
-    // },
+    {
+        title: '支付状态',
+        dataIndex: 'paymentStatus',
+        key: 'paymentStatus',
+        scopedSlots: { customRender: 'paymentStatus' },
+        width: '180px'
+    },
     {
         title: '操作', 
         key: 'operation', 
@@ -1906,31 +1696,37 @@ export default {
             this.isPayVisible = true
             let self = this
             this.scene = scope.scene
-            
-            if(scope.paymentScene == 1 || scope.paymentScene == 2 || scope.paymentScene == 3 || scope.paymentScene == 14 || scope.paymentScene == 21) {
+            if(scope.paymentScene >= 1 && scope.paymentScene <= 6) {
                 getPaymentReqDetail(scope.id).then(res => {
-                    console.log('pay: ', res)
                     if(res.status == 1 && res.data) {
                         self.paymentObj = res.data
-                        if (res.data.invoiceList.length > 0) {
-                        res.data.invoiceList.map(v => {
-                            let fileUrl = []
-                            let invoiceFile = v.invoiceFile.split(',')
-                            invoiceFile && invoiceFile.map(res => {
-                                let num = res.lastIndexOf('\#')
-                                let resObj = {
-                                    name: res.substring(0, num),
-                                    url: res.substring(num + 1, res.length)
-                                }
-                                fileUrl.push(resObj)
-                            })
-                            v.fileUrl = fileUrl
+                        let invoiceStr = self.paymentObj.invoiceFile && self.paymentObj.invoiceFile.substring(0, self.paymentObj.invoiceFile.length - 1).split(',')
+                        let invoiceArr = []
+                        invoiceStr && invoiceStr.map(res => {
+                            // res = res.split('#')[0]
+                            // invoiceArr.push(res)
+                            // let resObj = {
+                            //     name: res.split('#')[0],
+                            //     url: res.split('#')[1]
+                            // }
+                            let num = res.lastIndexOf('\#')
+                            let resObj = {
+                                name: res.substring(0, num),
+                                url: res.substring(num + 1, res.length)
+                            }
+                            invoiceArr.push(resObj)
                         })
-                    }
-                        this.dataSource1 = res.data.invoiceList
+                        self.paymentObj.invoiceFile = invoiceArr
+
                         let approveStr = self.paymentObj.approveFile && self.paymentObj.approveFile.substring(0, self.paymentObj.approveFile.length - 1).split(',')
                         let approveArr = []
                         approveStr && approveStr.map(res => {
+                            // res = res.split('#')[0]
+                            // approveArr.push(res)
+                            // let resObj = {
+                            //     name: res.split('#')[0],
+                            //     url: res.split('#')[1]
+                            // }
                             let num = res.lastIndexOf('\#')
                             let resObj = {
                                 name: res.substring(0, num),
@@ -1943,6 +1739,12 @@ export default {
                         let otherStr = self.paymentObj.otherFile && self.paymentObj.otherFile.substring(0, self.paymentObj.otherFile.length - 1).split(',')
                         let otherArr = []
                         otherStr && otherStr.map(res => {
+                            // res = res.split('#')[0]
+                            // otherArr.push(res)
+                            // let resObj = {
+                            //     name: res.split('#')[0],
+                            //     url: res.split('#')[1]
+                            // }
                             let num = res.lastIndexOf('\#')
                             let resObj = {
                                 name: res.substring(0, num),
@@ -1951,7 +1753,6 @@ export default {
                             otherArr.push(resObj)
                         })
                         self.paymentObj.otherFile = otherArr
-
                     }
                 })
             } else if(scope.paymentScene >= 7 && scope.paymentScene <= 13 || scope.paymentScene == 17) {
@@ -1959,21 +1760,6 @@ export default {
                     console.log("req: ", res)
                     if(res.status == 1 && res.data) {
                         self.paymentObj = res.data
-                        if (res.data.invoiceList.length > 0) {
-                        res.data.invoiceList.map(v => {
-                            let fileUrl = []
-                            let invoiceFile = v.invoiceFile.split(',')
-                            invoiceFile && invoiceFile.map(res => {
-                                let num = res.lastIndexOf('\#')
-                                let resObj = {
-                                    name: res.substring(0, num),
-                                    url: res.substring(num + 1, res.length)
-                                }
-                                fileUrl.push(resObj)
-                            })
-                            v.fileUrl = fileUrl
-                        })
-                    }
                         this.dataSource1 = res.data.invoiceList
 
                         let approveStr = self.paymentObj.approveFile && self.paymentObj.approveFile.substring(0, self.paymentObj.approveFile.length - 1).split(',')
@@ -2028,91 +1814,40 @@ export default {
                         })
                         self.paymentObj.paymentDetails = uploadArr
                     }
-                }) 
-            } else if(scope.paymentScene == 13) {
-                getPaymentPayDetail(scope.id).then(res => {
-                    console.log("req: ", res)
-                    if(res.status == 1 && res.data) {
-                        self.paymentObj = res.data
-                        if (res.data.invoiceList.length > 0) {
-                        res.data.invoiceList.map(v => {
-                            let fileUrl = []
-                            let invoiceFile = v.invoiceFile.split(',')
-                            invoiceFile && invoiceFile.map(res => {
-                                let num = res.lastIndexOf('\#')
-                                let resObj = {
-                                    name: res.substring(0, num),
-                                    url: res.substring(num + 1, res.length)
-                                }
-                                fileUrl.push(resObj)
-                            })
-                            v.fileUrl = fileUrl
-                        })
-                    }
-                        this.dataSource1 = res.data.invoiceList
-                        let approveStr = self.paymentObj.approveFile && self.paymentObj.approveFile.substring(0, self.paymentObj.approveFile.length - 1).split(',')
-                        let approveArr = []
-                        approveStr && approveStr.map(res => {
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            approveArr.push(resObj)
-                        })
-                        self.paymentObj.approveFile = approveArr
-
-                        let otherStr = self.paymentObj.otherFile && self.paymentObj.otherFile.substring(0, self.paymentObj.otherFile.length - 1).split(',')
-                        let otherArr = []
-                        otherStr && otherStr.map(res => {
-                            let num = res.lastIndexOf('\#')
-                            let resObj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            otherArr.push(resObj)
-                        })
-                        self.paymentObj.otherFile = otherArr
-
-                        let newStr = self.paymentObj.paymentDetails && self.paymentObj.paymentDetails.substring(0, self.paymentObj.paymentDetails.length - 1).split(',')
-                        let uploadArr = []
-                        newStr && newStr.map(res => {
-                            let num = res.lastIndexOf('\#')
-                            let obj = {
-                                name: res.substring(0, num),
-                                url: res.substring(num + 1, res.length)
-                            }
-                            uploadArr.push(obj)
-                        })
-                        self.paymentObj.paymentDetails = uploadArr
-                    }
-                }) 
-            } 
-            else if(scope.paymentScene == 18 || scope.paymentScene == 15 || scope.paymentScene == 19 || scope.paymentScene == 20 || scope.paymentScene == 22) {
+                })  
+            } else if(scope.paymentScene > 13) {
                 getPaymentSalaryDetail(scope.id).then(res => {
                     console.log("salary: ", res)
                     if(res.status == 1 && res.data) {
                         self.paymentObj = res.data
-                        if (res.data.invoiceList.length > 0) {
-                        res.data.invoiceList.map(v => {
-                            let fileUrl = []
-                            let invoiceFile = v.invoiceFile.split(',')
-                            invoiceFile && invoiceFile.map(res => {
-                                let num = res.lastIndexOf('\#')
-                                let resObj = {
-                                    name: res.substring(0, num),
-                                    url: res.substring(num + 1, res.length)
-                                }
-                                fileUrl.push(resObj)
-                            })
-                            v.fileUrl = fileUrl
+
+                        let invoiceStr = self.paymentObj.invoiceFile && self.paymentObj.invoiceFile.substring(0, self.paymentObj.invoiceFile.length - 1).split(',')
+                        let invoiceArr = []
+                        invoiceStr && invoiceStr.map(res => {
+                            // res = res.split('#')[0]
+                            // invoiceArr.push(res)
+                            // let resObj = {
+                            //     name: res.split('#')[0],
+                            //     url: res.split('#')[1]
+                            // }
+                            let num = res.lastIndexOf('\#')
+                            let resObj = {
+                                name: res.substring(0, num),
+                                url: res.substring(num + 1, res.length)
+                            }
+                            invoiceArr.push(resObj)
                         })
-                        console.log(this.dataSource1)
-                    }
-                        this.dataSource1 = res.data.invoiceList
+                        self.paymentObj.invoiceFile = invoiceArr
+
                         let approveStr = self.paymentObj.approveFile && self.paymentObj.approveFile.substring(0, self.paymentObj.approveFile.length - 1).split(',')
                         let approveArr = []
                         approveStr && approveStr.map(res => {
+                            // res = res.split('#')[0]
+                            // approveArr.push(res)
+                            // let resObj = {
+                            //     name: res.split('#')[0],
+                            //     url: res.split('#')[1]
+                            // }
                             let num = res.lastIndexOf('\#')
                             let resObj = {
                                 name: res.substring(0, num),
@@ -2120,9 +1855,7 @@ export default {
                             }
                             approveArr.push(resObj)
                         })
-                        
                         self.paymentObj.approveFile = approveArr
-                        console.log(self.paymentObj)
 
                         let otherStr = self.paymentObj.otherFile && self.paymentObj.otherFile.substring(0, self.paymentObj.otherFile.length - 1).split(',')
                         let otherArr = []
@@ -2161,7 +1894,6 @@ export default {
                     }
                 })
             }
-
         },
         handleSubmitModalClick() {
             this.isAddVisible = false

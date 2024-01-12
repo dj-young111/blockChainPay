@@ -372,9 +372,9 @@
                         新增
                         </a-button>
                         <a-table bordered class="fp-table" :data-source="dataSource" :columns="billColumns" :pagination="false" style="margin-bottom: 40px">
-                        <template slot="invoiceBatchNo" slot-scope="text, record">
+                        <!-- <template slot="invoiceBatchNo" slot-scope="text, record">
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceBatchNo', $event)" />
-                        </template>
+                        </template> -->
                         <template slot="invoiceCode" slot-scope="text, record">
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceCode', $event)" />
                         </template>
@@ -406,13 +406,13 @@
                                 <a-button type="primary"> <a-icon type="upload" /> 上传发票附件 </a-button>
                             </a-upload> -->
                             <a-upload
-                                :action="`${$fileUrl}/files`"
+                                :action="`${$fileUrl}/files/invoice`"
                                 @change="(e) => handleReqChangeFile(e, index)"
                                 :before-upload="beforeReqImgUpload"
                                 :default-file-list="reqDetailForm.fileUrlList"
                                 accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF,.xlsx,.xls,.doc,.docx"
                             >
-                                <a-button type="primary"> <a-icon type="upload" /> 添加文件 </a-button>
+                                <a-button type="primary"> <a-icon type="upload" /> 上传发票附件 </a-button>
                             </a-upload>
                         </template>
                         <template slot="operation" slot-scope="text, record">
@@ -1026,9 +1026,9 @@
                         新增
                         </a-button>
                         <a-table bordered class="fp-table" :data-source="dataSource" :columns="billColumns" :pagination="false" style="margin-bottom: 40px">
-                        <template slot="invoiceBatchNo" slot-scope="text, record">
+                        <!-- <template slot="invoiceBatchNo" slot-scope="text, record">
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceBatchNo', $event)" />
-                        </template>
+                        </template> -->
                         <template slot="invoiceCode" slot-scope="text, record">
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceCode', $event)" />
                         </template>
@@ -1050,7 +1050,7 @@
                         </template>
                         <template slot="invoiceFile" slot-scope="text, record, index">
                             <a-upload
-                                :action="`${$fileUrl}/files`"
+                                :action="`${$fileUrl}/files/invoice`"
                                 @change="(e) => handlePayChangeFile(e, index)"
                                 :before-upload="beforePayImgUpload"
                                 :default-file-list="payDetailForm.fileUrlList"
@@ -1298,9 +1298,9 @@
                         新增
                         </a-button>
                         <a-table bordered class="fp-table" :data-source="dataSource" :columns="billColumns" :pagination="false" style="margin-bottom: 40px">
-                        <template slot="invoiceBatchNo" slot-scope="text, record">
+                        <!-- <template slot="invoiceBatchNo" slot-scope="text, record">
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceBatchNo', $event)" />
-                        </template>
+                        </template> -->
                         <template slot="invoiceCode" slot-scope="text, record">
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceCode', $event)" />
                         </template>
@@ -1323,7 +1323,7 @@
                         </template>
                         <template slot="invoiceFile" slot-scope="text, record, index">
                             <a-upload
-                                :action="`${$fileUrl}/files`"
+                                :action="`${$fileUrl}/files/invoice`"
                                 @change="(e) => handleOtherPayChangeFile(e, index)"
                                 :before-upload="beforeOtherPayImgUpload"
                                 :default-file-list="payDetailOtherForm.fileUrlList"
@@ -1701,6 +1701,18 @@
                             <a-month-picker placeholder="请选择工资月份" @change="handleSalartMonthChange" />
                         </a-form-model-item>
                     </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="是否补发" prop="isBackPay">
+                        <a-select v-model="salaryDetailForm.isBackPay">
+                            <a-select-option :value="0">
+                                否
+                            </a-select-option>
+                            <a-select-option :value="1">
+                                是
+                            </a-select-option>
+                        </a-select>
+                        </a-form-model-item>
+                    </a-col>
                 </a-row>
                 <!-- <a-row :gutter="24">
                     <a-form-model-item label="所属结算批次">
@@ -1717,9 +1729,9 @@
                         新增
                         </a-button>
                         <a-table bordered class="fp-table" :data-source="dataSource" :columns="billColumns" :pagination="false" style="margin-bottom: 40px">
-                        <template slot="invoiceBatchNo" slot-scope="text, record">
+                        <!-- <template slot="invoiceBatchNo" slot-scope="text, record">
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceBatchNo', $event)" />
-                        </template>
+                        </template> -->
                         <template slot="invoiceCode" slot-scope="text, record">
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceCode', $event)" />
                         </template>
@@ -1742,7 +1754,7 @@
                         </template>
                         <template slot="invoiceFile" slot-scope="text, record, index">
                             <a-upload
-                                :action="`${$fileUrl}/files`"
+                                :action="`${$fileUrl}/files/invoice`"
                                 @change="(e) => handleSalaryChangeFile(e, index)"
                                 :before-upload="beforeSalaryImgUpload"
                                 :default-file-list="payDetailForm.fileUrlList"
@@ -1973,6 +1985,75 @@
                         </a-form-model-item>
                     </a-col>
                 </a-row>
+                <div v-if="type == 22">     
+                <div class="modal-title">
+                    <span>收款方信息</span>
+                </div>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                    <a-form-model-item label="收款方银行账号">
+                        <a-tooltip>
+                                <template slot="title">
+                                {{subContractSalaryObj.payeeAcc}}
+                                </template>
+                                   <a-input 
+                                        type="text" 
+                                        v-model="subContractSalaryObj.payeeAcc"
+                                        disabled
+                                    />
+                            </a-tooltip>
+                    
+                    </a-form-model-item>
+                </a-col>
+                <a-col :span="12">
+                    <a-form-model-item label="收款银行账号户名">
+                         <a-tooltip>
+                                <template slot="title">
+                                {{subContractSalaryObj.payeeName}}
+                                </template>
+                                   <a-input 
+                                        type="text" 
+                                        v-model="subContractSalaryObj.payeeName"
+                                        disabled
+                                    />
+                            </a-tooltip>
+                    
+                    </a-form-model-item>
+                </a-col>
+                </a-row>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方开户行">
+                            <a-tooltip>
+                                <template slot="title">
+                                {{subContractSalaryObj.payeeOpenBank}}
+                                </template>
+                                   <a-input 
+                                    type="text" 
+                                    v-model="subContractSalaryObj.payeeOpenBank"
+                                    disabled
+                                />
+                            </a-tooltip>
+                        
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方联行行号">
+                             <a-tooltip>
+                                <template slot="title">
+                                {{subContractSalaryObj.payeeOpenBankNo}}
+                                </template>
+                                   <a-input 
+                                    type="text" 
+                                    v-model="subContractSalaryObj.payeeOpenBankNo"
+                                    disabled
+                                />
+                            </a-tooltip>
+                        
+                        </a-form-model-item>
+                    </a-col>
+                </a-row>
+            </div>  
                 <div class="modal-title">
                     <span>支付申请信息</span>
                 </div>
@@ -2042,6 +2123,18 @@
                             <a-month-picker placeholder="请选择工资月份" @change="handleSubContractSalartMonthChange" />
                         </a-form-model-item>
                     </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="是否补发" prop="isBackPay">
+                        <a-select v-model="subContractSalaryDetailForm.isBackPay">
+                            <a-select-option :value="0">
+                                否
+                            </a-select-option>
+                            <a-select-option :value="1">
+                                是
+                            </a-select-option>
+                        </a-select>
+                        </a-form-model-item>
+                    </a-col>
                 </a-row>
                 <!-- <a-row :gutter="24">
                     <a-form-model-item label="所属结算批次">
@@ -2058,9 +2151,9 @@
                         新增
                         </a-button>
                         <a-table bordered class="fp-table" :data-source="dataSource" :columns="billColumns" :pagination="false" style="margin-bottom: 40px">
-                        <template slot="invoiceBatchNo" slot-scope="text, record">
+                        <!-- <template slot="invoiceBatchNo" slot-scope="text, record">
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceBatchNo', $event)" />
-                        </template>
+                        </template> -->
                         <template slot="invoiceCode" slot-scope="text, record">
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceCode', $event)" />
                         </template>
@@ -2083,7 +2176,7 @@
                         </template>
                         <template slot="invoiceFile" slot-scope="text, record, index">
                             <a-upload
-                                :action="`${$fileUrl}/files`"
+                                :action="`${$fileUrl}/files/invoice`"
                                 @change="(e) => handleSubContractSalaryChangeFile(e, index)"
                                 :before-upload="beforeSubContractSalaryImgUpload"
                                 :default-file-list="subContractSalaryDetailForm.fileUrlList"
@@ -2709,9 +2802,9 @@
                         新增
                         </a-button>
                         <a-table bordered class="fp-table" :data-source="dataSource" :columns="billColumns" :pagination="false" style="margin-bottom: 40px">
-                        <template slot="invoiceBatchNo" slot-scope="text, record">
+                        <!-- <template slot="invoiceBatchNo" slot-scope="text, record">
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceBatchNo', $event)" />
-                        </template>
+                        </template> -->
                         <template slot="invoiceCode" slot-scope="text, record">
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceCode', $event)" />
                         </template>
@@ -2734,7 +2827,7 @@
                         </template>
                         <template slot="invoiceFile" slot-scope="text, record, index">
                             <a-upload
-                                :action="`${$fileUrl}/files`"
+                                :action="`${$fileUrl}/files/invoice`"
                                 @change="(e) => handleReqAndPayChangeFile(e, index)"
                                 :before-upload="beforeReqAndPayImgUpload"
                                 :default-file-list="payDetailOtherForm.fileUrlList"
@@ -3686,6 +3779,11 @@
                             <span>{{ salaryDetailView.month }}</span>
                         </a-form-model-item>
                     </a-col>
+                     <a-col :span="12">
+                        <a-form-model-item label="是否补发">
+                            <span>{{ salaryDetailView.isBackPay == 0 ? '否' : '是' }}</span>
+                        </a-form-model-item>
+                    </a-col>
                 </a-row>
                 <div class="modal-title">
                     <span>发票文件</span>
@@ -3804,6 +3902,33 @@
                     </a-col>
                 </a-row>
                 <div class="modal-title">
+                    <span>收款方信息</span>
+                </div>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                    <a-form-model-item label="收款方银行账号">
+                        <span>{{ salaryDetailView.payeeAcc }}</span>
+                    </a-form-model-item>
+                </a-col>
+                <a-col :span="12">
+                    <a-form-model-item label="收款银行账号户名">
+                        <span>{{ salaryDetailView.payeeName }}</span>
+                    </a-form-model-item>
+                </a-col>
+                </a-row>
+                <a-row :gutter="24">
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方开户行">
+                            <span>{{ salaryDetailView.payeeOpenBank }}</span>
+                        </a-form-model-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-model-item label="收款方联行行号">
+                            <span>{{ salaryDetailView.payeeOpenBankNo }}</span>
+                        </a-form-model-item>
+                    </a-col>
+                </a-row>
+                <div class="modal-title">
                     <span>支付申请信息</span>
                 </div>
                 <a-row :gutter="24">
@@ -3846,6 +3971,11 @@
                     <a-col :span="12">
                         <a-form-model-item label="工资月份">
                             <span>{{ salaryDetailView.month }}</span>
+                        </a-form-model-item>
+                    </a-col>
+                     <a-col :span="12">
+                        <a-form-model-item label="是否补发">
+                            <span>{{ salaryDetailView.isBackPay == 0 ? '否' : '是' }}</span>
                         </a-form-model-item>
                     </a-col>
                 </a-row>
@@ -4532,10 +4662,10 @@ const EditableCell = {
   template: `
       <div class="editable-cell">
         <div v-if="editable" class="editable-cell-input-wrapper">
-          <a-input :value="value" :class="value ? '': 'has-error'" @change="handleChange" @blur="handleBlur" @pressEnter="check" />
+          <a-input :value="text" :class="text ? '': 'has-error'" @change="handleChange" @blur="handleBlur" @pressEnter="check" />
         </div>
         <div v-else class="editable-cell-text-wrapper">
-          {{ value || ' ' }}
+          {{ text || ' ' }}
           <a-icon type="edit" class="editable-cell-icon" @click="edit" />
         </div>
       </div>
@@ -4545,27 +4675,27 @@ const EditableCell = {
   },
   data() {
     return {
-      value: this.text,
+      text: this.text,
       editable: true,
     };
   },
   methods: {
     handleChange(e) {
       const value = e.target.value;
-      this.value = value;
-      this.$emit('change', this.value);
+      this.text = value;
+      this.$emit('change', this.text);
     },
     handleBlur(e) {
         console.log(e)
       const value = e.target.value;
-      if (!value) {
+      if (!text) {
         this.$message.error('请输入发票信息')
 
       }
     },
     check() {
       this.editable = false;
-      this.$emit('change', this.value);
+      this.$emit('change', this.text);
     },
     edit() {
       this.editable = true;
@@ -4588,11 +4718,16 @@ export default {
             ],
             count: 1,
             billColumns: [
+                // {
+                // title: '* 发票批次号',
+                // dataIndex: 'invoiceBatchNo',
+                // width: '16%',
+                // scopedSlots: { customRender: 'invoiceBatchNo' },
+                // },
                 {
-                title: '* 发票批次号',
-                dataIndex: 'invoiceBatchNo',
-                width: '16%',
-                scopedSlots: { customRender: 'invoiceBatchNo' },
+                title: '* 发票扫描件',
+                dataIndex: 'invoiceFile',
+                scopedSlots: { customRender: 'invoiceFile' },
                 },
                 {
                 title: '* 发票代码',
@@ -4615,11 +4750,6 @@ export default {
                 title: '* 是否本地纳税',
                 dataIndex: 'isLocalTax',
                 scopedSlots: { customRender: 'isLocalTax' },
-                },
-                {
-                title: '* 发票扫描件',
-                dataIndex: 'invoiceFile',
-                scopedSlots: { customRender: 'invoiceFile' },
                 },
                 {
                 title: '操作',
@@ -4817,6 +4947,7 @@ export default {
                 fileUrlApproveList: [{ required: true, message: '请上传审批文件', trigger: 'change' }],
                 fileUrlOtherList: [{ required: true, message: '请上传材料', trigger: 'change' }],
                 payerAcc: [{ required: true, message: '请选择付款银行账号', trigger: 'change' }], 
+                isBackPay: [{ required: true, message: '请选择工资是否补发', trigger: 'change' }], 
             },
             subContractSalaryDetailRules: {
                 taskName: [{ required: true, message: '请输入任务名称', trigger: 'change' }], 
@@ -4829,6 +4960,7 @@ export default {
                 fileUrlApproveList: [{ required: true, message: '请上传审批文件', trigger: 'change' }],
                 fileUrlOtherList: [{ required: true, message: '请上传材料', trigger: 'change' }],
                 payerAcc: [{ required: true, message: '请选择付款银行账号', trigger: 'change' }], 
+                isBackPay: [{ required: true, message: '请选择工资是否补发', trigger: 'change' }], 
             },
             reqAndPayDetailRules: {
                 taskName: [{ required: true, message: '请输入任务名称', trigger: 'change' }], 
@@ -5066,7 +5198,11 @@ export default {
             const newData = {
                 key: count,
                 isLocalTax: 1,
-                invoiceFile: ''
+                invoiceFile: '',
+                invoiceNo: '',
+                invoiceAmount: '',
+                invoiceCode: '',
+                invoiceDate: ''
             };
             this.payDetailForm.fileUrlList = []
             this.dataSource = [...dataSource, newData];
@@ -5160,7 +5296,7 @@ export default {
             //         self.progressReqDetailForm.taskName = res.data
             //     })
             // } 
-            else if(this.type >= 3 && this.type <= 6 ) {
+            else if(this.type >= 3 && this.type <= 6 || this.type == 21) {
                 this.isReqDetailVisible = true
                 this.isPayDetailVisible = false
                 this.isSalaryDetailVisible = false
@@ -5209,7 +5345,7 @@ export default {
             //         self.reqAndPayDetailForm.taskName = res.data
             //     })
             // }
-             else if(this.type == 15 || this.type == 19 || this.type == 20) {
+             else if(this.type == 15 || this.type == 19 || this.type == 20 || this.type == 22) {
                 // 工资
                 if(this.scene == 3 || this.scene == 6) {
                     this.isSubContractSalaryDetailVisible = true
@@ -5325,7 +5461,7 @@ export default {
                 getReqTaskName(item.type).then(res => {
                     self.progressReqDetailForm.taskName = res.data
                 })
-            } else if(item.type >= 3 && item.type <= 6 ) {
+            } else if(item.type >= 3 && item.type <= 6 || item.type == 21) {
                 this.isReqDetailVisible = true
                 this.isPayDetailVisible = false
                 this.isSalaryDetailVisible = false
@@ -5653,7 +5789,7 @@ export default {
                     
                     if (this.dataSource.length > 0) {
                         this.dataSource.map(v => {
-                            v.invoiceFile = v.file.name + '#' + v.file.response.data 
+                            v.invoiceFile = v.file.name + '#' + v.file.response.data.url
                         })
                     }
                     reqObj.invoiceList = this.dataSource
@@ -6092,7 +6228,7 @@ export default {
             console.log(info, key)
             let fileList = [...info.fileList];
             fileList = fileList.slice(0);
-            this.dataSource.fileKey = key
+            // this.dataSource.fileKey = key
             fileList = fileList.map(file => {
                 if (file.response) {
                 // Component will show file.url as link
@@ -6103,6 +6239,15 @@ export default {
             this.payDetailForm.fileUrlList = fileList;
             if (status === 'done') {
                 this.dataSource[key].file = fileList[0]
+                if (fileList[0].response.status == 1) {
+                    this.dataSource[key].invoiceAmount = fileList[0].response.data.invoiceAmount
+                    this.dataSource[key].invoiceCode = fileList[0].response.data.invoiceCode
+                    this.dataSource[key].invoiceDate = fileList[0].response.data.invoiceDate
+                    this.dataSource[key].invoiceNo = fileList[0].response.data.invoiceNo
+                } else {
+                    this.$message.error(fileList[0].response.message)
+                }
+                
             }
             // if (status !== "uploading") {
             //     if (status == "removed") {
@@ -6184,6 +6329,14 @@ export default {
             this.payDetailForm.fileUrlList = fileList;
             if (status === 'done') {
                 this.dataSource[key].file = fileList[0]
+                if (fileList[0].response.status == 1) {
+                    this.dataSource[key].invoiceAmount = fileList[0].response.data.invoiceAmount
+                    this.dataSource[key].invoiceCode = fileList[0].response.data.invoiceCode
+                    this.dataSource[key].invoiceDate = fileList[0].response.data.invoiceDate
+                    this.dataSource[key].invoiceNo = fileList[0].response.data.invoiceNo
+                } else {
+                    this.$message.error(fileList[0].response.message)
+                }
             }
             // const status = info.file.status;
             // if (status !== "uploading") {
@@ -6305,6 +6458,14 @@ export default {
             this.reqDetailForm.fileUrlList = fileList;
             if (status === 'done') {
                 this.dataSource[key].file = fileList[0]
+                if (fileList[0].response.status == 1) {
+                    this.dataSource[key].invoiceAmount = fileList[0].response.data.invoiceAmount
+                    this.dataSource[key].invoiceCode = fileList[0].response.data.invoiceCode
+                    this.dataSource[key].invoiceDate = fileList[0].response.data.invoiceDate
+                    this.dataSource[key].invoiceNo = fileList[0].response.data.invoiceNo
+                } else {
+                    this.$message.error(fileList[0].response.message)
+                }
             }
 
             // const status = info.file.status;
@@ -6454,6 +6615,14 @@ export default {
             // this.salaryDetailForm.fileUrlList = fileList;
             if (status === 'done') {
                 this.dataSource[key].file = fileList[0]
+                if (fileList[0].response.status == 1) {
+                    this.dataSource[key].invoiceAmount = fileList[0].response.data.invoiceAmount
+                    this.dataSource[key].invoiceCode = fileList[0].response.data.invoiceCode
+                    this.dataSource[key].invoiceDate = fileList[0].response.data.invoiceDate
+                    this.dataSource[key].invoiceNo = fileList[0].response.data.invoiceNo
+                } else {
+                    this.$message.error(fileList[0].response.message)
+                }
             }
             // const status = info.file.status;
             // if (status !== "uploading") {
@@ -6605,6 +6774,14 @@ export default {
             // this.salaryDetailForm.fileUrlList = fileList;
             if (status === 'done') {
                 this.dataSource[key].file = fileList[0]
+                if (fileList[0].response.status == 1) {
+                    this.dataSource[key].invoiceAmount = fileList[0].response.data.invoiceAmount
+                    this.dataSource[key].invoiceCode = fileList[0].response.data.invoiceCode
+                    this.dataSource[key].invoiceDate = fileList[0].response.data.invoiceDate
+                    this.dataSource[key].invoiceNo = fileList[0].response.data.invoiceNo
+                } else {
+                    this.$message.error(fileList[0].response.message)
+                }
             }
             // const status = info.file.status;
             // if (status !== "uploading") {
@@ -6730,6 +6907,14 @@ export default {
             this.reqAndPayDetailForm.fileUrlList = fileList;
             if (status === 'done') {
                 this.dataSource[key].file = fileList[0]
+                if (fileList[0].response.status == 1) {
+                    this.dataSource[key].invoiceAmount = fileList[0].response.data.invoiceAmount
+                    this.dataSource[key].invoiceCode = fileList[0].response.data.invoiceCode
+                    this.dataSource[key].invoiceDate = fileList[0].response.data.invoiceDate
+                    this.dataSource[key].invoiceNo = fileList[0].response.data.invoiceNo
+                } else {
+                    this.$message.error(fileList[0].response.message)
+                }
             }
             // const status = info.file.status;
             // if (status !== "uploading") {
@@ -6933,7 +7118,7 @@ export default {
                         this.reqDetailView.otherFile = otherArr
                 })
             }  
-            else if(this.type >= 3 && this.type <= 6 ) {
+            else if(this.type >= 3 && this.type <= 6 || this.type == 21 ) {
                 this.isReqDetailViewVisible = true
                 this.isPayDetailViewVisible = false
                 this.isSalaryDetailViewVisible = false
@@ -7261,7 +7446,7 @@ export default {
             //         this.reqAndPayDetailView.otherFile = otherFile
             //     })
             // } 
-            else if(this.type == 15 || this.type == 19 || this.type == 20) {
+            else if(this.type == 15 || this.type == 19 || this.type == 20 || this.type == 22) {
                 // 工资
                 if(this.scene == 3 || this.scene == 6) {
                     this.isSubContractSalaryDetailViewVisible = true

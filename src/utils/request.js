@@ -8,6 +8,8 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 // 生产
 let baseURL =  'https://sharechain.xacip.net' //'http://144.7.99.96:12448' //'http://144.7.99.96:23559'
 
+// 测试
+// let baseURL =  'http://144.7.99.96:12448'
 if (process.env.NODE_ENV == 'development') {
     // baseURL = 'http://35.201.215.236:13448'  'http://172.16.10.97:8081' //
     baseURL = 'http://144.7.99.96:12448'
@@ -18,9 +20,6 @@ if (process.env.NODE_ENV == 'development') {
 
 // 测试
 export const fileUrl = 'http://144.7.99.96:12448/api'
-
-// 
-
 // 创建 axios 实例
 const request = axios.create({
   // API 请求的默认前缀

@@ -170,7 +170,9 @@ export default {
     this.$watch('collapsed', () => {
       this.$store.commit(SIDEBAR_TYPE, this.collapsed)
       if (this.collapsed) {
-
+        this.title = '' 
+      } else {
+        this.title = defaultSettings.title
       }
     })
     this.$watch('isMobile', () => {

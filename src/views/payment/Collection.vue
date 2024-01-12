@@ -59,7 +59,7 @@
         </template>
       </a-table>
     </a-card>
-    <a-modal v-model="isAddVisible" class="addModal" title="支付信息补录" ok-text="确认" cancel-text="取消" @ok="handleSubmitModalClick" @cancel="handleCancelClick">
+    <a-modal v-model="isAddVisible" class="addModal" width="80%" title="支付信息补录" ok-text="确认" cancel-text="取消" @ok="handleSubmitModalClick" @cancel="handleCancelClick">
       <a-form-model
         ref='ruleForm'
         :model="addForm"
@@ -398,7 +398,7 @@
       </a-form-model>
     </a-modal>
 
-    <a-modal v-model="isDetailVisible" class="addModal" title="详情" :footer="null">
+    <a-modal v-model="isDetailVisible" class="addModal" width="80%" title="详情" :footer="null">
         <div class="modal-title">
             <span>基本信息</span>
         </div>
@@ -583,7 +583,7 @@
     </a-modal>
 
 
-    <a-modal v-model="isSettleVisible" class="addModal" title="结算批次" :footer="null">
+    <a-modal v-model="isSettleVisible" class="addModal" width="80%" title="结算批次" :footer="null">
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
@@ -1331,7 +1331,7 @@ export default {
 }
 .addModal{
   .ant-modal-content{
-    width: 900px;
+    // width: 900px;
     .ant-radio-group{
       width: 400px;
     }

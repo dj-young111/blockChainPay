@@ -345,12 +345,12 @@ export const constantRouterMap = [
             component: () => import('@/views/workbench/Todo'),
             meta: { title: '待办事项' }
           },
-          // {
-          //   path: '/workbench/finished',
-          //   name: 'Finished',
-          //   component: () => import('@/views/workbench/Finished'),
-          //   meta: { title: '已办事项' }
-          // }
+          {
+            path: '/workbench/finished',
+            name: 'Finished',
+            component: () => import('@/views/workbench/Finished'),
+            meta: { title: '已办事项' }
+          }
         ]
       },
       // 统计报表

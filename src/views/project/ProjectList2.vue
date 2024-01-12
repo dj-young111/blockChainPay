@@ -79,7 +79,7 @@
         <a-row :gutter="24">
           <a-col :span="12">
             <a-form-model-item label="所属一级项目" prop="projectIDLv1">
-              <a-select v-model="addForm.projectIDLv1" placeholder="请选择所属一个项目">
+              <a-select show-search  :filter-option="filterOption" v-model="addForm.projectIDLv1" placeholder="请选择所属一个项目">
                 <a-select-option v-for="item of projectList" :key="item.projectIDLv1" :value="item.projectIDLv1">
                   {{ item.projectNameLv1 }}
                 </a-select-option>
@@ -381,12 +381,17 @@ export default {
       })
     },
     getProjectList1 () {
-      getProList1().then(res => {
+      getProList1({ pageNum: 1, pageSize: 10000}).then(res => {
         console.log(res.data)  
         if(res.data && res.data.pageList.length > 0) {
           this.projectList = res.data.pageList
         }
       })
+    },
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
     },
    handleSearchClick() {
      this.getQuotaApplyList()

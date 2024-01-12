@@ -14,16 +14,37 @@
                     ]"
                 />
             </a-form-item>
-            <a-form-item label="新密码" class="item">
+            <a-form-item label="新密码" class="item" has-feedback>
                 <a-input-password
                     size="large"
                     placeholder="8-16位，需包含大小写字母、数字、特殊符号"
                     v-decorator="[
                         'newPassword',
-                        {rules: [{ required: true, message: '请输入新密码' }, { validator: passwordValidator }], validateTrigger: 'blur'}
+                        {rules: [{ required: true, message: '请输入新密码' }, { validator: passwordValidator }]}
                     ]"
                 />
             </a-form-item>
+            <a-form-item label="确认密码" class="item" has-feedback>
+                <a-input-password
+                    size="large"
+                    v-decorator="[
+                    'confirm',
+                    {
+                        rules: [
+                        {
+                            required: true,
+                            message: '请确认你的密码!',
+                        },
+                        {
+                            validator: compareToFirstPassword,
+                        },
+                        ],
+                    },
+                    ]"
+                    type="password"
+                    @blur="handleConfirmBlur"
+                />
+                </a-form-item>
             <a-form-item class="item-button">
                 <a-button
                     size="large"
@@ -50,6 +71,7 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 export default {
     data () {
         return {
+            confirmDirty: false,
             form: this.$form.createForm(this)
         }
     },
@@ -65,17 +87,16 @@ export default {
                     setModifyPassword(reqObj).then(res => {
                         if(res.status == 1 && res.data) {
                             const data = res.data
-                            if(data.status == -1) {
-                                this.$message.error(data.message)
-                                this.form.resetFields()
-                            } else {
+                            if (data.status == 1) {
                                 this.$message.success(data.data)
                                 setTimeout(() => {
                                     storage.set(ACCESS_TOKEN, '')
                                     window.location.reload()
                                 }, 600)
+                            } else {
+                                this.$message.error(data.message)
+                                this.form.resetFields()
                             }
-                            
                         }
                     })
                 } else {
@@ -88,13 +109,27 @@ export default {
         },
         passwordValidator(rule, value, callback) {
             console.log(value)
-            let reg = /((^(?=.*[a-z])(?=.*[A-Z])(?=.*\W)[\da-zA-Z\W]{8,16}$)|(^(?=.*\d)(?=.*[A-Z])(?=.*\W)[\da-zA-Z\W]{8,16}$)|(^(?=.*\d)(?=.*[a-z])(?=.*\W)[\da-zA-Z\W]{8,16}$)|(^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\da-zA-Z\W]{8,16}$))/
+            let reg =  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[~!@#$%^&*)(_+}{|:?><]).{8,16}$/ // /((^(?=.*[a-z])(?=.*[A-Z])(?=.*\W)[\da-zA-Z\W]{8,16}$)|(^(?=.*\d)(?=.*[A-Z])(?=.*\W)[\da-zA-Z\W]{8,16}$)|(^(?=.*\d)(?=.*[a-z])(?=.*\W)[\da-zA-Z\W]{8,16}$)|(^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\da-zA-Z\W]{8,16}$))/
             if(reg.test(value)) {
                 callback()
             } else {
                 callback('请输入8-16位，需包含大小写字母、数字、特殊符号')
             }
-        }
+        },
+         handleConfirmBlur(e) {
+            const value = e.target.value;
+            this.confirmDirty = this.confirmDirty || !!value;
+        },
+        compareToFirstPassword(rule, value, callback) {
+            const form = this.form;
+            console.log(form.getFieldValue('newPassword'))
+             console.log(value)
+            if (value && value !== form.getFieldValue('newPassword')) {
+                callback('两次输入密码不一致!');
+            } else {
+                callback();
+            }
+        },
     }
 }
 </script>

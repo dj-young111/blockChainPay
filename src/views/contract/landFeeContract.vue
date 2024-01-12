@@ -1195,7 +1195,7 @@ export default {
         contractOperator: [{ required: true, message: '请选择合同经办人', trigger: 'change' }],
         contractPrimaryReviewer: [{ required: true, message: '请选择合同一级复核人', trigger: 'change' }],
         contractSecondaryReviewer: [{ required: true, message: '请选择合同二级复核人', trigger: 'change' }],
-        fileUrlList: [{ required: true, message: '请上传合同文件', trigger: 'change' }],
+        fileUrlList: [{ required: true, type: 'any', message: '请上传合同文件', trigger: 'change' }],
         companyOperator: [{ required: true, message: '请选择甲方企业经办人', trigger: 'change' }],
         companyContractPrimaryReviewer: [{ required: true, message: '请选择合同一级复核人', trigger: 'change' }],
         companyContractDetailOperator: [{ required: true, message: '请选择合同经办人', trigger: 'change' }],

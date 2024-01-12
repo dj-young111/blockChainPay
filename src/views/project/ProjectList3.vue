@@ -56,7 +56,7 @@
       <a-row :gutter="24">
           <a-col :span="12">
             <a-form-model-item label="所属二级项目" prop="projectIDLv2">
-              <a-select v-model="addForm.projectIDLv2" placeholder="请选择所属二级项目">
+              <a-select show-search  :filter-option="filterOption" v-model="addForm.projectIDLv2" placeholder="请选择所属二级项目">
                 <a-select-option v-for="item of projectType" :key="item.projectIDLv2" :value="item.projectIDLv2">
                   {{ item.projectNameLv2 }}
                 </a-select-option>
@@ -397,11 +397,16 @@ export default {
       })
     },
     getProList2Select() {
-      getProList2().then(res => {
+      getProList2({ pageNum: 1, pageSize: 10000}).then(res => {
         if(res.data && res.data.pageList.length > 0) {
           this.projectType = res.data.pageList
         }
       })
+    },
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
     },
     getOwnerUnitSelect() {
       getOwnerUnit().then(res => {

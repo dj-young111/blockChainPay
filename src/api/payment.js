@@ -179,12 +179,21 @@ export function addPayFund (data) {
   })
 }
 
+// // 获取资金流向列表
+// export function getMoneyFlow (data) {
+//   return request({
+//       url: contractApi.flowList,
+//       method: 'post',
+//       data
+//   })
+// }
+
 // 获取资金流向列表
-export function getMoneyFlow (data) {
+export function getMoneyFlow (params) {
   return request({
-      url: contractApi.flowList,
-      method: 'post',
-      data
+      url: '/cashFlow/info',
+      method: 'get',
+      params
   })
 }
 

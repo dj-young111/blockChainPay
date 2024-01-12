@@ -2,7 +2,12 @@
     <page-header-wrapper>
         <a-card :bordered="false">
             <a-tabs :default-active-key="activeKey" @change="handleTabsChange">
-                <a-tab-pane key="1" :tab="`支付审批${paymentCount ? '(' + paymentCount + ')' : ''}`">
+                <a-tab-pane key="1" >
+                    <span slot="tab">
+                        <a-badge :dot='paymentCount > 0'>
+                            <span class="title-name">{{`支付审批${paymentCount ? '(' + paymentCount + ')' : ''}`}}</span> 
+                        </a-badge>
+                    </span>
                     <a-table
                         :rowKey="((record, index) => {return index})"
                         :data-source='paymentData'
@@ -21,7 +26,12 @@
                         </template>
                     </a-table>
                 </a-tab-pane>
-                <a-tab-pane key="2" :tab="`支付补录${payCollectionCount ? '(' + payCollectionCount + ')' : ''}`" force-render>
+                <a-tab-pane key="2" force-render>
+                    <span slot="tab">
+                        <a-badge :dot='payCollectionCount > 0'>
+                           <span class="title-name"> {{`支付补录${payCollectionCount ? '(' + payCollectionCount + ')' : ''}`}}</span> 
+                        </a-badge>
+                    </span>
                     <a-table
                         :rowKey="((record, index) => {return index})"
                         :data-source='payCollectionData'
@@ -37,7 +47,12 @@
                         </template>
                     </a-table>
                 </a-tab-pane>
-                <a-tab-pane key="3" :tab="`合同审批${contractCount ? '(' + contractCount + ')' : ''}`" force-render>
+                <a-tab-pane key="3" force-render>
+                    <span slot="tab">
+                        <a-badge :dot='contractCount > 0'>
+                            <span class="title-name"> {{`合同审批${contractCount ? '(' + contractCount + ')' : ''}`}}</span> 
+                        </a-badge>
+                    </span>
                     <a-table
                         :rowKey="((record, index) => {return index})"
                         :data-source='contractData'
@@ -453,13 +468,14 @@
                     v-for="item of paymentObj.nodeList" 
                     :key="item.value"
                     :title="item.name"
+                    :status="item.handleStatus == '已通过' ? 'finish': item.handleStatus == '进行中' ? 'process': 'wait'"
                     :subTitle="setMoment(item.handleDate)"
                     :description="item.handleStatus"
                 ></a-step>
             </a-steps>
-            <div class="model-log" v-if="paymentObj.paymentScene != 18 && paymentObj.paymentScene != 13">
+            <!-- <div class="model-log" v-if="paymentObj.paymentScene != 18 && paymentObj.paymentScene != 13">
                 <a-button type="primary" @click="handlePayLogClick(paymentObj.id)">审批日志</a-button>
-            </div>
+            </div> -->
             <a-form-model
                 ref='rulePaymentForm'
                 :model="paymentForm"
@@ -489,7 +505,7 @@
                     </a-row>
                 </div>
                 <!-- v-if="scene == 3 && paymentObj.paymentScene >= 14 || scene == 6 && paymentObj.paymentScene >= 14 || scene == 2 && paymentObj.paymentScene > 14" -->
-                <div v-if="paymentObj.paymentScene == 15 || paymentObj.paymentScene == 19 || paymentObj.paymentScene == 20">
+                <div v-if="paymentObj.paymentScene == 15 || paymentObj.paymentScene == 19 || paymentObj.paymentScene == 20 || paymentObj.paymentScene == 22">
                     <div v-if="paymentObj.paymentScene != 19">
                         <div class="model-row">
                             <span>中标主体信息</span>
@@ -571,6 +587,32 @@
                             </a-col>
                         </a-row>
                     </div>
+                    <div v-if="paymentObj.paymentScene == 22">
+                        <div class="model-row">
+                            <span>收款方信息</span>
+                        </div>
+                        <a-row :gutter="24" class="model-col">
+                            <a-col :span="12">
+                                <span>收款方银行账号：</span>
+                                <span>{{ paymentObj.payeeAcc }}</span>
+                            </a-col>
+                            <a-col :span="12">
+                                <span>收款方银行账号户名：</span>
+                                <span>{{ paymentObj.payeeName }}</span>
+                            </a-col>
+                        </a-row>
+                        <a-row :gutter="24" class='model-col'>
+                            <a-col :span="12">
+                                <span>收款方开户行：</span>
+                                <span>{{ paymentObj.payeeOpenBank }}</span>
+                            </a-col>
+                             <a-col :span="12">
+                                <span>收款方联行行号：</span>
+                                <span>{{ paymentObj.payeeOpenBankNo }}</span>
+                            </a-col>
+                           
+                        </a-row>
+                    </div>
                     <div>
                         <div class="model-row">
                             <span>支付申请信息</span>
@@ -599,6 +641,10 @@
                             <a-col :span="12">
                                 <span>工资月份：</span>
                                 <span>{{ paymentObj.month }}</span>
+                            </a-col>
+                            <a-col :span="12">
+                                <span>是否补发：</span>
+                                <span>{{ paymentObj.isBackPay == 0 ? '否' : '是' }}</span>
                             </a-col>
                         </a-row>
                         <!-- <a-row :gutter="24" class="model-col">
@@ -845,7 +891,7 @@
                     </div>
                 </div>
                 <!-- 请款 -->
-                <div v-else-if="paymentObj.paymentScene == 1 || paymentObj.paymentScene == 2 || paymentObj.paymentScene == 3 || paymentObj.paymentScene == 14">
+                <div v-else-if="paymentObj.paymentScene == 1 || paymentObj.paymentScene == 2 || paymentObj.paymentScene == 3 || paymentObj.paymentScene == 14 || paymentObj.paymentScene == 21">
                     <div>
                         <div class="model-row">
                             <span>付款方信息</span>
@@ -1194,7 +1240,7 @@
 
 
         <!-- 合同编辑 -->
-        <a-modal v-model="isEditStatus" class="addContractModal" title="编辑合同" ok-text="确认" cancel-text="取消" @ok="handleEditSubmitModalClick" @cancel="handleEditCancelClick">
+        <a-modal v-model="isEditStatus" class="addContractModal" width="80%" title="编辑合同" ok-text="确认" cancel-text="取消" @ok="handleEditSubmitModalClick" @cancel="handleEditCancelClick">
             <a-form-model
                 ref='editRuleForm'
                 :model="editForm"
@@ -2420,6 +2466,18 @@
             <div class="tip">
                 【请仔细核对本次付款的收付款账号信息及金额，提交后，系统将自动通知付款银行支付，您可在支付管理-支付明细查询页面追踪付款状态，请再次确认，如无误，请点击确认按钮！】
             </div>
+            <div v-if="paymentObj.paymentScene == 22">
+                <h3 style="margin-top: 30px">对公付款信息</h3>
+                <a-table
+                    :rowKey="((record, index) => {return index})"
+                    :columns="applyModalColumns"
+                    :data-source="payData"
+                    :pagination="false"
+                    style="margin-top: 20px;"
+                >
+                </a-table>
+            </div>
+            <h3 style="margin-top: 30px" v-if="paymentObj.paymentScene == 22">代发明细</h3>
             <a-table
                 :rowKey="((record, index) => {return index})"
                 :columns="applyModalColumns"
@@ -2727,12 +2785,12 @@ export default {
             paymentCount: '',
             contractData: [],
              billColumns: [
-                {
-                title: '发票批次号',
-                dataIndex: 'invoiceBatchNo',
-                width: '16%',
-                scopedSlots: { customRender: 'invoiceBatchNo' },
-                },
+                // {
+                // title: '发票批次号',
+                // dataIndex: 'invoiceBatchNo',
+                // width: '16%',
+                // scopedSlots: { customRender: 'invoiceBatchNo' },
+                // },
                 {
                 title: '发票代码',
                 dataIndex: 'invoiceCode',
@@ -3083,6 +3141,7 @@ export default {
             timer: '',
             isapplyModalVisible: false,
             applyData: [],
+            payData: [],
             applyModalColumns: [
                 {
                     title: '付款户名',
@@ -3497,6 +3556,8 @@ export default {
         handleAuditClick(scope) {
             this.isAddVisible = true
             this.cacheScope = scope
+            this.addForm.currentHandle = ''
+            this.addForm.remark = ''
             getContractDetailList(scope.id).then(res => {
                 if(res.status == 1 && res.data) {
                     this.$nextTick(() => {
@@ -3550,10 +3611,12 @@ export default {
 
         },
         handlePaymentAuditClick(scope) {
+            this.paymentForm.currentHandle = ''
+            this.paymentForm.remark = ''
             this.isPayVisible = true
             let self = this
             this.scene = scope.scene
-            if(scope.paymentScene == 1 || scope.paymentScene == 2 || scope.paymentScene == 3 || scope.paymentScene == 14) {
+            if(scope.paymentScene == 1 || scope.paymentScene == 2 || scope.paymentScene == 3 || scope.paymentScene == 14 || scope.paymentScene == 21) {
                 getPaymentReqDetail(scope.id).then(res => {
                     console.log('pay: ', res)
                     if(res.status == 1 && res.data) {
@@ -3734,7 +3797,7 @@ export default {
                     }
                 }) 
             } 
-            else if(scope.paymentScene == 18 || scope.paymentScene == 15 || scope.paymentScene == 19 || scope.paymentScene == 20) {
+            else if(scope.paymentScene == 18 || scope.paymentScene == 15 || scope.paymentScene == 19 || scope.paymentScene == 20 || scope.paymentScene == 22) {
                 getPaymentSalaryDetail(scope.id).then(res => {
                     console.log("salary: ", res)
                     if(res.status == 1 && res.data) {
@@ -3912,7 +3975,14 @@ export default {
                         this.isapplyModalVisible = true
                         this.btn = true
                         this.countNum = 10
-                        this.applyData = this.paymentObj.paymentInfoList
+                        let arr = JSON.parse(JSON.stringify(this.paymentObj.paymentInfoList))
+                        if (this.paymentObj.paymentScene == 22) {
+                            this.applyData = arr.slice(1) //this.paymentObj.paymentInfoList
+                            this.payData = [this.paymentObj.paymentInfoList[0]]
+                        } else {
+                            this.applyData = this.paymentObj.paymentInfoList
+                        }
+                        console.log(this.applyData)
                         this.paymentInfoListTotalAmount = this.paymentObj.paymentInfoListTotalAmount
                         this.timer = setInterval(() => {
                             this.countNum--
@@ -5685,6 +5755,11 @@ export default {
             width: 80px;
         }
     }
+}
+.title-name {
+    font-size: 18px;
+    font-weight: 500;
+    color: #414141;
 }
 
 

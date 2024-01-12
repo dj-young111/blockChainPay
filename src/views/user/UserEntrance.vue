@@ -1,22 +1,24 @@
 <template>
   <div class="main">
+    
     <div class="project-list">
-      <div class="list-item" v-for="(item,index) in data" v-bind:key='index' @click="go(item)">
-        <div class="title">
-          <img src="../../assets/company.png" alt="">
-          <span>{{item.projectName}}</span>
+        <div class="list-item" v-for="(item,index) in data" v-bind:key='index' @click="go(item)">
+          <div class="badge-dot" v-if="item.todoNum > 0"></div>
+          <div class="title">
+            <img src="../../assets/company.png" alt="">
+            <span>{{item.projectName}}</span>
+          </div>
+          <div class="msg">业主单位：{{item.ownerName}}</div>
+          <div class="msg">总包单位：{{item.generalName}}</div>
+          <div class="msg">合同数量：{{item.contractNum}}个</div>
+          <div class="msg">合同总金额：{{item.contractTotalAmount}}万元</div>
         </div>
-        <div class="msg">业主单位：{{item.ownerName}}</div>
-        <div class="msg">总包单位：{{item.generalName}}</div>
-        <div class="msg">合同数量：{{item.contractNum}}个</div>
-        <div class="msg">合同总金额：{{item.contractTotalAmount}}万元</div>
-      </div>
-      <div class="add-project">
-        <div class="add" @click="addProject">
-          <img src="../../assets/star.png" alt="">
-          <div>关联项目</div>
+        <div class="add-project">
+          <div class="add" @click="addProject">
+            <img src="../../assets/star.png" alt="">
+            <div>关联项目</div>
+          </div>
         </div>
-      </div>
     </div>
     <a-modal v-model="visible" class="" title="关联项目" @ok='handleClick'>
       <a-row :gutter="24" class="modal-row">
@@ -147,6 +149,7 @@ export default {
         color: #333;
       }
     }
+    
   .main {
     width: 100%;
     height: 100%;
@@ -159,6 +162,17 @@ export default {
       justify-content: space-around;
       margin-top: 100px;
       .list-item {
+        .badge-dot {
+          position: absolute;
+          top: -1px;
+          right: 0;
+          width: 6px;
+          height: 6px;
+          background: #f5222d;
+          border-radius: 100%;
+          box-shadow: 0 0 0 1px #fff;
+        }
+        position: relative;
         width: 432px;
         height: 256px;
         // margin-right: 63px;
