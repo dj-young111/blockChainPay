@@ -452,7 +452,7 @@
             <a-row :gutter="24" style="margin-top: 30px;text-align: center;">
                 <a-col>
                     <a-button @click="handleCancelClick" style="margin-right: 20px;">取消</a-button>
-                    <a-button v-if="isEditBtn" type="primary" @click="handleEditModalClick" style="margin-right: 20px;">编辑</a-button>
+                    <!-- <a-button v-if="isEditBtn" type="primary" @click="handleEditModalClick" style="margin-right: 20px;">编辑</a-button> -->
                     <a-button type="primary" @click="handleSubmitModalClick" :loading="contractOnSubmitLoading">确认</a-button>
                 </a-col>
             </a-row>
@@ -891,7 +891,7 @@
                     </div>
                 </div>
                 <!-- 请款 -->
-                <div v-else-if="paymentObj.paymentScene == 1 || paymentObj.paymentScene == 2 || paymentObj.paymentScene == 3 || paymentObj.paymentScene == 14 || paymentObj.paymentScene == 21">
+                <div v-else-if="paymentObj.paymentScene == 1 || paymentObj.paymentScene == 2 || paymentObj.paymentScene == 3 || paymentObj.paymentScene == 4 || paymentObj.paymentScene == 14 || paymentObj.paymentScene == 21">
                     <div>
                         <div class="model-row">
                             <span>付款方信息</span>
@@ -3616,7 +3616,7 @@ export default {
             this.isPayVisible = true
             let self = this
             this.scene = scope.scene
-            if(scope.paymentScene == 1 || scope.paymentScene == 2 || scope.paymentScene == 3 || scope.paymentScene == 14 || scope.paymentScene == 21) {
+            if(scope.paymentScene == 1 || scope.paymentScene == 2 || scope.paymentScene == 3 || scope.paymentScene == 4 || scope.paymentScene == 14 || scope.paymentScene == 21) {
                 getPaymentReqDetail(scope.id).then(res => {
                     console.log('pay: ', res)
                     if(res.status == 1 && res.data) {

@@ -386,7 +386,7 @@
                         </template>
                         <template slot="isLocalTax" slot-scope="text, record">
                             <!-- <editable-cell :text="text" @change="onCellChange(record.key, 'isLocalTax', $event)" /> -->
-                            <a-select v-model="isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
+                            <a-select v-model="record.isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
                                 <a-select-option :value="1">
                                     是
                                 </a-select-option>
@@ -1039,7 +1039,7 @@
                             <editable-cell :text="text" @change="onCellChange(record.key, 'invoiceAmount', $event)" />
                         </template>
                         <template slot="isLocalTax" slot-scope="text, record">
-                            <a-select v-model="isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
+                            <a-select v-model="record.isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
                                 <a-select-option :value="1">
                                     是
                                 </a-select-option>
@@ -1312,7 +1312,7 @@
                         </template>
                         <template slot="isLocalTax" slot-scope="text, record">
                             <!-- <editable-cell :text="text" @change="onCellChange(record.key, 'isLocalTax', $event)" /> -->
-                            <a-select v-model="isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
+                            <a-select v-model="record.isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
                                 <a-select-option :value="1">
                                     是
                                 </a-select-option>
@@ -1743,7 +1743,7 @@
                         </template>
                         <template slot="isLocalTax" slot-scope="text, record">
                             <!-- <editable-cell :text="text" @change="onCellChange(record.key, 'isLocalTax', $event)" /> -->
-                            <a-select v-model="isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
+                            <a-select v-model="record.isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
                                 <a-select-option :value="1">
                                     是
                                 </a-select-option>
@@ -2165,7 +2165,7 @@
                         </template>
                         <template slot="isLocalTax" slot-scope="text, record">
                             <!-- <editable-cell :text="text" @change="onCellChange(record.key, 'isLocalTax', $event)" /> -->
-                            <a-select v-model="isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
+                            <a-select v-model="record.isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
                                 <a-select-option :value="1">
                                     是
                                 </a-select-option>
@@ -2816,7 +2816,7 @@
                         </template>
                         <template slot="isLocalTax" slot-scope="text, record">
                             <!-- <editable-cell :text="text" @change="onCellChange(record.key, 'isLocalTax', $event)" /> -->
-                            <a-select v-model="isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
+                            <a-select v-model="record.isLocalTax" style="width: 120px" @change="(val) => handleInvoiceChange(val, record)">
                                 <a-select-option :value="1">
                                     是
                                 </a-select-option>
@@ -5210,6 +5210,8 @@ export default {
         },
         handleInvoiceChange(val, record) {
             console.log(val)
+            console.log(this.dataSource)
+            // this.dataSource[record.key - 1].isLocalTax = val
             record.isLocalTax = val
             console.log(record)
         },
@@ -5538,7 +5540,7 @@ export default {
                     // reqObj.invoiceFile = resultFile
                     if (this.dataSource.length > 0) {
                         this.dataSource.map(v => {
-                            v.invoiceFile = v.file.name + '#' + v.file.response.data 
+                            v.invoiceFile = v.file.name + '#' + v.file.response.data.url
                         })
                     }
                     reqObj.invoiceList = this.dataSource
@@ -5871,7 +5873,7 @@ export default {
                     // reqObj.invoiceFile = resultFile
                     if (this.dataSource.length > 0) {
                         this.dataSource.map(v => {
-                            v.invoiceFile = v.file.name + '#' + v.file.response.data 
+                            v.invoiceFile = v.file.name + '#' + v.file.response.data.url
                         })
                     }
                         reqObj.invoiceList = this.dataSource
@@ -5964,7 +5966,7 @@ export default {
                     reqObj.salaryType = this.applicationType
                     if (this.dataSource.length > 0) {
                         this.dataSource.map(v => {
-                            v.invoiceFile = v.file.name + '#' + v.file.response.data 
+                            v.invoiceFile = v.file.name + '#' + v.file.response.data.url 
                         })
                         
                     }
@@ -6032,7 +6034,7 @@ export default {
                     // reqObj.invoiceFile = resultFile
                     if (this.dataSource.length > 0) {
                         this.dataSource.map(v => {
-                            v.invoiceFile = v.file.name + '#' + v.file.response.data 
+                            v.invoiceFile = v.file.name + '#' + v.file.response.data.url 
                         })
                     }
                     reqObj.invoiceList = this.dataSource
@@ -6097,7 +6099,7 @@ export default {
                     
                     if (this.dataSource.length > 0) {
                         this.dataSource.map(v => {
-                            v.invoiceFile = v.file.name + '#' + v.file.response.data 
+                            v.invoiceFile = v.file.name + '#' + v.file.response.data.url 
                         })
                     }
                     reqObj.invoiceList = this.dataSource

@@ -806,7 +806,7 @@
                     </div>
                 </div>
                 <!-- 请款 -->
-                <div v-else-if="paymentObj.paymentScene == 1 || paymentObj.paymentScene == 2 || paymentObj.paymentScene == 3 || paymentObj.paymentScene == 14 || paymentObj.paymentScene == 21">
+                <div v-else-if="paymentObj.paymentScene == 1 || paymentObj.paymentScene == 2 || paymentObj.paymentScene == 3 || paymentObj.paymentScene == 4 || paymentObj.paymentScene == 14 || paymentObj.paymentScene == 21">
                     <div>
                         <div class="model-row">
                             <span>付款方信息</span>
@@ -1907,7 +1907,7 @@ export default {
             let self = this
             this.scene = scope.scene
             
-            if(scope.paymentScene == 1 || scope.paymentScene == 2 || scope.paymentScene == 3 || scope.paymentScene == 14 || scope.paymentScene == 21) {
+            if(scope.paymentScene == 1 || scope.paymentScene == 2 || scope.paymentScene == 3 || scope.paymentScene == 4 || scope.paymentScene == 14 || scope.paymentScene == 21) {
                 getPaymentReqDetail(scope.id).then(res => {
                     console.log('pay: ', res)
                     if(res.status == 1 && res.data) {

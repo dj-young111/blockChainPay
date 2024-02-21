@@ -1374,6 +1374,10 @@ export default {
             //     this.$message.warning('当前用户无操作权限, 请联系管理员！')
             //     return
             // }
+            if(item.name == '建设者工资请款-穿透支付') {
+                this.$message.warning('穿透支付已被暂时禁用，如需要使用请联系系统管理员！')
+                return
+            }
             this.$router.push({
                 path: '/payment/applyList',
                 query: {
@@ -2124,9 +2128,9 @@ export default {
                 return '分包向总包申请工程进度款项，总包向分包合同中指定账户付款。'
             } else if(name == '设备款请款' && code == 5) {
                 return '供应商总包申请设备租赁款项，总包向供应商合同中指定账户付款。'
-            } else if(name == '穿透付款' && code == 3) {
+            } else if(name == '建设者工资请款-穿透支付' && code == 3) {
                 return '分包单位发起请款，上传工资单，总包审核后由农民工工资专户付款到分包收款账户，之后立刻将资金代发到劳务人员工资卡上。'
-            } else if(name == '穿透付款' && code == 6) {
+            } else if(name == '建设者工资请款-穿透支付' && code == 6) {
                 return '分包单位发起请款，上传工资单，总包审核后由农民工工资专户付款到分包收款账户，之后立刻将资金代发到劳务人员工资卡上。'
             } 
         },
@@ -2220,9 +2224,9 @@ export default {
                 return '1.分包合同 2.增值税专用发票 3.计量材料'
             } else if(name == '设备款请款' && type == 5) {
                 return '1.设备合同 2.增值税专用发票 3.设备租赁相关清单材料'
-            } else if(name == '穿透付款' && type == 3) {
+            } else if(name == '建设者工资请款-穿透支付' && type == 3) {
                 return '1、分包合同 2、增值税专用发票（如有） 3、工资单 4、签字盖章后的工资单审批文件'
-            } else if(name == '穿透付款' && type == 6) {
+            } else if(name == '建设者工资请款-穿透支付' && type == 6) {
                 return '1、分包合同 2、增值税专用发票（如有） 3、工资单 4、签字盖章后的工资单审批文件'
             } 
             

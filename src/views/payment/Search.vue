@@ -85,6 +85,25 @@
     </a-card>
 
     <a-modal v-model="isDetailVisible" class="addModal" title="详情" :footer="null" width="80%">
+      <div class="search-detail">
+        <a-select v-model="detailStatus" class="status-select" placeholder="请选择" width='300px'>
+          <a-select-option :key="''" :value="''">
+            全部
+          </a-select-option>
+          <a-select-option :key="0" :value="0">
+            待支付
+          </a-select-option>
+          <a-select-option :key="1" :value="1">
+            支付成功
+          </a-select-option>
+          <a-select-option :key="2" :value="2">
+            支付失败
+          </a-select-option>
+        </a-select>
+         <a-button type="primary" @click="searchDetail">查询</a-button>
+         <a-button type="primary" style="margin-left: 20px"  @click="$newExportsExcel(`${fileUrl}/payment/detail/info/list/file
+?taskName=${taskName}&status=${detailStatus}`,'导出文件', false)">导出</a-button>
+      </div>
         <a-table
         :rowKey="((record, index) => {return index})"
         :columns="detailColumns"
@@ -350,7 +369,8 @@ export default {
       cacheSettle: '',
       cacheDetailObj: {},
       cacheContractNumber: '',
-      taskName: ""
+      taskName: "",
+      detailStatus: ''
     }
   },
   created() {
@@ -399,7 +419,8 @@ export default {
       let reqObj = {
           taskName: taskName,
           pageNum: this.settlePagination.current,
-          pageSize: this.settlePagination.pageSize
+          pageSize: this.settlePagination.pageSize,
+          status: this.detailStatus
       }
       getSearchPayDetailList(reqObj).then(res => {
         if(res.data.status == 1 && res.data.data) {
@@ -445,6 +466,9 @@ export default {
       this.isDetailVisible = true
       this.taskName = row.taskName
       this.getSettleInfo(row.taskName)
+    },
+    searchDetail() {
+      this.getSettleInfo(this.taskName)
     },
     
     handlePaymentMethodChange(value) {
@@ -615,5 +639,13 @@ export default {
   word-break: break-all!important;
   overflow: none!important;
   text-overflow: initial!important;
+}
+.search-detail {
+  width: 100%;
+  margin-bottom: 30px;
+  .status-select {
+    margin-right: 100px;
+    width: 120px;
+  }
 }
 </style>

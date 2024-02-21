@@ -54,7 +54,7 @@
         </template>
       </a-table>
     </a-card>
-    <a-modal v-model="isAddVisible" class="addContractModal" width="80%" title="新增合同" ok-text="确认" cancel-text="取消" @ok="handleSubmitModalClick" @cancel="handleCancelClick" :confirmLoading="confirmLoading">
+    <a-modal v-model="isAddVisible" class="addContractModal" width="80%" :title="isShowEdit ? '编辑合同': '新增合同'" ok-text="确认" cancel-text="取消" @ok="handleSubmitModalClick" @cancel="handleCancelClick" :confirmLoading="confirmLoading">
       <a-form-model
         ref='ruleForm'
         :model="addForm"

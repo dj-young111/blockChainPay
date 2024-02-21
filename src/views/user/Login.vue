@@ -180,6 +180,7 @@ export default {
      storage.set("userName", res.data.data.userName)
      storage.set('roleId', res.data.data.roleId)
      storage.set('phoneNo', res.data.data.phoneNo)
+     storage.set('companyType', res.data.data.companyType)
       this.$router.push({ path: '/' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
