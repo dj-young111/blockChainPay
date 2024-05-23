@@ -503,6 +503,13 @@ export function getSearchPayList (data) {
       data
   })
 }
+export function getWorkerSearchPayList (data) {
+  return request({
+      url: '/payment/detail/worker',
+      method: 'post',
+      data
+  })
+}
 
 
 export function getSearchPayDetailList (data) {

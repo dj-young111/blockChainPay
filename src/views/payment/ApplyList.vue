@@ -1697,7 +1697,7 @@
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
-                        <a-form-model-item label="工资月份">
+                        <a-form-model-item label="工资月份" prop="month">
                             <a-month-picker placeholder="请选择工资月份" @change="handleSalartMonthChange" />
                         </a-form-model-item>
                     </a-col>
@@ -2119,7 +2119,7 @@
                 </a-row>
                 <a-row :gutter="24">
                     <a-col :span="12">
-                        <a-form-model-item label="工资月份">
+                        <a-form-model-item label="工资月份" prop="month">
                             <a-month-picker placeholder="请选择工资月份" @change="handleSubContractSalartMonthChange" />
                         </a-form-model-item>
                     </a-col>
@@ -4503,6 +4503,11 @@
             </div>
         </a-modal>
 
+        <a-modal v-model="tipVisible" width="50%" title="以下账号信息有误，请核对后重新上传" :footer="null">
+            <a-table :columns="tipColumns" :data-source="tipData">
+            </a-table>
+        </a-modal>
+
 
     </page-header-wrapper>
 </template>
@@ -4709,6 +4714,19 @@ export default {
         this.settleColumns = settleColumns
         this.salaryManageColumns = salaryManageColumns
         return {
+            tipVisible: false,
+            tipColumns: [
+                {
+                title: '收款账户名称',
+                dataIndex: 'accNoName',
+                },
+                {
+                title: '账号或卡号',
+                dataIndex: 'accNo',
+                },
+                
+            ],
+            tipData: [],
             dataSource: [
                 // {
                 //     key: '0',
@@ -4948,6 +4966,8 @@ export default {
                 fileUrlOtherList: [{ required: true, message: '请上传材料', trigger: 'change' }],
                 payerAcc: [{ required: true, message: '请选择付款银行账号', trigger: 'change' }], 
                 isBackPay: [{ required: true, message: '请选择工资是否补发', trigger: 'change' }], 
+                month: [{ required: true, message: '请选择工资月份', trigger: 'change' }], 
+                
             },
             subContractSalaryDetailRules: {
                 taskName: [{ required: true, message: '请输入任务名称', trigger: 'change' }], 
@@ -4961,6 +4981,7 @@ export default {
                 fileUrlOtherList: [{ required: true, message: '请上传材料', trigger: 'change' }],
                 payerAcc: [{ required: true, message: '请选择付款银行账号', trigger: 'change' }], 
                 isBackPay: [{ required: true, message: '请选择工资是否补发', trigger: 'change' }], 
+                month: [{ required: true, message: '请选择工资月份', trigger: 'change' }], 
             },
             reqAndPayDetailRules: {
                 taskName: [{ required: true, message: '请输入任务名称', trigger: 'change' }], 
@@ -5572,6 +5593,8 @@ export default {
                             }
                             this.$message.success('添加成功！')
                             this.getApplyInfo()
+                        } else {
+                            this.$message.error(res.message)
                         }
                     })
                 }
@@ -5851,7 +5874,9 @@ export default {
         // 其他付款提交
         handlePayDetailOtherSubmitClick(e) {
             e.preventDefault()
+            console.log(123)
             this.$refs.ruleOtherForm.validate(valid => {
+                console.log(valid)
                 if(valid) {
                     
                     let reqObj = Object.assign({}, this.payDetailOtherForm)
@@ -5896,12 +5921,22 @@ export default {
                     reqObj.otherFile = otherFile
 
                     let detailFile = ''
-                    reqObj.fileDetails && reqObj.fileDetails.map(v => {
-                            detailFile += v.name + '#' + v.response.data + ','
-                        })
-                    reqObj.salaryDetails = detailFile
+                    if (this.type == 18) {
+                        reqObj.fileDetails && reqObj.fileDetails.map(v => {
+                                detailFile += v.name + '#' + v.response.data.url + ','
+                            })
+                        reqObj.salaryDetails = detailFile
 
-                    reqObj.workerSalaryList = this.workerSalaryList
+                        reqObj.workerSalaryList = reqObj.fileDetails[0].response.data.accountInfoList //this.workerSalaryList
+                    }
+                    // if (this.type == 13) {
+                    //     reqObj.fileDetails && reqObj.fileDetails.map(v => {
+                    //             detailFile += v.name + '#' + v.response.data + ','
+                    //         })
+                    //     reqObj.salaryDetails = detailFile
+
+                    //     reqObj.workerSalaryList = this.workerSalaryList
+                    // }
                     // reqObj.settlementBatchId = this.selectionRows.length > 0 ? this.selectionRows[0].id : ''
                     // reqObj.salaryManageId = this.selectionSalaryRows.length > 0 ? this.selectionSalaryRows[0].id : ''
                     // delete reqObj.payerAcc
@@ -5911,6 +5946,7 @@ export default {
                     delete reqObj.fileUrlApproveList
                     delete reqObj.fileUrlOtherList
                     reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
+                    console.log(reqObj)
                     if (this.type == 13) {
                         addPayFund(reqObj).then(res => {
                             if(res.status == 1) {
@@ -5973,7 +6009,7 @@ export default {
                     reqObj.invoiceList = this.dataSource
                     let detailFile = ''
                     reqObj.fileDetails && reqObj.fileDetails.map(v => {
-                            detailFile += v.name + '#' + v.response.data + ','
+                            detailFile += v.name + '#' + v.response.data.url + ','
                         })
                     reqObj.salaryDetails = detailFile
 
@@ -5989,7 +6025,7 @@ export default {
                             otherFile += v.name + '#' + v.response.data + ','
                         })
                     reqObj.otherFile = otherFile
-                    reqObj.workerSalaryList = this.workerSalaryList
+                    reqObj.workerSalaryList = reqObj.fileDetails[0].response.data.accountInfoList //this.workerSalaryList
                     // reqObj.settlementBatchId = this.selectionRows.length > 0 ? this.selectionRows[0].id : ''
                     // reqObj.salaryManageId = this.selectionSalaryRows.length > 0 ? this.selectionSalaryRows[0].id : ''
                     delete reqObj.fileUrlList
@@ -6001,9 +6037,14 @@ export default {
                     }
                     reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
                     addSalaryFund(reqObj).then(res => {
-                        this.isSalaryDetailVisible = false
-                        this.$message.success('添加成功！')
-                        this.getApplyInfo()
+                        if (res.status == 1) {
+                            this.isSalaryDetailVisible = false
+                            this.$message.success('添加成功！')
+                            this.getApplyInfo()
+                        } else {
+                            this.$message.error(res.message)
+                        }
+                        
                     })
                 }
             })
@@ -6040,7 +6081,7 @@ export default {
                     reqObj.invoiceList = this.dataSource
                     let detailFile = ''
                     reqObj.fileDetails && reqObj.fileDetails.map(v => {
-                            detailFile += v.name + '#' + v.response.data + ','
+                            detailFile += v.name + '#' + v.response.data.url + ','
                         })
                     reqObj.salaryDetails = detailFile
 
@@ -6056,7 +6097,7 @@ export default {
                             otherFile += v.name + '#' + v.response.data + ','
                         })
                     reqObj.otherFile = otherFile
-                    reqObj.workerSalaryList = this.workerSalaryList
+                    reqObj.workerSalaryList = reqObj.fileDetails[0].response.data.accountInfoList //this.workerSalaryList
                     
                     delete reqObj.fileUrlList
                     delete reqObj.fileDetails
@@ -6070,9 +6111,13 @@ export default {
                     // }
                     reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
                     addSalaryFund(reqObj).then(res => {
-                        this.isSubContractSalaryDetailVisible = false
-                        this.$message.success('添加成功！')
-                        this.getApplyInfo()
+                        if (res.status == 1) {
+                            this.isSubContractSalaryDetailVisible = false
+                            this.$message.success('添加成功！')
+                            this.getApplyInfo()
+                        } else {
+                            this.$message.error(res.message)
+                        }
                     })
                 }
             })
@@ -6105,7 +6150,7 @@ export default {
                     reqObj.invoiceList = this.dataSource
                     let detailFile = ''
                     reqObj.fileDetails && reqObj.fileDetails.map(v => {
-                            detailFile += v.name + '#' + v.response.data + ','
+                            detailFile += v.name + '#' + v.response.data.url + ','
                         })
                     reqObj.salaryDetails = detailFile
 
@@ -6121,7 +6166,7 @@ export default {
                             otherFile += v.name + '#' + v.response.data + ','
                         })
                     reqObj.otherFile = otherFile
-                    reqObj.workerSalaryList = this.workerSalaryList
+                    reqObj.workerSalaryList = reqObj.fileDetails[0].response.data.accountInfoList//this.workerSalaryList
                     reqObj.settlementBatchId = this.selectionRows.length > 0 ? this.selectionRows[0].id : ''
                     reqObj.salaryManageId = this.selectionSalaryRows.length > 0 ? this.selectionSalaryRows[0].id : ''
                     delete reqObj.fileUrlList
@@ -6129,6 +6174,7 @@ export default {
                     delete reqObj.fileUrlApproveList
                     delete reqObj.fileUrlOtherList
                     reqObj.projectIDLv3 = localStorage.getItem('projectIDLv3')
+                    console.log(reqObj)
                     addSalaryFund(reqObj).then(res => {
                         if(res.status == 1) {
                             this.isReqAndPayDetailVisible = false
@@ -7764,12 +7810,26 @@ export default {
         },
         handleChangeFile(info) {
             console.log(info)
-            if (info.file.response && info.file.response.status === -1) {
-                this.$message.error(info.file.response.message)
+            if (info.file.response && info.file.response.status === -4 || info.file.response && info.file.response.status === -1) {
+                // this.$message.error(info.file.response.message)
+                if (info.fileList.length > 0 && info.file.response.status === -4) {
+                    this.tipVisible = true
+                    this.tipData = JSON.parse(info.file.response.data)
+                    // this.$error({
+                    //     title: '提示信息',
+                    //     content: info.file.response.message,
+                    // });
+                }
+                 if (info.fileList.length > 0 && info.file.response.status === -1) {
+                    this.$error({
+                        title: '提示信息',
+                        content: info.file.response.message,
+                    });
+                }
                 info.file.status = 'error'
                 let fileList = [...info.fileList];
                 fileList.map(file => {
-                    if (file.response && file.response.status === -1) {
+                    if (file.response && file.response.status === -4 || file.response && file.response.status === -1) {
                     file.status = 'error';
                     console.log(1111)
                     }
@@ -7799,6 +7859,8 @@ export default {
                 this.subContractSalaryDetailForm.fileDetails = info.fileList
                 }
             }
+            console.log(info.fileList)
+            console.log(this.salaryDetailForm)
             // console.log(this.addForm.fileUrlList)
         },
         beforeImgUpload(file) {

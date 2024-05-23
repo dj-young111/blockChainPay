@@ -346,6 +346,13 @@
                             </div>
                         </a-col>
                     </a-row>
+                     <a-row :gutter="24" class="model-col" v-if="contractObj.contractSupFile">
+                        <a-col :span="12">
+                            <div class="upload-wrapper">
+                                <span v-for="(item, index) of contractObj.contractSupFile" :key="index">{{ item.name }}<a style="margin-left: 10px;" @click="$newExportsExcel(`${fileUrl}/files?fileId=${item.url}&flag=true`)">下载</a></span>
+                            </div>
+                        </a-col>
+                    </a-row>
                 </div>
                 <div class="process">
                     <div class="model-row">
@@ -1886,11 +1893,6 @@ export default {
                     let newStr = this.contractObj.contractFile.substring(0, this.contractObj.contractFile.length - 1).split(',')
                     let uploadArr = []
                     newStr && newStr.map(res => {
-                        // res = res.split('#')[0]
-                        // let resObj = {
-                        //     name: res.split('#')[0],
-                        //     url: res.split('#')[1]
-                        // }
                         let num = res.lastIndexOf('\#')
                         let resObj = {
                             name: res.substring(0, num),
@@ -1898,7 +1900,21 @@ export default {
                         }
                         uploadArr.push(resObj)
                     })
+                    if (this.contractObj.contractSupFile) {
+                        let newStr1 = this.contractObj.contractSupFile.substring(0, this.contractObj.contractSupFile.length - 1).split(',')
+                        let uploadArr1 = []
+                        newStr1 && newStr1.map(res => {
+                            let num = res.lastIndexOf('\#')
+                            let resObj = {
+                                name: res.substring(0, num),
+                                url: res.substring(num + 1, res.length)
+                            }
+                            uploadArr1.push(resObj)
+                        })
+                        this.contractObj.contractSupFile = uploadArr1
+                    }
                     this.contractObj.contractFile = uploadArr
+                    
                 }
             })
         },

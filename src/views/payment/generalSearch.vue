@@ -1,7 +1,7 @@
 <template>
   <page-header-wrapper>
     <a-card :bordered="false">
-      <div class="table-page-search-wrapper">
+      <!-- <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
@@ -46,8 +46,7 @@
             </a-col>
           </a-row>
         </a-form>
-        <!-- <a-button type="primary" icon="plus" size="small" class="add" @click="handleAddClick">新建</a-button> -->
-      </div>
+      </div> -->
 
       <a-table
         :rowKey="((record, index) => {return index})"
@@ -142,7 +141,7 @@ import {
 // import { getQuotaList } from '@/api/level1'
 // import { dataSourceBank } from '@/utils/util'
 import { fileUrl } from '@/utils/request'
-import { getSettleList, getSearchPayList, getSearchPayDetailList } from '@/api/payment'
+import { getSettleList, getSearchPayList, getSearchPayDetailList, getWorkerSearchPayList } from '@/api/payment'
 
 const columns = [
   {
@@ -398,13 +397,13 @@ export default {
         pageSize: this.pagination.pageSize,
         projectIDLv3: localStorage.getItem('projectIDLv3')
       }
-      getSearchPayList(resObj).then(res => {
+      getWorkerSearchPayList(resObj).then(res => {
         if(res.data.status == 1 && res.data.data) {
           this.loading = false
           console.log(res.data)
           const data = res.data.data
-          this.loadData = data.pageList
-          this.pagination.total = data.rowCount
+          this.loadData = data
+          this.pagination.total = data.length
         }
       })
     },

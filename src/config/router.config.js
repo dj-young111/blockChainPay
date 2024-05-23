@@ -441,6 +441,12 @@ export const constantRouterMap = [
             meta: { title: '支付明细查询' }
           },
           {
+            path: '/payment/worker',
+            name: 'workerApplySearch',
+            component: () => import('@/views/payment/generalSearch'),
+            meta: { title: '总包代付明细' }
+          },
+          {
             path: '/payment/applyList',
             name: 'ApplyList',
             component: () => import('@/views/payment/ApplyList'),
