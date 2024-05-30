@@ -23,7 +23,7 @@ export default {
   menu: {
     locale: true
   },
-  title: '雄安政府投资项目区块链支付系统',
+  title: '邯郸市产业投资集团有限公司区块链支付系统',
   pwa: false,
   iconfontUrl: '',
   production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true'
