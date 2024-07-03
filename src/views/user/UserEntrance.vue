@@ -1,7 +1,21 @@
 <template>
   <div class="main">
-    
-    <div class="project-list">
+    <div class="top">
+      <a-button type="primary" @click="addProject">
+        关联项目
+      </a-button>
+    </div>
+    <a-table :dataSource="data" :columns="columns" >
+      <div slot="projectName" slot-scope="text, record">
+          <a-badge :dot="record.todoNum < 0">
+          <div>{{record.projectName}}</div>
+          </a-badge>
+      </div>
+      <div slot="action" slot-scope="text, record">
+          <a @click="go(record)">进入</a>
+      </div>
+    </a-table>
+    <!-- <div class="project-list">
         <div class="list-item" v-for="(item,index) in data" v-bind:key='index' @click="go(item)">
           <div class="badge-dot" v-if="item.todoNum > 0"></div>
           <div class="title">
@@ -19,7 +33,7 @@
             <div>关联项目</div>
           </div>
         </div>
-    </div>
+    </div> -->
     <a-modal v-model="visible" class="" title="关联项目" @ok='handleClick'>
       <a-row :gutter="24" class="modal-row">
           <div class="content-item">
@@ -74,7 +88,47 @@ export default {
       visible: false,
       list: [],
       value: undefined,
-      selectProject: {}
+      selectProject: {},
+       dataSource: [
+          
+        ],
+
+        columns: [
+          {
+            title: '项目名称',
+            dataIndex: 'projectName',
+            key: 'projectName',
+            // width: '28%',
+            scopedSlots: { customRender: 'projectName' },
+          },
+          {
+            title: '业主单位',
+            dataIndex: 'ownerName',
+            key: 'ownerName',
+          },
+          {
+            title: '总包单位',
+            dataIndex: 'generalName',
+            key: 'generalName',
+            width: '30%'
+          },
+          {
+            title: '合同总数量',
+            dataIndex: 'contractNum',
+            key: 'contractNum',
+          },
+          {
+            title: '合同总金额(万元)',
+            dataIndex: 'contractTotalAmount',
+            key: 'contractTotalAmount',
+          },
+          {
+            title: '操作',
+            key: 'action',
+            scopedSlots: { customRender: 'action' },
+            width: '5%'
+          },
+        ],
     }
   },
   mounted() {
@@ -151,10 +205,14 @@ export default {
     }
     
   .main {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
+    width: 75%;
+    // height: 100%;
+    // display: flex;
+    // justify-content: center;
+    margin: 0 auto;
+    .top {
+      margin: 30px 0;
+    }
     .project-list {
       width: 77%;
       display: flex;

@@ -13,7 +13,7 @@ let baseURL = 'http://144.7.99.96:12448'
 if (process.env.NODE_ENV == 'development') {
     // baseURL = 'http://35.201.215.236:13448'  'http://172.16.10.97:8081' //
     baseURL = 'http://144.7.99.96:12448'
-    // baseURL = 'http://172.16.10.97:8081'
+    // baseURL = 'https://sharechain.xacip.net'
 }
 // 生产
 // export const fileUrl = 'https://sharechain.xacip.net/api'
@@ -26,7 +26,7 @@ const request = axios.create({
   // baseURL: process.env.VUE_APP_API_BASE_URL,
   baseURL: baseURL + '/api',
   // baseURL: baseURL,
-  timeout: 30000 // 请求超时时间
+  timeout: 100000 // 请求超时时间
 })
 
 // 异常拦截处理器

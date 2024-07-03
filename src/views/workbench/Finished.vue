@@ -1685,9 +1685,9 @@ export default {
             dataSource1: [],
             paymentPagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 10,
                 defaultCurrent: 1,
-                defaultPageSize: 20,
+                defaultPageSize: 10,
                 showSizeChanger: true,
                 showQuickJumper: true,
                 pageSizeOptions: ['10', '20', '30', '40'],
@@ -1822,8 +1822,8 @@ export default {
         },
         getPaymentFinishInfo() {
             let reqObj = {
-                pageNum: this.pagination.current,
-                pageSize: this.pagination.pageSize,
+                pageNum: this.paymentPagination.current,
+                pageSize: this.paymentPagination.pageSize,
                 projectIDLv3: localStorage.getItem('projectIDLv3')
             }
             getPaymentFinishList(reqObj).then(res => {
@@ -1866,6 +1866,7 @@ export default {
             console.log(page, pageSize)
             this.paymentPagination.current = page
             // this.getContractTodoInfo()
+            this.getPaymentFinishInfo()
         },
         handlePaymentShowSizeChange(current, size) {
             console.log(current, size)
